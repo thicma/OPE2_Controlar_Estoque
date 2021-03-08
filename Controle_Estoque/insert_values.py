@@ -13,7 +13,7 @@ cursor = dao.cursor()
 valores = []
 nome_colunas = []
 nome_tabela = input('Informe o nome da tabela: ')
-"""
+
 cursor.execute(f'show columns from {nome_tabela};')
 
 for posicao, nome in enumerate (cursor):    
@@ -29,7 +29,7 @@ valores = tuple(valores)
 cursor.execute(formata_instrucao_sql.formatar_instrucao_sql(nome_tabela, nome_colunas), valores)
 for x in range(1,10):
     print('>',end='')
-dao.commit()"""
+dao.commit()
 cursor.execute(f'Select * from {nome_tabela}')
 
 for x in cursor:

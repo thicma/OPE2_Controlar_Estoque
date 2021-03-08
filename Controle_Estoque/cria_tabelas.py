@@ -17,36 +17,30 @@ cria_tabelas = '''
                     CARGO VARCHAR(20),
                     AUTORIZACAO INT(1)
                     )ENGINE=InnoDB;
-
-                CREATE TABLE IF NOT EXISTS TIPO_TRANSACAO(
+CREATE TABLE IF NOT EXISTS TIPO_TRANSACAO(
                     CODIGO_TRANSACAO INT(1) NOT NULL PRIMARY KEY,
                     NOME_TRANSACAO VARCHAR(10),
                     NIVEL_TRANSACAO INT(1));
-
-                CREATE TABLE IF NOT EXISTS FORNECEDOR(
+CREATE TABLE IF NOT EXISTS FORNECEDOR(
                     COD_FORNECEDOR INT NOT NULL PRIMARY KEY,
                     NOME VARCHAR(50),
                     EMAIL VARCHAR(100),
                     TELEFONE VARCHAR(20),
                     CNPJ VARCHAR(20));
-
-                CREATE TABLE IF NOT EXISTS TIPO(
+CREATE TABLE IF NOT EXISTS TIPO(
                     ID_TIPO INT NOT NULL PRIMARY KEY,
                     DESCRICAO VARCHAR(50),
                     MATERIAL VARCHAR(20),
                     MODELO VARCHAR(20),
                     ANO_COLECAO YEAR);
-
-                CREATE TABLE IF NOT EXISTS TAMANHO(
-                    ID_TAMANHO VARCHAR(2),
+CREATE TABLE IF NOT EXISTS TAMANHO(
+                    ID_TAMANHO VARCHAR(2) PRIMARY KEY,
                     DESCRICAO_TAMANHO VARCHAR(15));
-
-                CREATE TABLE IF NOT EXISTS MARCA(
+CREATE TABLE IF NOT EXISTS MARCA(
                     NOME_MARCA VARCHAR(20) NOT NULL PRIMARY KEY,
                     FORNECEDOR INT,
-                    FOREIGN KEY (FORNECEDOR) REFERENCES (COD_FORNECEDOR));
-
-                CREATE TABLE IF NOT EXISTS PRODUTO(
+                    FOREIGN KEY (FORNECEDOR) REFERENCES fornecedor (COD_FORNECEDOR));
+CREATE TABLE IF NOT EXISTS PRODUTO(
                     CODIGO VARCHAR(20) NOT NULL PRIMARY KEY,
                     COR VARCHAR(20),
                     PRECO FLOAT,
@@ -57,8 +51,7 @@ cria_tabelas = '''
                     FOREIGN KEY (TIPO) REFERENCES TIPO (ID_TIPO),
                     FOREIGN KEY (TAMANHO) REFERENCES TAMANHO (ID_TAMANHO),
                     FOREIGN KEY (MARCA) REFERENCES MARCA (NOME_MARCA));
-
-                CREATE TABLE IF NOT EXISTS TRANSACAO(
+CREATE TABLE IF NOT EXISTS TRANSACAO(
                     ID_TRANSACAO INT NOT NULL AUTO_INCREMENT,
                     DATA_TRANSACAO TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
                     USUARIO INT,
@@ -67,6 +60,6 @@ cria_tabelas = '''
                     PRIMARY KEY (ID_TRANSACAO),
                     FOREIGN KEY (USUARIO) REFERENCES USUARIO (MATRICULA),
                     FOREIGN KEY (COD_PRODUTO) REFERENCES PRODUTO (CODIGO),
-                    FOREIGN KEY (TIPO_TRANSACAO) REFERENCES TIPO_TRANSACAO (COD_TRANSACAO));
+                    FOREIGN KEY (TIPO_TRANSACAO) REFERENCES TIPO_TRANSACAO (CODIGO_TRANSACAO));
                      '''
 cursor.execute(cria_tabelas)
