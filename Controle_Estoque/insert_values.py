@@ -1,18 +1,23 @@
 import mysql.connector
 import formata_instrucao_sql
 
-
+tabelas = ['FORNECEDOR','TAMANHO','TIPO','TIPO_TRANSACAO','USUARIO'] 
 dao = mysql.connector.connect(
     host = 'localhost',
     user = 'root',
-    password = 'admin',
-    database = 'estoque'
+    password = '',
+    database = 'Estoque2'
 )
 
 cursor = dao.cursor()
 valores = []
 nome_colunas = []
-nome_tabela = input('Informe o nome da tabela: ')
+nome_tabela=''
+while (nome_tabela == ''):
+	nome_tabela = input('Informe o nome da tabela: ')
+	if (nome_tabela not in tabelas):
+		print("tabela invalida!")
+		nome_tabela=''
 
 cursor.execute(f'show columns from {nome_tabela};')
 
