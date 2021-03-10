@@ -1,13 +1,12 @@
+  
 import mysql.connector
 
 dao = mysql.connector.connect(
     host = 'localhost',
     user = 'root',
-    password = 'admin',
+    password = '',
 )
 
 cursor = dao.cursor()
 cria_data_base = '''CREATE DATABASE IF NOT EXISTS Estoque2;'''
 cursor.execute(cria_data_base)
-
-
