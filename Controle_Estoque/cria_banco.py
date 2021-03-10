@@ -7,7 +7,7 @@ dao = mysql.connector.connect(
 )
 
 cursor = dao.cursor()
-cria_data_base = '''CREATE DATABASE IF NOT EXISTS Estoque2;'''
+cria_data_base = '''CREATE DATABASE IF NOT EXISTS Estoque;'''
 cursor.execute(cria_data_base)
 
 

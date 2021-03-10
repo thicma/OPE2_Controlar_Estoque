@@ -4,7 +4,7 @@ dao = mysql.connector.connect(
     host = 'localhost',
     user = 'root',
     password = 'admin',
-    database = 'estoque2'
+    database = 'estoque'
 )
 
 cursor = dao.cursor()
