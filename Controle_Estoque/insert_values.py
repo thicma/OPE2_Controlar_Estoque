@@ -31,8 +31,10 @@ def cria_lista_com_nome_das_colunas(tabela):
         nome_colunas.append(nome[0])
     return nome_colunas
 
-
+print(f"""Escolha o uma das tabelas abaixo:""" )
 tabelas_existentes = cria_lista_de_tabelas()
+for nome_tabela in tabelas_existentes:
+    print(nome_tabela)
 nome_tabela = input('Informe o nome da tabela: ')
 colunas_tabelas = valida_escolha_da_tabela(nome_tabela, tabelas_existentes)
 

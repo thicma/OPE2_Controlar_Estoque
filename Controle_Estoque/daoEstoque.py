@@ -7,12 +7,13 @@ dao = mysql.connector.connect(
     database = 'estoque'
 )
 
-cursor = dao.cursor()
+cursor = dao.cursor(prepared=True)
 
-SQL_INSERT_TAMANHO_PRODUTO = 'Insert Into TAMANHO_PRODUTO (ID_TAMANHO_PRODUTO, DESCRICAO_TAMANHO) VALUES(%s,%s);'
 
 def criar_tamanho(tamanho: tuple):
     valores = tamanho
+    SQL_INSERT_TAMANHO_PRODUTO = """Insert Into TAMANHO_PRODUTO (ID_TAMANHO_PRODUTO, DESCRICAO_TAMANHO) 
+                                VALUES(%(valores)s,%(descricao)s);"""
     cursor.execute(SQL_INSERT_TAMANHO_PRODUTO, valores)
     dao.commit()
     cursor.execute('select * from tamanho_produto;')

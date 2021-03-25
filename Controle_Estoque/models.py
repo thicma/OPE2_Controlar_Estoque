@@ -43,3 +43,30 @@ class Tipo_Produto:
         self.id_tipo_produto = id_tipo_produto
         self.descricao_produto = descricao_produto
         self.modelo = modelo
+
+class Marca:
+    def __init__(self, nome_marca, fornecedor):
+        self.nome_marca = nome_marca
+        self.fornecedor = fornecedor
+    
+class Transacao:
+    def __init__(self, id_transacao, data_transacao, usuario, produto, id_autorizacao):
+        self.id_transacao = id_transacao
+        self.data_transacao = data_transacao
+        self.usuario = usuario
+        self.produto = produto
+        self.id_autorizacao = id_autorizacao
+    
+class Produto:
+    def __init__(self, id_produto, cor, preco: float, quantidade:int, tipo_produto,
+                tamanho_produto, marca, tipo_material, ano_modelo):
+        self. id_produto = id_produto
+        self.cor = cor
+        self.preco = preco
+        self.quantidade = quantidade
+        self.tipo_produto = tipo_produto
+        self.tamanho_produto = tamanho_produto
+        self.marca = marca
+        self.tipo_material = tipo_material
+        self.ano_modelo = ano_modelo
+    
