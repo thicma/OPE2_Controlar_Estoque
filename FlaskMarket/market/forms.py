@@ -8,10 +8,10 @@ class RegisterForm(FlaskForm):
     def validate_username(self, username_to_check):
         user = User.query.filter_by(username=username_to_check.data).first()
         if user:
-            raise ValidationError('Username alredy exists! Please try a different username.')    
+            raise ValidationError('Username alredy exists! Please try a different username.')   
 
     username = StringField(label='Usuário:', validators=[Length(min=2, max=30), DataRequired()])
-    name = StringField(label='Nome Completo', validators=[Length(min=2, max=30), DataRequired()])
+    name = StringField(label='Nome Completo', validators=[Length(min=2, max=50), DataRequired()])
     charge = StringField(label='Cargo: ', validators=[Length(min=2, max=15), DataRequired()])
     password = PasswordField(label='Senha:', validators=[Length(min=6), DataRequired()])
     password_confirm = PasswordField(label='Confirmar Senha:', validators=[EqualTo('password'), DataRequired()])
