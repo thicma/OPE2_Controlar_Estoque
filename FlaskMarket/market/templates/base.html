@@ -15,7 +15,7 @@
    <body>
       <!-- Navbar here -->
       <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Flask Market</a>
+        <a class="navbar-brand" href="#">ForU Estoque</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -37,7 +37,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link">Welcome, {{ current_user.username }}</a>
+                        <a class="nav-link">Bem Vindo, {{ current_user.username }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
