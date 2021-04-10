@@ -10,23 +10,17 @@
             {{ form.hidden_tag() }}
             <img class="mb-4" src="https://res.cloudinary.com/jimshapedcoding/image/upload/v1597332609/android-icon-192x192_ove2a7.png" alt="">
             <h1 class="h3 mb-3 font-weight-normal">
-                Please Login
+                Por favor, efetuar o Login
             </h1>
             <br>
             <div class= "text-left">
                 {{ form.username.label() }}
-                {{ form.username(class="form-control", placeholder="User Name") }}
+                {{ form.username(class="form-control", placeholder="Usuário") }}
 
                 {{ form.password.label() }}
-                {{ form.password(class="form-control", placeholder="Password") }}
+                {{ form.password(class="form-control", placeholder="Senha") }}
             </div>
             <br>
-
-
-            <div class="checkbox mb-3">
-               <h6>Do not have an account?</h6>
-               <a class="btn btn-sm btn-secondary" href="{{ url_for('register_page') }}">Register</a>
-            </div>
 
             {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
 
