@@ -1,5 +1,5 @@
 from market import app
-from flask import render_template, redirect, url_for, flash, get_flashed_messages
+from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory
 from market.models import Item, User
 from market.forms import RegisterForm, LoginForm
 from market import db
@@ -55,3 +55,8 @@ def logout():
     logout_user()
     flash('You have been logged out!', category='info')
     return redirect(url_for('home_page'))
+
+@app.route('/logo', methods=['GET'])
+def logo():
+    image = "logo.png"
+    return send_from_directory("images", image)
