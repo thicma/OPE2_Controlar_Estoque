@@ -1,6 +1,8 @@
 from estoque import db, login_manager
 from estoque import bcrypt
 from flask_login import UserMixin
+from sqlalchemy import DateTime
+import datetime
 
 
 @login_manager.user_loader
@@ -34,3 +36,25 @@ class Item(db.Model):
 
     def __repr__(self):
         return f'Item {self.name}'
+    
+"""
+class Autorizacao(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    descricao = db.Column(db.String(15))
+"""
+class Transacao(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    data = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
+"""
+class Fornecedor(db.Model):
+    pass
+
+class Tipo_Produto(db.Model):
+    pass
+
+class Tamanho(db.Model):
+    pass
+
+class Marca (db.Model):
+    pass
+"""

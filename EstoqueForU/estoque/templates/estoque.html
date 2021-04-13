@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    Market Place
+    Estoque ForU
 {% endblock %}
 {% block content%}
     <div class="row" style="margin-top:20px; margin-left: 20px;">
@@ -32,8 +32,8 @@
                             <td>{{ item.barcode }}</td>
                             <td>{{ item.price }}$</td>
                             <td>
-                                <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ item.id }}"> More Info</button>
-                                <button class="btn btn-outline btn-success">Purchase this Item</button>
+                                <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ item.id }}"> Mais Informações</button>
+                                <button class="btn btn-outline btn-success">Consultar este item</button>
                             </td>
                         </tr>
                     {% endfor %}
