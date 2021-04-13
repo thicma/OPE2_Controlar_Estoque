@@ -25,7 +25,7 @@
                     <a class="nav-link" href="{{ url_for('home_page') }}">Início <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('market_page') }}">Estoque</a>
+                    <a class="nav-link" href="{{ url_for('estoque_page') }}">Estoque</a>
                 </li>
             </ul>
                 {% if current_user.is_authenticated %}
@@ -50,7 +50,7 @@
                         <a class="nav-link" href="{{ url_for('login_page') }}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('register_page') }}">Register</a>
+                        <a class="nav-link" href="{{ url_for('register_page') }}">Criar conta</a>
                     </li>
                 </ul>                
                 

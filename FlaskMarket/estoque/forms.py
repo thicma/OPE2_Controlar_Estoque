@@ -1,14 +1,14 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import Length, EqualTo, DataRequired, ValidationError
-from market.models import User
+from estoque.models import User
 
 class RegisterForm(FlaskForm):
 
     def validate_username(self, username_to_check):
         user = User.query.filter_by(username=username_to_check.data).first()
         if user:
-            raise ValidationError('Username alredy exists! Please try a different username.')   
+            raise ValidationError('Usuário já existe! Por favor, tente cadastrar um usuário diferente.')   
 
     username = StringField(label='Usuário:', validators=[Length(min=2, max=30), DataRequired()])
     name = StringField(label='Nome Completo', validators=[Length(min=2, max=50), DataRequired()])
