@@ -2,7 +2,7 @@ from estoque import db, login_manager
 from estoque import bcrypt
 from flask_login import UserMixin
 from sqlalchemy import DateTime
-import datetime
+from datetime import datetime, timezone
 
 
 @login_manager.user_loader
@@ -27,34 +27,48 @@ class User(db.Model, UserMixin):
     def check_password_correction(self, attempted_password):
         return bcrypt.check_password_hash(self.password_hash, attempted_password)
 
-class Item(db.Model):
-    id= db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(length=30), nullable=False, unique=True)
-    price = db.Column(db.Float(), nullable=False)
-    barcode = db.Column(db.String(length=12), nullable=False, unique=True)
-    description = db.Column(db.String(length=1024), nullable=False, unique=True)
+class Tipo(db.Model)   :
+    id = db.Column(db.Integer(), primary_key=True)
+    descricao = db.Column(db.String(length=50), nullable=False)
+    material = db.Column(db.String(length=20), nullable=False)
+    modelo= db.Column(db.String(length=20), nullable=False)
+    ano_colecao = db.Column(db.Integer(), nullable=False)
 
-    def __repr__(self):
-        return f'Item {self.name}'
-    
-"""
 class Autorizacao(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     descricao = db.Column(db.String(15))
-"""
+
+    def __repr__(self):
+        return f"ID: {self.id}\n{self.descricao}"
+
 class Transacao(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    data = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
-"""
-class Fornecedor(db.Model):
-    pass
+    data = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now)
 
-class Tipo_Produto(db.Model):
-    pass
+    def __repr__(self):
+        return f"{self.id}\n{self.data}"
+
+class Fornecedor(db.Model):
+    id= db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(length=30), nullable=False, unique=True)
+    email = db.Column(db.String(length=50), nullable=False, unique=True)
+    fone = db.Column(db.String(length=15), nullable=False, unique=False)
+    cnpj = db.Column(db.String(length=14), nullable=False, unique=True)
+
+class Produto(db.Model):
+    id = db.Column(db.String(length=20), primary_key=True)
+    cor = db.Column(db.String(length=15), nullable=False)    
+    preco = db.Column(db.Float(), nullable=False)
+    quantidade = db.Column(db.Integer(), nullable=False)
+    tipo = db.Column(db.Integer(), nullable=False)
+    tamanho = db.Column(db.String(length=2), nullable=False)
+    marca = db.Column(db.String(length=20), nullable=False)
 
 class Tamanho(db.Model):
-    pass
+    id = db.Column(db.String(length=2), primary_key=True)
+    descricao = db.Column(db.String(length=15), nullable=False)
 
 class Marca (db.Model):
-    pass
-"""
+    nome = db.Column(db.String(length=20), primary_key=True)
+    fornecedor= db.Column(db.Integer(), nullable=False)
+

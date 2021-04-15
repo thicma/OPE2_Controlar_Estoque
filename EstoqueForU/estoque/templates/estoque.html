@@ -24,16 +24,16 @@
                 </thead>
                 <tbody>
                     <!-- Your rows inside the table HERE: -->
-                    {% for item in items %}
-                    {% include 'includes/items_modals.html' %}
+                    {% for produto in produtos %}
+                    {% include 'includes/produtos_modals.html' %}
                         <tr>
-                            <td>{{ item.id }}</td>
-                            <td>{{ item.name }}</td>
-                            <td>{{ item.barcode }}</td>
-                            <td>{{ item.price }}$</td>
+                            <td>{{ produto.id }}</td>
+                            <td>{{ produto.name }}</td>
+                            <td>{{ produto.barcode }}</td>
+                            <td>{{ produto.price }}$</td>
                             <td>
-                                <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ item.id }}"> Mais Informações</button>
-                                <button class="btn btn-outline btn-success">Consultar este item</button>
+                                <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ produto.id }}"> Mais Informações</button>
+                                <button class="btn btn-outline btn-success">Consultar este produto</button>
                             </td>
                         </tr>
                     {% endfor %}
