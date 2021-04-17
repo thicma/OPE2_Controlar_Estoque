@@ -7,7 +7,7 @@
     {% block content %}
     <body class="text-center">
         <div class="container">
-            <form method="POST" class="form-register" style="color:white">
+            <form method="POST" class="form-register" style="color:red">
                 {{ form.hidden_tag() }}
                 <div style="margin-top: 5px;">
                     <img class="mb-4" src="{{ url_for('logo')}}" alt="Logo">
@@ -17,20 +17,20 @@
                     </h1>
                 <div class="text-left">
 
-                {{form.id.label()}}
-                {{form.id(class="form-control", placeholder="Código do Fornecedor")}}
+                {{form.id.label(style="font-size:25px")}}
+                {{form.id(class="form-control", style="background-color: #ffc6ba",placeholder="Código do Fornecedor")}}
 
-                {{form.name.label()}}
-                {{form.name(class="form-control", placeholder="Nome do Fornecedor")}}
+                {{form.name.label(style="font-size:25px")}}
+                {{form.name(class="form-control", style="background-color: #ffc6ba",placeholder="Nome do Fornecedor")}}
                 
-                {{form.email.label()}}
-                {{form.email(class="form-control", placeholder="E-mail")}}
+                {{form.email.label(style="font-size:25px")}}
+                {{form.email(class="form-control", style="background-color: #ffc6ba",placeholder="E-mail")}}
                
-                {{form.fone.label()}}
-                {{form.fone(class="form-control", placeholder="Telefone")}}
+                {{form.fone.label(style="font-size:25px")}}
+                {{form.fone(class="form-control", style="background-color: #ffc6ba",placeholder="Telefone")}}
 
-                {{form.cnpj.label()}}
-                {{form.cnpj(class="form-control", placeholder="CNPJ")}}
+                {{form.cnpj.label(style="font-size:25px")}}
+                {{form.cnpj(class="form-control", style="background-color: #ffc6ba",placeholder="CNPJ")}}
                 
                 <br>
                 {{form.submit(class="btn btn-lg btn-block btn-primary")}}                    

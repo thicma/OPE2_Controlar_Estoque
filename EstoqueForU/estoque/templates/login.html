@@ -6,7 +6,7 @@
 {% block content %}
 <body class="text-center">
     <div class="container">
-        <form method="POST" class="form-signin" style="color:white">
+        <form method="POST" class="form-signin" style="color:red">
             {{ form.hidden_tag() }}
             <div style="margin-top: 5px;">
             <img class="mb-4" src="{{ url_for('logo')}}" alt="Logo">
@@ -16,11 +16,11 @@
             </h1>
             <br>
             <div class= "text-left">
-                {{ form.username.label() }}
-                {{ form.username(class="form-control", placeholder="Usuário") }}
+                {{ form.username.label(style="font-size:25px") }}
+                {{ form.username(class="form-control",style="background-color: #ffc6ba", placeholder="Usuário") }}
 
-                {{ form.password.label() }}
-                {{ form.password(class="form-control", placeholder="Senha") }}
+                {{ form.password.label(style="font-size:25px") }}
+                {{ form.password(class="form-control", style="background-color: #ffc6ba",placeholder="Senha") }}
             </div>
             <br>
 
