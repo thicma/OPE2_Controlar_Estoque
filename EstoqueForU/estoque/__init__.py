@@ -2,12 +2,12 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-import os
+from datetime import timedelta
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///estoque.db'
 app.config['SECRET_KEY'] = 'd1e8ab4c46d1d1d40c592ef2'
-app.config['UPLOAD_PATH'] = os.path.dirname(os.path.abspath(__file__)) + '/static'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)

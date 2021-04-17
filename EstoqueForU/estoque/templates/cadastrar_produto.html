@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+    {% block title %}
+        Cadastramento de Produtos
+    {% endblock %}
+
+    {% block content %}
+    <body class="text-center">
+        <div class="container">
+            <form method="POST" class="form-register" style="color:white">
+                {{ form.hidden_tag() }}
+                <div style="margin-top: 5px;">
+                    <img class="mb-4" src="{{ url_for('logo')}}" alt="Logo">
+                </div>
+                    <h1 class="h3 mb-3 font-weight-normal">
+                        Cadastramento de Produto
+                    </h1>
+                <div class="text-left">
+
+                {{form.id.label()}}
+                {{form.id(class="form-control", placeholder="Código do Produto")}}
+
+                {{form.cor.label()}}
+                {{form.cor(class="form-control", placeholder="Cor do Produto")}}
+                
+                {{form.preco.label()}}
+                {{form.preco(class="form-control", placeholder="Preço da Unidade do Poduto")}}
+               
+                {{form.quantidade.label()}}
+                {{form.quantidade(class="form-control", placeholder="Quantidade do Produto")}}
+
+                {{form.tipo.label()}}
+                {{form.tipo(class="form-control", placeholder="Tipo do Produto")}}
+
+                {{form.tamanho.label()}}
+                {{form.tamanho(class="form-control", placeholder="PP, P, M, G, GG")}}
+
+                {{form.marca.label()}}
+                {{form.marca(class="form-control", placeholder="marca")}}
+                
+                <br>
+                {{form.submit(class="btn btn-lg btn-block btn-primary")}}                    
+                </div>
+            </form>
+        </div>
+    </body>
+    {% endblock %}

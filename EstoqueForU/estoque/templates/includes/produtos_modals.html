@@ -6,7 +6,7 @@
   </style>
   
   <!-- More Info -->
-  <div class="modal fade" id="Modal-MoreInfo-{{ item.id }}"
+  <div class="modal fade" id="Modal-MoreInfo-{{ produto.id }}"
        tabindex="-1"
        aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -14,7 +14,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="ModalLabel">
             <!-- -->
-            {{ item.name }}
+            {{ produto.name }}
 
           </h5>
           <button type="button" class="close"
@@ -24,7 +24,7 @@
         </div>
         <div class="modal-body">
           
-          {{ item.description }}
+          {{ produto.description }}
 
         </div>
         <div class="modal-footer">

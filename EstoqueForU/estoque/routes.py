@@ -1,7 +1,7 @@
 from estoque import app
-from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory
-from estoque.models import Produto, User, Transacao, Fornecedor
-from estoque.forms import RegisterForm, LoginForm, FornecedorForm
+from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session
+from estoque.models import Produto, User, Transacao, Fornecedor, Produto
+from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm
 from estoque import db
 from flask_login import login_user, logout_user, login_required
 from datetime import datetime
@@ -14,11 +14,13 @@ def home_page():
 @app.route('/estoque')
 @login_required
 def estoque_page():
+    session.modified = True
     produtos = Produto.query.all()
     return render_template('estoque.html', produtos = produtos)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
+    session.modified = True
     form = RegisterForm()
     if form.validate_on_submit():
         user_to_create = User(username = form.username.data,
@@ -39,6 +41,7 @@ def register_page():
 
 @app.route('/register_fornecedor', methods=['GET', 'POST'])
 def register_fornecedor():
+    session.modified = True
     form = FornecedorForm()
     if form.validate_on_submit():
         fornecedor_to_create = Fornecedor(id = form.id.data,
@@ -60,6 +63,36 @@ def register_fornecedor():
             flash(f'Ocorreu um erro ao cadastrar o fornecedor: {err_msg}', category='danger')
     return render_template('register_fornecedor.html', form=form)
 
+@app.route('/cadastrar_produto', methods=['GET', 'POST'])
+def cadastrar_produto():
+    session.modified = True
+    form = ProdutoForm()
+    if form.validate_on_submit():
+        produto_criado = Produto(id = form.id.data,
+                                        cor = form.cor.data,
+                                        preco = form.preco.data,
+                                        quantidade = form.quantidade.data,
+                                        tipo = form.tipo.data,
+                                        tamanho = form.tamanho.data,
+                                        marca = form.marca.data)
+        db.session.add(produto_criado)
+        db.session.commit()
+        flash(f'Produto {produto_criado.id} cadastrado com sucesso', category='sucess')
+        form.id.data = None
+        form.cor.data = None
+        form.preco.data = None
+        form.quantidade.data = None
+        form.tipo.data = None
+        form.tamanho.data = None
+        form.marca.data = None
+        return render_template('cadastrar_produto.html', form=form)
+    if form.errors !={}:
+        for err_msg in form.errors.values():
+            flash(f'Ocorreu um erro ao cadastrar o fornecedor: {err_msg}', category='danger')
+    return render_template('cadastrar_produto.html', form=form)
+
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
     form = LoginForm()
@@ -70,6 +103,8 @@ def login_page():
         ):
             login_user(attempted_user)
             flash(f'Sucesso! Usuário logado: {attempted_user.username}', category='success')
+            session.permanent = True
+            session.modified = True
             return redirect(url_for('estoque_page'))
         
         else:
