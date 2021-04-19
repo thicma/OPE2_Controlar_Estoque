@@ -1,7 +1,7 @@
 from estoque import app
 from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session
-from estoque.models import Produto, User, Transacao, Fornecedor, Produto
-from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm
+from estoque.models import Produto, User, Transacao, Fornecedor, Produto, Marca
+from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm
 from estoque import db
 from flask_login import login_user, logout_user, login_required
 from datetime import datetime
@@ -91,6 +91,25 @@ def cadastrar_produto():
             flash(f'Ocorreu um erro ao cadastrar o fornecedor: {err_msg}', category='danger')
     return render_template('cadastrar_produto.html', form=form)
 
+@app.route('/cadastar_marca', methods=['GET', 'POST'])
+def cadastrar_marca():
+    session.modified = True
+    form = MarcaForm()
+    if form.validate_on_submit():
+        marca_criada = Marca(nome = form.nome.data,
+                            fornecedor = form.fornecedor.data)
+        db.session.add(marca_criada)
+        db.session.commit()
+        flash(f'Marca {marca_criada.nome} cadastrada com sucesso', category='sucess')
+        form.nome.data = None
+        form.fornecedor.data = None
+        return render_template('cadastrar_marca.html', form=form)
+    if form.errors !={}:
+        for err_msg in form.errors.values():
+            flash(f'Ocorreu um erro ao cadastrar a Marca', category='danger')
+    
+    return render_template('cadastrar_marca.html', form=form)
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -119,5 +138,5 @@ def logout():
 
 @app.route('/logo', methods=['GET'])
 def logo():
-    image = "logo.png"
+    image = "logo2.png"
     return send_from_directory("images", image)

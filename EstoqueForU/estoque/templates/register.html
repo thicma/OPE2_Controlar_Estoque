@@ -7,7 +7,7 @@
     {% block content %}
     <body class="text-center">
         <div class="container">
-            <form method="POST" class="form-register" style="color:red">
+            <form method="POST" class="form-register" style="color: #5b0e2d">
                 {{ form.hidden_tag() }}
                 <div style="margin-top: 5px;">
                     <img class="mb-4" src="{{ url_for('logo')}}" alt="Logo">
@@ -18,19 +18,19 @@
                 <div class="text-left">
 
                 {{form.username.label(style="font-size:25px")}}
-                {{form.username(class="form-control", style="background-color: #ffc6ba", placeholder="Usuário")}}
+                {{form.username(class="form-control", placeholder="Usuário")}}
 
                 {{form.name.label(style="font-size:25px")}}
-                {{form.name(class="form-control", style="background-color: #ffc6ba", placeholder="Nome Completo")}}
+                {{form.name(class="form-control", placeholder="Nome Completo")}}
                 
                 {{form.charge.label(style="font-size:25px")}}
-                {{form.charge(class="form-control", style="background-color: #ffc6ba", placeholder="Cargo")}}
+                {{form.charge(class="form-control", placeholder="Cargo")}}
                
                 {{form.password.label(style="font-size:25px")}}
-                {{form.password(class="form-control", style="background-color: #ffc6ba", placeholder="Password")}}
+                {{form.password(class="form-control", placeholder="Password")}}
 
                 {{form.password.label(style="font-size:25px")}}
-                {{form.password_confirm(class="form-control", style="background-color: #ffc6ba", placeholder="Confirm Password")}}
+                {{form.password_confirm(class="form-control", placeholder="Confirm Password")}}
                 
                 <br>
                 {{form.submit(class="btn btn-lg btn-block btn-primary")}}                    

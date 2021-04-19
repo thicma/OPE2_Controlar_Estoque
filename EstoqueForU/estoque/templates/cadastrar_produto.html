@@ -7,7 +7,7 @@
     {% block content %}
     <body class="text-center">
         <div class="container">
-            <form method="POST" class="form-register" style="color:white">
+            <form method="POST" class="form-register" style="color:#5b0e2d">
                 {{ form.hidden_tag() }}
                 <div style="margin-top: 5px;">
                     <img class="mb-4" src="{{ url_for('logo')}}" alt="Logo">
@@ -17,25 +17,25 @@
                     </h1>
                 <div class="text-left">
 
-                {{form.id.label()}}
+                {{form.id.label(style="font-size:25px")}}
                 {{form.id(class="form-control", placeholder="Código do Produto")}}
 
-                {{form.cor.label()}}
+                {{form.cor.label(style="font-size:25px")}}
                 {{form.cor(class="form-control", placeholder="Cor do Produto")}}
                 
-                {{form.preco.label()}}
+                {{form.preco.label(style="font-size:25px")}}
                 {{form.preco(class="form-control", placeholder="Preço da Unidade do Poduto")}}
                
-                {{form.quantidade.label()}}
+                {{form.quantidade.label(style="font-size:25px")}}
                 {{form.quantidade(class="form-control", placeholder="Quantidade do Produto")}}
 
-                {{form.tipo.label()}}
+                {{form.tipo.label(style="font-size:25px")}}
                 {{form.tipo(class="form-control", placeholder="Tipo do Produto")}}
 
-                {{form.tamanho.label()}}
+                {{form.tamanho.label(style="font-size:25px")}}
                 {{form.tamanho(class="form-control", placeholder="PP, P, M, G, GG")}}
 
-                {{form.marca.label()}}
+                {{form.marca.label(style="font-size:25px")}}
                 {{form.marca(class="form-control", placeholder="marca")}}
                 
                 <br>

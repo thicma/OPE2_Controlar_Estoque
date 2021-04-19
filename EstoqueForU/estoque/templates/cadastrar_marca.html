@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    Login Page
+    Cadastramento de Marca
 {% endblock %}
 
 {% block content %}
@@ -12,15 +12,15 @@
             <img class="mb-4" src="{{ url_for('logo')}}" alt="Logo">
         </div>
             <h1 class="h3 mb-3 font-weight-normal">
-                Por favor, efetuar o Login
+                Cadastramento de Marcas
             </h1>
             <br>
             <div class= "text-left">
-                {{ form.username.label(style="font-size:25px") }}
-                {{ form.username(class="form-control",style="background-color: #ffc6ba", placeholder="Usuário") }}
+                {{ form.nome.label(style="font-size:25px") }}
+                {{ form.nome(class="form-control",style="background-color: #ffc6ba", placeholder="Marca") }}
 
-                {{ form.password.label(style="font-size:25px") }}
-                {{ form.password(class="form-control", style="background-color: #ffc6ba",placeholder="Senha") }}
+                {{ form.fornecedor.label(style="font-size:25px") }}
+                {{ form.fornecedor(class="form-control", style="background-color: #ffc6ba",placeholder="Fornecedor da Marca") }}
             </div>
             <br>
 

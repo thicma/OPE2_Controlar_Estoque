@@ -6,8 +6,9 @@
 
     {% block content %}
     <body class="text-center">
+
         <div class="container">
-            <form method="POST" class="form-register" style="color:red">
+            <form method="POST" class="form-register" style="color: #5b0e2d">
                 {{ form.hidden_tag() }}
                 <div style="margin-top: 5px;">
                     <img class="mb-4" src="{{ url_for('logo')}}" alt="Logo">
@@ -18,19 +19,19 @@
                 <div class="text-left">
 
                 {{form.id.label(style="font-size:25px")}}
-                {{form.id(class="form-control", style="background-color: #ffc6ba",placeholder="Código do Fornecedor")}}
+                {{form.id(class="form-control", placeholder="Código do Fornecedor")}}
 
                 {{form.name.label(style="font-size:25px")}}
-                {{form.name(class="form-control", style="background-color: #ffc6ba",placeholder="Nome do Fornecedor")}}
+                {{form.name(class="form-control", placeholder="Nome do Fornecedor")}}
                 
                 {{form.email.label(style="font-size:25px")}}
-                {{form.email(class="form-control", style="background-color: #ffc6ba",placeholder="E-mail")}}
+                {{form.email(class="form-control", placeholder="E-mail")}}
                
                 {{form.fone.label(style="font-size:25px")}}
-                {{form.fone(class="form-control", style="background-color: #ffc6ba",placeholder="Telefone")}}
+                {{form.fone(class="form-control", placeholder="Telefone")}}
 
                 {{form.cnpj.label(style="font-size:25px")}}
-                {{form.cnpj(class="form-control", style="background-color: #ffc6ba",placeholder="CNPJ")}}
+                {{form.cnpj(class="form-control", placeholder="CNPJ")}}
                 
                 <br>
                 {{form.submit(class="btn btn-lg btn-block btn-primary")}}                    
