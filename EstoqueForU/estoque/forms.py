@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import Length, EqualTo, DataRequired, ValidationError
-from estoque.models import User, Fornecedor, Produto, Marca
+from estoque.models import User, Fornecedor, Produto, Marca, Tipo
 
 
 class RegisterForm(FlaskForm):
@@ -67,3 +67,17 @@ class MarcaForm(FlaskForm):
     nome = StringField(label='Marca', validators=[Length(max=20), DataRequired()])
     fornecedor = StringField(label='Fornecedor', validators=[DataRequired()])
     submit = SubmitField(label='Cadastrar Marca')
+
+class TipoForm(FlaskForm):
+
+    def validate_id(self, id_to_check):
+        id = Tipo.query.filter_by(id=id_to_check.data).first()
+        if id:
+            raise ValidationError(f'Tipo já registrado {id.descricao}')
+        
+    id= StringField(label='Código do Tipo:', validators=[DataRequired()])
+    descricao = StringField(label='Descrição do Tipo:', validators=[Length(max=50), DataRequired()])
+    material = StringField(label='Material do Produto:', validators=[Length(max=20), DataRequired()])
+    modelo = StringField(label='Modelo', validators=[Length(max=20), DataRequired()])
+    ano_colecao = StringField(label='Ano da Coleção', validators=[Length(min=4, max=4), DataRequired()])
+    submit = SubmitField(label='Cadastrar Tipo')

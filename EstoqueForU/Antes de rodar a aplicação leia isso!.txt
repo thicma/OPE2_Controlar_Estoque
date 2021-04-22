@@ -6,5 +6,5 @@ Antes de iniciar a aplicação rodar!
 
 2 - digitar o comando: from estoque import db
 
-3 - digitar : db.crate_all()
+3 - digitar : db.create_all()
 

@@ -1,7 +1,7 @@
 from estoque import app
-from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session
-from estoque.models import Produto, User, Transacao, Fornecedor, Produto, Marca
-from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm
+from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session, request
+from estoque.models import Produto, User, Transacao, Fornecedor, Produto, Marca, Tipo
+from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm, TipoForm
 from estoque import db
 from flask_login import login_user, logout_user, login_required
 from datetime import datetime
@@ -27,9 +27,7 @@ def register_page():
                             name = form.name.data,
                             charge = form.charge.data,
                             password = form.password.data)
-        date_create = Transacao()
         db.session.add(user_to_create)
-        db.session.add(date_create)
         db.session.commit()
         login_user(user_to_create)
         flash(f'Conta criada com suecesso. Logado como usuário {user_to_create.username}', category='success')
@@ -66,6 +64,7 @@ def register_fornecedor():
 @app.route('/cadastrar_produto', methods=['GET', 'POST'])
 def cadastrar_produto():
     session.modified = True
+    tipos = Tipo.query.all()
     form = ProdutoForm()
     if form.validate_on_submit():
         produto_criado = Produto(id = form.id.data,
@@ -75,23 +74,29 @@ def cadastrar_produto():
                                         tipo = form.tipo.data,
                                         tamanho = form.tamanho.data,
                                         marca = form.marca.data)
-        db.session.add(produto_criado)
-        db.session.commit()
-        flash(f'Produto {produto_criado.id} cadastrado com sucesso', category='sucess')
-        form.id.data = None
-        form.cor.data = None
-        form.preco.data = None
-        form.quantidade.data = None
-        form.tipo.data = None
-        form.tamanho.data = None
-        form.marca.data = None
-        return render_template('cadastrar_produto.html', form=form)
+        for x in tipos:
+            if int(form.tipo.data) == x.id:             
+                db.session.add(produto_criado)
+                db.session.commit()
+                flash(f'Produto {produto_criado.id} cadastrado com sucesso', category='sucess')
+                form.id.data = None
+                form.cor.data = None
+                form.preco.data = None
+                form.quantidade.data = None
+                form.tipo.data = None
+                form.tamanho.data = None
+                form.marca.data = None
+                return render_template('cadastrar_produto.html', form=form)
+            else:
+                flash(f'O tipo informado não existe, você será redirecionado para o cadastramento.', category='danger')
+                return redirect(url_for('cadastrar_tipo'))
+
     if form.errors !={}:
         for err_msg in form.errors.values():
-            flash(f'Ocorreu um erro ao cadastrar o fornecedor: {err_msg}', category='danger')
+            flash(f'Ocorreu um erro ao cadastrar o Produto: {err_msg}', category='danger')
     return render_template('cadastrar_produto.html', form=form)
 
-@app.route('/cadastar_marca', methods=['GET', 'POST'])
+@app.route('/cadastrar_marca', methods=['GET', 'POST'])
 def cadastrar_marca():
     session.modified = True
     form = MarcaForm()
@@ -106,10 +111,33 @@ def cadastrar_marca():
         return render_template('cadastrar_marca.html', form=form)
     if form.errors !={}:
         for err_msg in form.errors.values():
-            flash(f'Ocorreu um erro ao cadastrar a Marca', category='danger')
-    
+            flash(f'Ocorreu um erro ao cadastrar a Marca', category='danger')    
     return render_template('cadastrar_marca.html', form=form)
 
+@app.route('/cadastrar_tipo', methods=['GET', 'POST'])
+def cadastrar_tipo():
+    session.modified = True
+    form = TipoForm()
+    if form.validate_on_submit():
+        tipo_criado = Tipo(id = form.id.data,
+                            descricao = form.descricao.data,
+                            material = form.material.data,
+                            modelo = form.modelo.data,
+                            ano_colecao = form.ano_colecao.data
+                            )
+        db.session.add(tipo_criado)
+        db.session.commit()
+        flash(f'Tipo {tipo_criado.id} - {tipo_criado.descricao} criado com sucesso.', category='sucess')
+        form.id.data = None
+        form.descricao.data = None
+        form.material.data = None
+        form.modelo.data = None
+        form.ano_colecao.data = None
+        return redirect(url_for('cadastrar_produto'))
+    if form.errors != {}:
+        for err_msg in form.errors.values():
+            flash(f'Ocorreu um erro ao cadastrar o Tipo do Produto: {err_msg}', category='danger')
+    return render_template('cadastrar_tipo.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
