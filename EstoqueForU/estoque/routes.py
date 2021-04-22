@@ -1,7 +1,7 @@
 from estoque import app
 from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session, request
 from estoque.models import Produto, User, Transacao, Fornecedor, Produto, Marca, Tipo
-from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm, TipoForm
+from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm, TipoForm, ConsultaForm
 from estoque import db
 from flask_login import login_user, logout_user, login_required
 from datetime import datetime
@@ -11,12 +11,14 @@ from datetime import datetime
 def home_page():
     return render_template('home.html')
 
-@app.route('/estoque')
+@app.route('/estoque', methods=['GET', 'POST'])
 @login_required
 def estoque_page():
     session.modified = True
-    produtos = Produto.query.all()
-    return render_template('estoque.html', produtos = produtos)
+    form = ConsultaForm()
+    if form.validate_on_submit():
+        return redirect(url_for("home_page"))
+    return render_template('estoque.html', form = form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
@@ -139,6 +141,13 @@ def cadastrar_tipo():
             flash(f'Ocorreu um erro ao cadastrar o Tipo do Produto: {err_msg}', category='danger')
     return render_template('cadastrar_tipo.html', form=form)
 
+@app.route('/consultar', methods=['GET'])
+def consultar_produto():
+    form = ConsultaForm()
+    if form.validate_on_submit():
+        redirect(url_for('home_page'))
+
+    return redirect(url_for())
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():

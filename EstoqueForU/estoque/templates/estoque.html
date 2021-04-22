@@ -3,8 +3,30 @@
     Estoque ForU
 {% endblock %}
 {% block content%}
+<div class="row" style="margin-top:20px; margin-left: 20px;">
+    <div class="col-12">
+        <table class="table table-hover" style="background-color: #ffa781">
+            <tbody>
+                <form method="POST" class="form-control">
+                    {{ form.hidden_tag() }}
+                    <td>
+                        {{form.consulta.label()}}
+                        {{form.consulta(class="form-control", placeholder="Consulta")}}
+                    </td>
+                    <td>
+                        <br>
+                        {{form.submit(class="btn btn-lg btn-block btn-primary", style="width:150px")}}
+                    </td>
+                    <td>                 
+                    </td>
+                </form>
+
+            </tbody>
+        </table>
+    </div>
+</div>
     <div class="row" style="margin-top:20px; margin-left: 20px;">
-        <div class="col-11">
+        <div class="col-12">
             <h2>Itens disponíveis no estoque.</h2>
             <p>Clique no item para verificar a situação em estoque.</p>
             <br>
@@ -18,8 +40,6 @@
                         <th scope="col">Preço</th>
                         <th scope="col">Quantidade</th>
                         <th scope="col">Opções</th>
-                        
-
                     </tr>
                 </thead>
                 <tbody>

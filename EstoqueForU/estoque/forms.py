@@ -81,3 +81,8 @@ class TipoForm(FlaskForm):
     modelo = StringField(label='Modelo', validators=[Length(max=20), DataRequired()])
     ano_colecao = StringField(label='Ano da Coleção', validators=[Length(min=4, max=4), DataRequired()])
     submit = SubmitField(label='Cadastrar Tipo')
+
+class ConsultaForm(FlaskForm):
+
+    consulta = StringField(label='Produto a consultar:', validators=[DataRequired()])
+    submit = SubmitField(label='Consultar')
