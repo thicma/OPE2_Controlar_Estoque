@@ -63,7 +63,12 @@ def register_fornecedor():
             flash(f'Ocorreu um erro ao cadastrar o fornecedor: {err_msg}', category='danger')
     return render_template('register_fornecedor.html', form=form)
 
-@app.route('/cadastrar_produto', methods=['GET', 'POST'])
+@app.route('/cadastrar_produto', methods=['GET'])
+def mostrar_tela_de_cadastro_do_produto():
+    form=ProdutoForm()
+    return render_template('cadastrar_produto.html', form=form)
+
+@app.route('/cadastrar_produto', methods=['POST'])
 def cadastrar_produto():
     session.modified = True
     tipos = Tipo.query.all()
