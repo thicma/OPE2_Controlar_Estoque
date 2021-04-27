@@ -16,6 +16,10 @@
                     <td>
                         <br>
                         {{form.submit(class="btn btn-lg btn-block btn-primary", style="width:150px")}}
+                        <a class="btn btn-success" href="{{url_for('estoque_page')}}">Listar Todos</a>
+                    </td>
+                    <td>
+                        <br>
                     </td>
                     <td>
                         &nbsp;                 
@@ -51,13 +55,13 @@
                     {% include 'includes/produtos_modals.html' %}
                         <tr>
                             <td>{{produto.id }}</td>
-                            <td>{{produto.tipo }}</td>
-                            <td>{{produto.descricao }}</td>
-                            <td>{{produto.modelo }}</td>
+                            <td>{{produto.tipo.title() }}</td>
+                            <td>{{produto.descricao.title() }}</td>
+                            <td>{{produto.modelo.title() }}</td>
                             <td>{{produto.ano_colecao }}</td>
-                            <td>{{produto.material }}</td>
-                            <td>{{produto.preco }}</td>
-                            <td>{{produto.tamanho }}</td>
+                            <td>{{produto.material.title() }}</td>
+                            <td>R${{'%0.2f' |format(produto.preco|float)}}</td>
+                            <td>{{produto.tamanho.descricao.title() }}</td>
                             <td>
                                 <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ resultado.id }}"> Mais Informações</button>
                                 <button class="btn btn-outline btn-success">Consultar este produto</button>

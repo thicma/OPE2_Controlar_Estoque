@@ -16,7 +16,8 @@ def home_page():
 @login_required
 def mostar_tela_de_estoque():
     form=ConsultaForm()
-    return render_template('estoque.html', form=form)
+    resultado = Produto.query.all()
+    return render_template('estoque.html', form=form, resultado=resultado)
 
 @app.route('/estoque', methods=['POST'])
 @login_required
@@ -26,18 +27,18 @@ def estoque_page():
     transacao = None
     resultado = ''
     if form.validate_on_submit():
-        resultado = consulta(form.consulta.data)
+        resultado = consulta(form.consulta.data.lower())
         transacao = registra_transacao(form.consulta.data)
-        if resultado != None:
-            for x in resultado:
-                print(x)
-            return render_template('estoque.html', resultado=resultado, form=form)
+        if resultado != False:
+            return render_template('estoque.html', form=form, resultado=resultado)
         else:
             flash('Nenhum resultado encontrado!', category='info')
-    return render_template('estoque.html', form=form, resultado=resultado)
+    return render_template('estoque.html', form=form)
 
 def consulta(atributo_para_consulta):
-    condicao = Produto.query.filter(or_(Produto.tipo == atributo_para_consulta, Produto.tamanho_id == atributo_para_consulta )).all()
+    condicao = Produto.query.filter(or_(Produto.tipo.contains(atributo_para_consulta), Produto.tamanho_id == atributo_para_consulta,
+                                     Produto.marca_nome.contains(atributo_para_consulta), Produto.ano_colecao == atributo_para_consulta,
+                                     Produto.material.contains(atributo_para_consulta),Produto.descricao.contains(atributo_para_consulta))).all()
     if condicao :
         condicao = condicao
         return condicao
@@ -98,42 +99,45 @@ def mostrar_tela_de_cadastro_do_produto():
 def cadastrar_produto():
     session.modified = True    
     form = ProdutoForm()
-    validar_tipo = validar_tipo_informado(int(form.tipo.data))
+    validar_preco = validar_preco_informado(form.preco.data)
     if form.validate_on_submit():
-        if validar_tipo:
-            produto_criado = Produto(id = form.id.data,
-                                        cor = form.cor.data,
-                                        preco = form.preco.data,
-                                        quantidade = form.quantidade.data,
-                                        tamanho = form.tamanho.data,
-                                        marca = form.marca.data,
-                                        tipo = validar_tipo) 
+            produto_criado = Produto(tipo = form.tipo.data.lower(),
+                                    descricao = form.descricao.data.lower(),
+                                    modelo = form.modelo.data.lower(),
+                                    ano_colecao = form.ano_colecao.data,
+                                    material = form.material.data.lower(),
+                                    cor = form.cor.data.lower(),
+                                    preco = validar_preco,
+                                    quantidade = form.quantidade.data,
+                                    tamanho_id = form.tamanho.data.upper(),
+                                    marca_nome = form.marca.data.lower()) 
             db.session.add(produto_criado)
             db.session.commit()
-            flash(f'Produto {produto_criado.id} cadastrado com sucesso', category='sucess')
-            form.id.data = None
+            flash(f'Produto {produto_criado.tipo} cadastrado com sucesso', category='sucess')
+            form.tipo.data = None
+            form.descricao.data = None
+            form.modelo.data = None     
+            form.ano_colecao.data = None
+            form.material.data = None
             form.cor.data = None
             form.preco.data = None
             form.quantidade.data = None
-            form.tipo.data = None
             form.tamanho.data = None
             form.marca.data = None
             return render_template('cadastrar_produto.html', form=form)
-        else:
-            flash(f'O tipo informado não existe, você será redirecionado para o cadastramento.', category='danger')
-            return redirect(url_for('cadastrar_tipo'))
     if form.errors !={}:
         for err_msg in form.errors.values():
             flash(f'Ocorreu um erro ao cadastrar o Produto: {err_msg}', category='danger')
     return render_template('cadastrar_produto.html', form=form)
 
-def validar_tipo_informado(id_to_check):
-    lista_tipo = []
-    resposta_se_tipo_existe = Tipo.query.filter_by(id=id_to_check).first()
-    if not resposta_se_tipo_existe:
-        return False
-    lista_tipo.append(resposta_se_tipo_existe)
-    return lista_tipo
+def validar_preco_informado(preco_informado):
+    preco_formatado = ''
+    if ',' in preco_informado:
+        preco_formatado = preco_informado.replace(',', '.')
+        return preco_formatado
+    return preco_informado
+        
+
 
 @app.route('/cadastrar_marca', methods=['GET', 'POST'])
 @login_required

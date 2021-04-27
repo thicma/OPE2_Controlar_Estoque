@@ -62,7 +62,6 @@ class ProdutoForm(FlaskForm):
     cor = StringField(label='Cor do Produto', validators=[Length(max=15), DataRequired()])
     preco = StringField(label='Valor Unitário', validators=[DataRequired()])
     quantidade = StringField(label='Quantidade', validators=[DataRequired()])
-    tipo = StringField(label='Tipo do Produto', validators=[DataRequired()])
     tamanho = StringField(label='Tamanho', validators=[Length(max=2), DataRequired()])
     marca = StringField(label='Marca', validators=[Length(max=20), DataRequired()])
     submit = SubmitField(label='Cadastar Produto')
