@@ -2,7 +2,22 @@ body {
     font-family: "Lato", sans-serif;
     background-color: #ffa781 ;
     color: #5b0e2d;
-  }  
+  }
+  .label{
+    font-family:"Lato";
+    font-size: 15px;
+    text-align: left;
+    color: #5b0e2d;
+    margin-left: 50px;
+    
+  }
+  .form-control{
+    padding: 2px 0px 2px 0px;
+  }
+  #tabela_form{
+    padding-left: 50px;
+    font-size: 50px;
+  }
   .sidenav {
     height: 100%;
     width: 0;

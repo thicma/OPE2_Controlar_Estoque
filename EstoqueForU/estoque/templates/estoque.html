@@ -36,27 +36,33 @@
                     <tr>
                         <!-- Your Columns HERE -->
                         <th scope="col">ID</th>
-                        <th scope="col">Produto</th>
-                        <th scope="col">Cor</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Descrição</th>
+                        <th scope="col">Modelo</th>
+                        <th scope="col">Ano da Coleção</th>
+                        <th scope="col">Material</th>
                         <th scope="col">Preço</th>
-                        <th scope="col">Quantidade</th>
-                        <th scope="col">Opções</th>
+                        <th scope="col">Tamanho</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- Your rows inside the table HERE: -->
-                    {% for produto in produtos %}
+                    {% for produto in resultado %}
                     {% include 'includes/produtos_modals.html' %}
                         <tr>
-                            <td>{{ produto.id }}</td>
-                            <td>{{ produto.name }}</td>
-                            <td>{{ produto.barcode }}</td>
-                            <td>{{ produto.price }}$</td>
+                            <td>{{produto.id }}</td>
+                            <td>{{produto.tipo }}</td>
+                            <td>{{produto.descricao }}</td>
+                            <td>{{produto.modelo }}</td>
+                            <td>{{produto.ano_colecao }}</td>
+                            <td>{{produto.material }}</td>
+                            <td>{{produto.preco }}</td>
+                            <td>{{produto.tamanho }}</td>
                             <td>
-                                <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ produto.id }}"> Mais Informações</button>
+                                <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ resultado.id }}"> Mais Informações</button>
                                 <button class="btn btn-outline btn-success">Consultar este produto</button>
                             </td>
-                        </tr>
+                        </tr>                    
                     {% endfor %}
                 </tbody>
             </table>

@@ -54,7 +54,11 @@ class FornecedorForm(FlaskForm):
 
 
 class ProdutoForm(FlaskForm):
-    id = StringField(label='Código do Produto', validators=[Length(max=20), DataRequired()])
+    tipo = StringField(label='Tipo do Produto', validators=[Length(max=15), DataRequired()])
+    descricao = StringField(label='Descrição do Produto', validators=[Length(max=50), DataRequired()])
+    modelo = StringField(label='Modelo', validators=[Length(max=20), DataRequired()])
+    ano_colecao = StringField(label='Ano da Colecao', validators=[Length(min=4, max=4), DataRequired()])
+    material = StringField(label='Material', validators=[Length(max=20), DataRequired()])
     cor = StringField(label='Cor do Produto', validators=[Length(max=15), DataRequired()])
     preco = StringField(label='Valor Unitário', validators=[DataRequired()])
     quantidade = StringField(label='Quantidade', validators=[DataRequired()])

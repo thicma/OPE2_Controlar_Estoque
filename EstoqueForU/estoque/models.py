@@ -1,8 +1,9 @@
 from estoque import db, login_manager
 from estoque import bcrypt
 from flask_login import UserMixin
-from sqlalchemy import DateTime
+from sqlalchemy import DateTime, or_
 from datetime import datetime, timezone
+from sqlalchemy.orm import relationship
 
 
 @login_manager.user_loader
@@ -15,6 +16,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(length=100), nullable=False, unique=False)
     charge= db.Column(db.String(length=50), nullable=False, unique=False)
     password_hash = db.Column(db.String(length=60), nullable=False)
+    transcao = db.relationship('Transacao', backref='transacao')
 
     @property
     def password(self):
@@ -60,20 +62,33 @@ class Marca (db.Model):
 
 
 class Produto(db.Model):
-    id = db.Column(db.String(length=20), primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True)
+    tipo = db.Column(db.String(length=15), nullable=False)
+    descricao = db.Column(db.String(length=50), nullable=False)
+    modelo = db.Column(db.String(length=20), nullable=False)
+    ano_colecao = db.Column(db.Integer(), nullable=False)
+    material = db.Column(db.String(length=20), nullable=False)
     cor = db.Column(db.String(length=15), nullable=False)    
     preco = db.Column(db.Float(), nullable=False)
     quantidade = db.Column(db.Integer(), nullable=False)
-    tipo = db.Column(db.Integer(), nullable=False)
-    tamanho = db.Column(db.String(length=2), nullable=False)
-    marca = db.Column(db.String(length=20), nullable=False)
+    marca_nome = db.Column(db.String(length=20), db.ForeignKey('marca.nome'))
+    marca = relationship('Marca', foreign_keys=[marca_nome])
+    tamanho_id = db.Column(db.String(length=2), db.ForeignKey('tamanho.id'))
+    tamanho = relationship('Tamanho', foreign_keys=[tamanho_id])
+
+    def __repr__(self):
+        return f"{self.id}\n{self.tipo}\n{self.descricao}"
 
 class Transacao(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     data = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now)
-    usuario = db.Column(db.Integer(), nullable=False)
-    produto = db.Column(db.String(length=20), nullable= False)
-    transacao = db.Column(db.Integer(), nullable=False)
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
+    produto_id = db.Column(db.Integer(), db.ForeignKey('produto.id'))
+    user = relationship('User', foreign_keys=[user_id])
+    produto = relationship('Produto', foreign_keys=[produto_id])
+    
+    
+
     def __repr__(self):
         return f"{self.id}\n{self.data}"
 

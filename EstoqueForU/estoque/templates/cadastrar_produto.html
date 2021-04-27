@@ -6,42 +6,79 @@
 
     {% block content %}
     <body class="text-center">
-        <div class="container">
-            <form method="POST" class="form-register" style="color:#5b0e2d">
-                {{ form.hidden_tag() }}
-                <div style="margin-top: 5px;">
-                    <img class="mb-4" src="{{ url_for('logo')}}" alt="Logo">
-                </div>
-                    <h1 class="h3 mb-3 font-weight-normal">
-                        Cadastramento de Produto
-                    </h1>
-                <div class="text-left">
-
-                {{form.id.label(style="font-size:25px")}}
-                {{form.id(class="form-control", placeholder="Código do Produto")}}
-
-                {{form.cor.label(style="font-size:25px")}}
-                {{form.cor(class="form-control", placeholder="Cor do Produto")}}
-                
-                {{form.preco.label(style="font-size:25px")}}
-                {{form.preco(class="form-control", placeholder="Preço da Unidade do Poduto")}}
-               
-                {{form.quantidade.label(style="font-size:25px")}}
-                {{form.quantidade(class="form-control", placeholder="Quantidade do Produto")}}
-
-                {{form.tipo.label(style="font-size:25px")}}
-                {{form.tipo(class="form-control", placeholder="Tipo do Produto")}}
-
-                {{form.tamanho.label(style="font-size:25px")}}
-                {{form.tamanho(class="form-control", placeholder="PP, P, M, G, GG")}}
-
-                {{form.marca.label(style="font-size:25px")}}
-                {{form.marca(class="form-control", placeholder="marca")}}
-                
-                <br>
-                {{form.submit(class="btn btn-lg btn-block btn-primary")}}                    
-                </div>
-            </form>
+        <div style="margin-top: 5px;" class="text-center">
+            <img src="{{ url_for('static', filename = 'logo2.png') }}"/>
         </div>
+        <h1 class="h3 mb-3 font-weight-normal" class="text-center">
+            Cadastramento de Produto
+        </h1>
+
+        <form method="POST" class="form-register" style="color:#5b0e2d">
+            {{ form.hidden_tag() }}
+            <div class="form-row">
+                <div class="col">
+                    {{form.tipo.label(class='label')}}
+                    {{form.tipo(class="form-control", placeholder="Tipo")}}
+                </div>
+                <div class="col">
+                    {{form.descricao.label(class='label')}}
+                    {{form.descricao(class="form-control", placeholder="")}}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                {{form.modelo.label(class='label')}}
+                {{form.modelo(class="form-control", placeholder="")}}
+                </div>
+                <div class="col">
+                {{form.ano_colecao.label(class='label')}}
+                {{form.ano_colecao(class="form-control", placeholder="")}}
+                </div>
+                
+                <div class="col">
+                    {{form.ano_colecao.label(class='label')}}
+                    {{form.ano_colecao(class="form-control", placeholder="")}}
+                    </div>
+
+                <div class="col">
+                {{form.material.label(class='label')}}
+                {{form.material(class="form-control", placeholder="")}}
+                </div>
+
+                <div class="col">
+                {{form.cor.label(class='label')}}
+                {{form.cor(class="form-control", placeholder="")}}
+                </div>
+
+
+                <div class="col">
+                {{form.preco.label(class='label')}}
+                {{form.preco(class="form-control", placeholder="")}}
+                </div>
+                <div class="col">
+                {{form.quantidade.label(class='label')}}
+                {{form.quantidade(class="form-control", placeholder="")}}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    {{form.tipo.label(class='label')}}
+                    {{form.tipo(class="form-control", placeholder="PP, P, M, G, GG")}}
+                </div>
+                <div class="col">
+                    {{form.tamanho.label(class='label')}}
+                    {{form.tamanho(class="form-control", placeholder="marca")}}
+                </div>      
+                <div class="col">
+                    {{form.marca.label(class='label')}}
+                    {{form.marca(class="form-control", placeholder="marca")}}
+                </div>
+            </div>
+                   
+                {{form.submit(class="btn btn-primary")}}                    
+
+        </form>
+
+  
     </body>
     {% endblock %}
