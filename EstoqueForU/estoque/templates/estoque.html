@@ -42,11 +42,13 @@
                         <th scope="col">ID</th>
                         <th scope="col">Tipo</th>
                         <th scope="col">Descrição</th>
+                        <th scope="col">Quantidade</th>
                         <th scope="col">Modelo</th>
                         <th scope="col">Ano da Coleção</th>
                         <th scope="col">Material</th>
                         <th scope="col">Preço</th>
                         <th scope="col">Tamanho</th>
+                        <th scope="col">Marca</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,11 +59,13 @@
                             <td>{{produto.id }}</td>
                             <td>{{produto.tipo.title() }}</td>
                             <td>{{produto.descricao.title() }}</td>
+                            <td>{{produto.quantidade }}</td>
                             <td>{{produto.modelo.title() }}</td>
                             <td>{{produto.ano_colecao }}</td>
                             <td>{{produto.material.title() }}</td>
                             <td>R${{'%0.2f' |format(produto.preco|float)}}</td>
                             <td>{{produto.tamanho.descricao.title() }}</td>
+                            <td>{{produto.marca_nome.title() }}</td>
                             <td>
                                 <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ resultado.id }}"> Mais Informações</button>
                                 <button class="btn btn-outline btn-success">Consultar este produto</button>

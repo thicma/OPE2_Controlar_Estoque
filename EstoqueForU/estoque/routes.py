@@ -6,6 +6,7 @@ from estoque import db
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import datetime
 from sqlalchemy import or_
+import re
 
 @app.route('/')
 @app.route('/home')
@@ -38,7 +39,8 @@ def estoque_page():
 def consulta(atributo_para_consulta):
     condicao = Produto.query.filter(or_(Produto.tipo.contains(atributo_para_consulta), Produto.tamanho_id == atributo_para_consulta,
                                      Produto.marca_nome.contains(atributo_para_consulta), Produto.ano_colecao == atributo_para_consulta,
-                                     Produto.material.contains(atributo_para_consulta),Produto.descricao.contains(atributo_para_consulta))).all()
+                                     Produto.material.contains(atributo_para_consulta),Produto.descricao.contains(atributo_para_consulta),
+                                     Produto.id.contains(atributo_para_consulta))).all()
     if condicao :
         condicao = condicao
         return condicao
@@ -101,6 +103,7 @@ def cadastrar_produto():
     form = ProdutoForm()
     validar_preco = validar_preco_informado(form.preco.data)
     if form.validate_on_submit():
+        if validar_preco != False:
             produto_criado = Produto(tipo = form.tipo.data.lower(),
                                     descricao = form.descricao.data.lower(),
                                     modelo = form.modelo.data.lower(),
@@ -109,11 +112,11 @@ def cadastrar_produto():
                                     cor = form.cor.data.lower(),
                                     preco = validar_preco,
                                     quantidade = form.quantidade.data,
-                                    tamanho_id = form.tamanho.data.upper(),
+                                    tamanho_id = form.tamanho.data.lower(),
                                     marca_nome = form.marca.data.lower()) 
             db.session.add(produto_criado)
             db.session.commit()
-            flash(f'Produto {produto_criado.tipo} cadastrado com sucesso', category='sucess')
+            flash(f'Produto {produto_criado.tipo} cadastrado com sucesso', category='success')
             form.tipo.data = None
             form.descricao.data = None
             form.modelo.data = None     
@@ -125,6 +128,9 @@ def cadastrar_produto():
             form.tamanho.data = None
             form.marca.data = None
             return render_template('cadastrar_produto.html', form=form)
+        else:
+            flash("Preço inválido! Informe apenas números e . ou ,", category='danger')
+            return render_template('cadastrar_produto.html', form=form)
     if form.errors !={}:
         for err_msg in form.errors.values():
             flash(f'Ocorreu um erro ao cadastrar o Produto: {err_msg}', category='danger')
@@ -132,11 +138,10 @@ def cadastrar_produto():
 
 def validar_preco_informado(preco_informado):
     preco_formatado = ''
-    if ',' in preco_informado:
+    if re.match("^[1-9]\d{0,7}((\.|\,)\d{1,4})$",preco_informado):
         preco_formatado = preco_informado.replace(',', '.')
         return preco_formatado
-    return preco_informado
-        
+    return False
 
 
 @app.route('/cadastrar_marca', methods=['GET', 'POST'])

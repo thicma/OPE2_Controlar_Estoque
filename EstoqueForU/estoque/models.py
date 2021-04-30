@@ -58,7 +58,7 @@ class Tamanho(db.Model):
 class Marca (db.Model):
     nome = db.Column(db.String(length=20), primary_key=True)
     id = db.Column(db.Integer(), autoincrement=True, nullable=False)
-    fornecedor= db.Column(db.Integer(), nullable=False)
+    fornecedor = db.Column(db.Integer(), nullable=False)
 
 
 class Produto(db.Model):

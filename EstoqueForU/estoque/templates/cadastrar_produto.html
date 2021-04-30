@@ -5,6 +5,9 @@
     {% endblock %}
 
     {% block content %}
+    <head>
+        <link rel="stylesheet" type= "text/css" href="{{ url_for ('static', filename='css/style.css') }}" >
+    </head>
     <body class="text-center">
         <div style="margin-top: 5px;" class="text-center">
             <img src="{{ url_for('static', filename = 'logo2.png') }}"/>
@@ -13,62 +16,52 @@
             Cadastramento de Produto
         </h1>
 
-        <form method="POST" class="form-register" style="color:#5b0e2d">
-            {{ form.hidden_tag() }}
+        <form>
             <div class="form-row">
-                <div class="col">
-                    {{form.tipo.label(class='label')}}
-                    {{form.tipo(class="form-control", placeholder="Tipo")}}
-                </div>
-                <div class="col">
-                    {{form.descricao.label(class='label')}}
-                    {{form.descricao(class="form-control", placeholder="")}}
-                </div>
+              <div class="form-group col-md-6">
+                <label for="inputEmail4">Email</label>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="inputPassword4">Password</label>
+                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputAddress">Address</label>
+              <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+            </div>
+            <div class="form-group">
+              <label for="inputAddress2">Address 2</label>
+              <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
             </div>
             <div class="form-row">
-                <div class="col">
-                {{form.modelo.label(class='label')}}
-                {{form.modelo(class="form-control", placeholder="")}}
-                </div>
-                <div class="col">
-                {{form.ano_colecao.label(class='label')}}
-                {{form.ano_colecao(class="form-control", placeholder="")}}
-                </div>                
-
-                <div class="col">
-                {{form.material.label(class='label')}}
-                {{form.material(class="form-control", placeholder="")}}
-                </div>
-
-                <div class="col">
-                {{form.cor.label(class='label')}}
-                {{form.cor(class="form-control", placeholder="")}}
-                </div>
-
-
-                <div class="col">
-                {{form.preco.label(class='label')}}
-                {{form.preco(class="form-control", placeholder="")}}
-                </div>
-                <div class="col">
-                {{form.quantidade.label(class='label')}}
-                {{form.quantidade(class="form-control", placeholder="")}}
-                </div>
+              <div class="form-group col-md-6">
+                <label for="inputCity">City</label>
+                <input type="text" class="form-control" id="inputCity">
+              </div>
+              <div class="form-group col-md-4">
+                <label for="inputState">State</label>
+                <select id="inputState" class="form-control">
+                  <option selected>Choose...</option>
+                  <option>...</option>
+                </select>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="inputZip">Zip</label>
+                <input type="text" class="form-control" id="inputZip">
+              </div>
             </div>
-            <div class="form-row">
-                <div class="col">
-                    {{form.tamanho.label(class='label')}}
-                    {{form.tamanho(class="form-control", placeholder="Tamanho")}}
-                </div>      
-                <div class="col">
-                    {{form.marca.label(class='label')}}
-                    {{form.marca(class="form-control", placeholder="Marca")}}
-                </div>
+            <div class="form-group">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="gridCheck">
+                <label class="form-check-label" for="gridCheck">
+                  Check me out
+                </label>
+              </div>
             </div>
-                   
-                {{form.submit(class="btn btn-primary")}}                    
-
-        </form>
+            <button type="submit" class="btn btn-primary">Sign in</button>
+          </form>
 
   
     </body>

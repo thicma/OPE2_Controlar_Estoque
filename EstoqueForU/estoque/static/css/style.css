@@ -2,57 +2,44 @@ body {
     font-family: "Lato", sans-serif;
     background-color: #ffa781 ;
     color: #5b0e2d;
-  }
-  .label{
-    font-family:"Lato";
-    font-size: 15px;
-    text-align: left;
-    color: #5b0e2d;
-    margin-left: 50px;
-    
-  }
-  .form-control{
-    padding: 2px 0px 2px 0px;
-  }
-  #tabela_form{
-    padding-left: 50px;
-    font-size: 50px;
-  }
-  .sidenav {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #053d57;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-  }  
-  .sidenav a {
-    padding: 8px 8px 8px 8px;
-    text-align: left;
-    text-decoration: none;
-    font-size: 20px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
-  }  
-  .sidenav a:hover {
-    color: #f1f1f1;
-  }  
-  .sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 20px;
-    margin-left: 50px;
-  }
-  .form-control{
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  }
-  @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
-  }
+}
+form{
+  font-size: 25px;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #053d57;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}  
+.sidenav a {
+  padding: 8px 8px 8px 8px;
+  text-align: left;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}  
+.sidenav a:hover {
+  color: #f1f1f1;
+}  
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 20px;
+  margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
