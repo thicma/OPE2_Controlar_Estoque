@@ -7,7 +7,6 @@
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" type= "text/css" href="{{ url_for ('static', filename='css/CSSReset.css') }}" >
       <link rel="stylesheet" type= "text/css" href="{{ url_for ('static', filename='bootstrap/css/bootstrap.css') }}" crossorigin="anonymous" >
-      <link rel="stylesheet" type= "text/css" href="{{ url_for ('static', filename='css/style.css') }}" crossorigin="anonymous" >
       <title>
         {% block title %}
 
@@ -16,70 +15,68 @@
    </head>
    <body>
       <!-- Navbar here -->
-        <div class="row">
-            <div class="col-sm-3">
-                <br>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <nav class="navbar navbar-expand-lg bg-dark">            
-                <div class="collapse navbar-collapse">
-                  <ul class="navbar-nav mr-auto">
-                    <li class="nav-item col-md-3">
-                        <a href="{{ url_for('home_page') }}">
-                            <img src="{{ url_for ('static', filename='logo_barra.png')}}" alt="">
-                        </a>
-                    </li>
-                    <li class="nav-item col-md-2">
-                        <a href="{{ url_for('estoque_page') }}">Estoque</a>
-                    </li>
-                    <li class="nav-item col-md-4">
-                        <a href="{{ url_for('register_fornecedor') }}">Cadastrar Fornecedor</a>
-                    </li>
-                    <li class="nav-item col-md-3">
-                        <a href="{{ url_for('mostrar_tela_de_cadastro_do_produto') }}">Cadastrar Produto</a>
-                    </li>
-                    <li class="nav-item col-md-3">
-                        <a href="{{ url_for('cadastrar_marca') }}">Cadastrar Marca</a>
-                    </li>
-                  </ul>
-                  <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-                  </form>
+      <div class="content">
+      <nav class="navbar navbar-expand-md fixed-top navbar-dark" aria-label="Main navigation"> 
+        <div class="container-fluid">
+              {% if current_user.is_authenticated %}                    
+              <ul class="navbar-nav">
+                  <li class="nav-item">
+                      <a class="nav-link">Bem Vindo, {{ current_user.username.title() }}</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                  </li>            
+              </ul>              
+              {% else %}
+              <ul class="navbar-nav">
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('login_page') }}">Login</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('register_page') }}">Criar conta</a>
+                  </li>
+              </ul>
+              {% endif %}
+          </div>
+        </nav>
+        <header class="navbar navbar-expand-md navbar-dark bd-navbar bg-dark" style="padding-top: 50px;">
+            <nav class="container-xxl flex-wrap flex-md-nowrap">
+                <div class="collapse navbar-collapse">           
+                    <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
+                        <li class="nav-item col-6 col-md-auto">
+                            <a class="nav-link p-2" href="{{ url_for('home_page') }}">
+                                <img src="{{ url_for ('static', filename='logo_barra.png')}}" alt="">
+                            </a>
+                        </li>
+                        <li class="nav-item col-6 col-md-auto">
+                            <a class="nav-link p-2" href="{{ url_for('estoque_page') }}">Estoque</a>
+                        </li>
+                        <li class="nav-item col-6 col-md-auto">
+                            <a class="nav-link p-2" href="{{ url_for('register_fornecedor') }}">Cadastrar Fornecedor</a>
+                        </li>
+                        <li class="nav-item col-6 col-md-auto">
+                            <a class="nav-link p-2" href="{{ url_for('mostrar_tela_de_cadastro_do_produto') }}">Cadastrar Produto</a>
+                        </li>
+                        <li class="nav-item col-6 col-md-auto">
+                            <a class="nav-link p-2" href="{{ url_for('cadastrar_marca') }}">Cadastrar Marca</a>
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+                    </form>
                 </div>
-              </nav>
-        </div>
-        <nav class="navbar navbar-expand-md navbar-dark bg-light">
+            </nav>
+        </header>
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                    <button type="button" class="btn btn-primary">Primary</button>
+            </li>
+            <li class='nav-item'>
+                    <button type="button" class="btn btn-primary">Primary</button>
+            </li>
+        </ul>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-                {% if current_user.is_authenticated %}
-                <ul class="navbar-nav mr-auto">
-                            
-
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link">Bem Vindo, {{ current_user.username.title() }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                    </li>            
-                </ul> 
-
-                {% else %}
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login_page') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('register_page') }}">Criar conta</a>
-                    </li>
-                </ul>                
-                
-                {% endif %}
-        </div>
-    </nav>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -111,7 +108,7 @@
           document.getElementById("mySidenav").style.width = "0";
         }
         </script>
-   
+    </div>
     </body>
 
 </html>
