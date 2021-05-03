@@ -3,77 +3,91 @@
     Estoque ForU
 {% endblock %}
 {% block content%}
-<div class="row" style="margin-top:20px; margin-left: 20px;">
-    <div class="col-12">
-        <table class="table table-hover" style="background-color: #ffa781">
-            <tbody>
-                <form method="POST" class="form-control">
-                    {{ form.hidden_tag() }}
-                    <td>
-                        {{form.consulta.label()}}
-                        {{form.consulta(class="form-control", placeholder="Consulta")}}
-                    </td>
-                    <td>
-                        <br>
-                        {{form.submit(class="btn btn-lg btn-block btn-primary", style="width:150px")}}
-                        <a class="btn btn-success" href="{{url_for('estoque_page')}}">Listar Todos</a>
-                    </td>
-                    <td>
-                        <br>
-                    </td>
-                    <td>
-                        &nbsp;                 
-                    </td>
-                
-            </tbody>
-        </table>
-    </form>
+<div class="row">
+    <div class="col-md-12">
+        <br>
     </div>
 </div>
-    <div class="row" style="margin-top:20px; margin-left: 20px;">
-        <div class="col-12">
-            <h2>Itens disponíveis no estoque.</h2>
-            <p>Clique no item para verificar a situação em estoque.</p>
-            <br>
-            <table class="table table-hover" style="background-color: #ffa781">
-                <thead>
-                    <tr>
-                        <!-- Your Columns HERE -->
-                        <th scope="col">ID</th>
-                        <th scope="col">Tipo</th>
-                        <th scope="col">Descrição</th>
-                        <th scope="col">Quantidade</th>
-                        <th scope="col">Modelo</th>
-                        <th scope="col">Ano da Coleção</th>
-                        <th scope="col">Material</th>
-                        <th scope="col">Preço</th>
-                        <th scope="col">Tamanho</th>
-                        <th scope="col">Marca</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Your rows inside the table HERE: -->
-                    {% for produto in resultado %}
-                    {% include 'includes/produtos_modals.html' %}
-                        <tr>
-                            <td>{{produto.id }}</td>
-                            <td>{{produto.tipo.title() }}</td>
-                            <td>{{produto.descricao.title() }}</td>
-                            <td>{{produto.quantidade }}</td>
-                            <td>{{produto.modelo.title() }}</td>
-                            <td>{{produto.ano_colecao }}</td>
-                            <td>{{produto.material.title() }}</td>
-                            <td>R${{'%0.2f' |format(produto.preco|float)}}</td>
-                            <td>{{produto.tamanho.descricao.title() }}</td>
-                            <td>{{produto.marca_nome.title() }}</td>
-                            <td>
-                                <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ resultado.id }}"> Mais Informações</button>
-                                <button class="btn btn-outline btn-success">Consultar este produto</button>
-                            </td>
-                        </tr>                    
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+<div class="col-md-8">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
     </div>
+  </nav>
+</div>
+  <div class="row">
+    <div class="col-md-12">
+        <br>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <table id="minha_tabela" class="table table-hover">
+            <thead>
+                <tr>
+                    <!-- Your Columns HERE -->
+                    {% for coluna in colunas %}
+                        {% if not "_" in coluna %}
+                            <th scope="col"> {{ coluna.title() }}</th>
+                        {% else %}
+                            <th scope="col"> {{ coluna.replace("_", " ").title() }}</th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Your rows inside the table HERE: -->
+                {% for produto in resultado %}
+                {% include 'includes/produtos_modals.html' %}
+                    <tr>
+                        <td>{{produto.tipo.title() }}</td>
+                        <td>{{produto.descricao.title() }}</td>
+                        <td>{{produto.modelo.title() }}</td>
+                        <td>{{produto.ano_colecao }}</td>
+                        <td>{{produto.material.title() }}</td>
+                        <td>{{produto.cor.title() }}</td>
+                        <td>{{(produto.preco | formatar_moeda )}}</td>
+                        <td>{{produto.quantidade }}</td>
+                        <td>{{produto.marca_nome.title() }}</td>
+                        <td>{{produto.tamanho.descricao.title() }}</td>
+                        <td>
+                            <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ produto.id }}"> Mais Informações</button>
+                            <button class="btn btn-outline btn-success">Consultar este produto</button>
+                        </td>
+                    </tr>                    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

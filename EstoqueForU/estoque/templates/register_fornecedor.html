@@ -8,7 +8,7 @@
     <body class="text-center">
 
         <div class="container">
-            <form method="POST" class="form-register" style="color: #5b0e2d">
+            <form method="POST" class="form-register">
                 {{ form.hidden_tag() }}
                 <div style="margin-top: 5px;">
                     <img src="{{ url_for('static', filename = 'logo2.png') }}"/>
@@ -18,19 +18,19 @@
                     </h1>
                 <div class="text-left">
 
-                {{form.id.label(style="font-size:25px")}}
+                {{form.id.label()}}
                 {{form.id(class="form-control", placeholder="Código do Fornecedor")}}
 
-                {{form.name.label(style="font-size:25px")}}
+                {{form.name.label()}}
                 {{form.name(class="form-control", placeholder="Nome do Fornecedor")}}
                 
-                {{form.email.label(style="font-size:25px")}}
+                {{form.email.label()}}
                 {{form.email(class="form-control", placeholder="E-mail")}}
                
-                {{form.fone.label(style="font-size:25px")}}
+                {{form.fone.label()}}
                 {{form.fone(class="form-control", placeholder="Telefone")}}
 
-                {{form.cnpj.label(style="font-size:25px")}}
+                {{form.cnpj.label()}}
                 {{form.cnpj(class="form-control", placeholder="CNPJ")}}
                 
                 <br>

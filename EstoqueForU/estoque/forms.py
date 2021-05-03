@@ -1,7 +1,9 @@
+from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import Length, EqualTo, DataRequired, ValidationError
-from estoque.models import User, Fornecedor, Produto, Marca, Tipo
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from estoque.models import *
 
 
 class RegisterForm(FlaskForm):
@@ -52,9 +54,13 @@ class FornecedorForm(FlaskForm):
     cnpj = StringField(label='CNPJ:', validators=[Length(min=14, max=14), DataRequired()])
     submit = SubmitField(label='Cadastrar')
 
+def seleciona_categoria():
+    produtos= Produto.query.all()
+    lista_de_categoria = [(categoria.id, categoria.tipo) for categoria in produtos]
+    return lista_de_categoria
 
 class ProdutoForm(FlaskForm):
-    tipo = StringField(label='Tipo do Produto', validators=[Length(max=15), DataRequired()])
+    categoria = SelectField(u"Categoria", choices=seleciona_categoria())
     descricao = StringField(label='Descrição do Produto', validators=[Length(max=50), DataRequired()])
     modelo = StringField(label='Modelo', validators=[Length(max=20), DataRequired()])
     ano_colecao = StringField(label='Ano da Colecao', validators=[Length(min=4, max=4), DataRequired()])
@@ -62,7 +68,7 @@ class ProdutoForm(FlaskForm):
     cor = StringField(label='Cor do Produto', validators=[Length(max=15), DataRequired()])
     preco = StringField(label='Valor Unitário', validators=[DataRequired()])
     quantidade = StringField(label='Quantidade', validators=[DataRequired()])
-    tamanho = StringField(label='Tamanho', validators=[Length(max=2), DataRequired()])
+    tamanho = SelectField(u"Tamanho", choices=[(tamanho.id, tamanho.descricao) for tamanho in Tamanho.query.all()])
     marca = StringField(label='Marca', validators=[Length(max=20), DataRequired()])
     submit = SubmitField(label='Cadastar Produto')
 

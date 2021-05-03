@@ -28,6 +28,7 @@ class User(db.Model, UserMixin):
     
     def check_password_correction(self, attempted_password):
         return bcrypt.check_password_hash(self.password_hash, attempted_password)
+    
 
 class Tipo(db.Model)   :
     id = db.Column(db.Integer(), primary_key=True)
@@ -75,9 +76,9 @@ class Produto(db.Model):
     marca = relationship('Marca', foreign_keys=[marca_nome])
     tamanho_id = db.Column(db.String(length=2), db.ForeignKey('tamanho.id'))
     tamanho = relationship('Tamanho', foreign_keys=[tamanho_id])
-
+    
     def __repr__(self):
-        return f"{self.id}\n{self.tipo}\n{self.descricao}"
+        return f"{self.tipo}"
 
 class Transacao(db.Model):
     id = db.Column(db.Integer(), primary_key=True)

@@ -1,26 +1,27 @@
-{% extends 'base.html' %}
-
-    {% block title %}
-        Cadastramento de Produtos
-    {% endblock %}
-
-    {% block content %}
-
-    <body id="formularios">
-      <link rel="stylesheet" type= "text/css" href="{{ url_for ('static', filename='css/style.css') }}" >
-        <div style="margin-top: 5px;" class="text-center">
-            <img src="{{ url_for('static', filename = 'logo2.png') }}"/>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            {{form.consulta.label()}}
+            {{form.consulta(class="form-control", placeholder="Consulta")}}
         </div>
-        <h1 class="h3 mb-3 font-weight-normal">
-            Cadastramento de Produto
-        </h1>
-
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            {{form.submit(class="btn btn-lg btn-block btn-primary")}}
+        </div>
+        <div class="form-group col-md-2">
+            <a class="btn btn-lg btn-block btn-primary" href="{{url_for('estoque_page')}}">Listar Todos</a>
+        </div> 
+    </div>
+</form>
         <form method="POST" class="form-register">
             {{ form.hidden_tag() }}
-            <ul class="list-group col-md-2">
-                {{ form.categoria(class="btn btn-lg btn-outline-primary") }}
-            </ul>
             <div class="form-row">
+              <div class="form-group col-md-4">
+                {{ form.tipo.label() }}
+                {{ form.tipo(class="form-control", placeholder="Blusa, Calça, Camiseta, etc..") }}
+              </div>
               <div class="form-group col-md-4">
                 {{ form.descricao.label() }}
                 {{ form.descricao(class="form-control", placeholder="Descrição do produto")}}
@@ -29,9 +30,10 @@
                 {{ form.ano_colecao.label() }}
                 {{ form.ano_colecao(class="form-control", placeholder="XXXX")}}
               </div>
-              <ul class="list-group col-md-2">
-                {{ form.tamanho(class="btn btn-lg btn-outline-primary") }}
-              </ul>
+              <div class="form-group col-md-2">
+                {{ form.tamanho.label() }}
+                {{ form.tamanho(class="form-control", placeholder="PP, P, M, G, GG")}}
+              </div>
             </div>
             <div class="form-row">
                <div class="form-group col-md-4">
@@ -69,7 +71,3 @@
                 </div>
             </div>
           </form>
-
-  
-    </body>
-    {% endblock %}

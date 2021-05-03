@@ -1,3 +1,28 @@
+body {
+    font-family: "Lato", sans-serif;
+    background-color: #EEFBFB ;
+    color: #203647;
+}
+#minha_tabela {
+  background-color: #007CB0;
+}
+
+#minha_tabela td {
+  background-color: #007CC9;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 25px;
+  padding-bottom: 50px;
+  font-weight: bold;
+  font-size: 50px;
+}
+
+#navbarNav li {
+  color: #203647;
+  font-weight: bold;
+}
 
 .sidenav {
   height: 100%;
@@ -6,7 +31,8 @@
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #053d57;
+  background-color: #007CC7;
+  color: #203647;
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
@@ -16,12 +42,12 @@
   text-align: left;
   text-decoration: none;
   font-size: 20px;
-  color: #818181;
+  color: #203647;
   display: block;
   transition: 0.3s;
-}  
+} 
 .sidenav a:hover {
-  color: #f1f1f1;
+  color: #EEFBFB;
 }  
 .sidenav .closebtn {
   position: absolute;
@@ -29,6 +55,10 @@
   right: 25px;
   font-size: 20px;
   margin-left: 50px;
+}
+h3 {
+  font-weight: bold;
+  color: #EEFBFB;
 }
 
 @media screen and (max-height: 450px) {
