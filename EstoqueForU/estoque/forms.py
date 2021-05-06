@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, SelectField, BooleanField
 from wtforms.validators import Length, EqualTo, DataRequired, ValidationError
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from estoque.models import *
@@ -54,15 +54,17 @@ class FornecedorForm(FlaskForm):
     cnpj = StringField(label='CNPJ:', validators=[Length(min=14, max=14), DataRequired()])
     submit = SubmitField(label='Cadastrar')
 
+
 def seleciona_categoria():
-    produtos= Produto.query.all()
-    lista_de_categoria = [(categoria.id, categoria.tipo) for categoria in produtos]
+    categorias= Categoria.query.all()
+    lista_de_categoria = [(categoria.id, categoria.descricao) for categoria in categorias]
     return lista_de_categoria
 
 class ProdutoForm(FlaskForm):
     categoria = SelectField(u"Categoria", choices=seleciona_categoria())
     descricao = StringField(label='Descrição do Produto', validators=[Length(max=50), DataRequired()])
     modelo = StringField(label='Modelo', validators=[Length(max=20), DataRequired()])
+    genero = SelectField(u"Genero", choices=[('f','feminino'),('m','masculino')])
     ano_colecao = StringField(label='Ano da Colecao', validators=[Length(min=4, max=4), DataRequired()])
     material = StringField(label='Material', validators=[Length(max=20), DataRequired()])
     cor = StringField(label='Cor do Produto', validators=[Length(max=15), DataRequired()])
@@ -76,20 +78,6 @@ class MarcaForm(FlaskForm):
     nome = StringField(label='Marca', validators=[Length(max=20), DataRequired()])
     fornecedor = StringField(label='Fornecedor', validators=[DataRequired()])
     submit = SubmitField(label='Cadastrar Marca')
-
-class TipoForm(FlaskForm):
-
-    def validate_id(self, id_to_check):
-        id = Tipo.query.filter_by(id=id_to_check.data).first()
-        if id:
-            raise ValidationError(f'Tipo já registrado {id.descricao}')
-        
-    id= StringField(label='Código do Tipo:', validators=[DataRequired()])
-    descricao = StringField(label='Descrição do Tipo:', validators=[Length(max=50), DataRequired()])
-    material = StringField(label='Material do Produto:', validators=[Length(max=20), DataRequired()])
-    modelo = StringField(label='Modelo', validators=[Length(max=20), DataRequired()])
-    ano_colecao = StringField(label='Ano da Coleção', validators=[Length(min=4, max=4), DataRequired()])
-    submit = SubmitField(label='Cadastrar Tipo')
 
 class ConsultaForm(FlaskForm):
 

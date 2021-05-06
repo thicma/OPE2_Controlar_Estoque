@@ -30,12 +30,12 @@ class User(db.Model, UserMixin):
         return bcrypt.check_password_hash(self.password_hash, attempted_password)
     
 
-class Tipo(db.Model)   :
+class Categoria(db.Model)   :
     id = db.Column(db.Integer(), primary_key=True)
     descricao = db.Column(db.String(length=50), nullable=False)
-    material = db.Column(db.String(length=20), nullable=False)
-    modelo= db.Column(db.String(length=20), nullable=False)
-    ano_colecao = db.Column(db.Integer(), nullable=False)
+
+    def __repr__(self):
+        return f'{self.descricao}'
 
 class Autorizacao(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
@@ -64,9 +64,11 @@ class Marca (db.Model):
 
 class Produto(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    tipo = db.Column(db.String(length=15), nullable=False)
+    categoria_id = db.Column(db.String(length=15), db.ForeignKey('categoria.id'))
+    categoria = relationship('Categoria', foreign_keys=[categoria_id])
     descricao = db.Column(db.String(length=50), nullable=False)
     modelo = db.Column(db.String(length=20), nullable=False)
+    genero = db.Column(db.String(length=9), nullable=False)
     ano_colecao = db.Column(db.Integer(), nullable=False)
     material = db.Column(db.String(length=20), nullable=False)
     cor = db.Column(db.String(length=15), nullable=False)    
@@ -78,7 +80,7 @@ class Produto(db.Model):
     tamanho = relationship('Tamanho', foreign_keys=[tamanho_id])
     
     def __repr__(self):
-        return f"{self.tipo}"
+        return f"{self.categoria.descricao}\n{self.descricao}\n{self.modelo}\n{self.ano_colecao}"
 
 class Transacao(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
