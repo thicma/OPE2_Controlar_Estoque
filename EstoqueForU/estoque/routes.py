@@ -1,6 +1,6 @@
 from estoque import app
 from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session, request
-from estoque.models import Produto, User, Transacao, Fornecedor, Produto, Marca, Categoria
+from estoque.models import Produto, User, Transacao, Fornecedor, Produto, Marca, Categoria, Tamanho
 from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm, ConsultaForm
 from estoque import db
 from flask_login import login_user, logout_user, login_required, current_user
@@ -128,11 +128,26 @@ def busca_valores_checkbox():
     global todos
     lista_tamanhos = request.form.getlist('tamanho')
     lista_categoria = request.form.getlist('categoria')
+    if len(lista_categoria) == 0:
+        lista_categoria = [(categoria.id) for categoria in Categoria.query.all()]
+    if len(lista_tamanhos) == 0:
+        lista_tamanhos = [(tamanho.id) for tamanho in Tamanho.query.all()]
+
     resultado = ''
     if masculino == 1:
         resultado = Produto.query.filter(and_(Produto.genero == 'masculino',
                                         Produto.tamanho_id.in_(lista_tamanhos),
                                         Produto.categoria_id.in_(lista_categoria))).all()
+    elif feminino == 1:
+        resultado = Produto.query.filter(and_(Produto.genero == 'feminino',
+                                        Produto.tamanho_id.in_(lista_tamanhos),
+                                        Produto.categoria_id.in_(lista_categoria))).all()
+    else:
+        resultado = Produto.query.filter(and_(Produto.tamanho_id.in_(lista_tamanhos),
+                                        Produto.categoria_id.in_(lista_categoria))).all()
+    
+    if len(resultado) == 0:
+        flash('Nenhum produto encontrado', category='info')
 
     print(resultado)    
     return render_template('estoque.html', resultado=resultado)
