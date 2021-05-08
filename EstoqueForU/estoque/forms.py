@@ -80,6 +80,5 @@ class MarcaForm(FlaskForm):
     submit = SubmitField(label='Cadastrar Marca')
 
 class ConsultaForm(FlaskForm):
-
     consulta = StringField(label='Produto a consultar:', validators=[DataRequired()])
     submit = SubmitField(label='Consultar')

@@ -45,10 +45,15 @@ h1 {
   color: #203647;
   display: block;
   transition: 0.3s;
-} 
-.sidenav a:hover {
-  color: #EEFBFB;
-}  
+}
+.menu__link{
+  color: #333333;
+  padding: .5rem 1rem;
+}
+.menu__link:hover, .menu__link.ativo {
+  border-bottom: 2px solid #0073e6;
+}
+
 .sidenav .closebtn {
   position: absolute;
   top: 0;

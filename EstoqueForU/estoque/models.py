@@ -44,6 +44,19 @@ class Autorizacao(db.Model):
     def __repr__(self):
         return f"ID: {self.id}\n{self.descricao}"
 
+#class Movimentacao_financeira(db.Model):
+"""
+id
+data_hora
+produto_id
+usuario_id
+quantidade
+valor
+tipo (entrada ou saida)
+
+fazer relatório em outra tela de html para retornar o relatório
+"""
+
 class Fornecedor(db.Model):
     id= db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(length=30), nullable=False, unique=True)

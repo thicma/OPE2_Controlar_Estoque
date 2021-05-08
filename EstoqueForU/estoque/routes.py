@@ -11,69 +11,45 @@ import locale
 locale.setlocale(locale.LC_MONETARY, 'Portuguese_Brazil.1252')
 
 
-listar_todos_produtos = Produto.query.all()
-masculino = 0
-feminino = 0
-todos = 1
+def gera_nome_colunas():
+    return ['Categoria','Descrição','Modelo','Gênero','Ano da Coleção','Material','Cor','Preço','Quantidade','Nome da Marca','Tamanho']
 
 @app.route('/', methods=['GET'])
 def home_page():
     return render_template('home.html')
 
-@app.route('/masculino', methods=['POST'])
-def produtos_masculinos():
-    global masculino
-    global feminino
-    global todos
-    masculino = 1
-    feminino = 0
-    todos = 0
-    colunas = Produto.__table__.columns.keys()
-    resultado = Produto.query.filter(Produto.genero == "masculino").all()
-    print(f'masculino: {masculino} | feminino: {feminino} | todos{todos}')
-    return render_template('estoque.html', resultado=resultado, colunas=colunas)
-
-@app.route('/feminino', methods=['POST'])
-def produtos_feminino():
-    global masculino
-    global feminino
-    global todos
-    masculino = 0
-    feminino = 1
-    todos = 0
-    colunas = Produto.__table__.columns.keys()
-    resultado = Produto.query.filter(Produto.genero == "feminino").all()
-    print(f'masculino: {masculino} | feminino: {feminino} | todos{todos}')
-    return render_template('estoque.html', resultado=resultado, colunas=colunas)
-
-
-"""
-@app.route('/', methods=['POST'])
-def busca_check():
-    form = request.form
-    filters = {'categoria': None ,'descricao': None,'modelo': None,'genero':form["masculino"],
-            'ano_colecao':form["2020"],'material':None,'cor':None,'tamanho':form["p"]}
-    
-    resultado = Produto.query.filter(*filters).all()
-    
-    return render_template("home.html")
-"""
-
 @app.route('/estoque', methods=['GET'])
 @login_required
 def mostar_tela_de_estoque():
-    global masculino
-    global feminino
-    global todos
-    masculino = 0
-    feminino = 0
-    todos = 1
     form=ConsultaForm()
     resultado = Produto.query.all()
-    colunas = Produto.__table__.columns.keys()
-    colunas.pop(0)
-    print(f'masculino: {masculino} | feminino: {feminino} | todos{todos}')
+    colunas = gera_nome_colunas()
     return render_template('estoque.html', form=form, resultado=resultado, colunas=colunas)
+
+@app.route('/estoque', methods=['POST'])
+@login_required
+def estoque_page():
+    session.modified = True
+    resultado = ''
+    colunas = gera_nome_colunas()
+    resultado = consulta(request.form['consultar'].lower())
+    if resultado != False:
+        return render_template('estoque.html',resultado=resultado, colunas=colunas, genero="")
+    else:
+        flash('Nenhum resultado encontrado!', category='info')
+    return render_template('estoque.html')
+
+@app.route('/masculino', methods=['POST'])
+def produtos_masculinos():
+    colunas = gera_nome_colunas()
+    resultado = Produto.query.filter(Produto.genero == "masculino").all()
+    return render_template('estoque.html', resultado=resultado, colunas=colunas, genero="masculino")
+
+@app.route('/feminino', methods=['POST'])
+def produtos_feminino():
+    colunas = gera_nome_colunas()
+    resultado = Produto.query.filter(Produto.genero == "feminino").all()
+    return render_template('estoque.html', resultado=resultado, colunas=colunas, genero="feminino")
 
 
 def entrada_produto():
@@ -83,63 +59,35 @@ def entrada_produto():
 def saida_produto():
     pass
 
-@app.route('/estoque', methods=['POST'])
-@login_required
-def estoque_page():
-    global masculino
-    global feminino
-    global todos
-    masculino = 0
-    feminino = 0
-    todos = 1
-    session.modified = True
-    form=ConsultaForm()
-    resultado = ''
-    print(f'masculino: {masculino} | feminino: {feminino} | todos{todos}')
-    if form.validate_on_submit():
-        resultado = consulta(form.consulta.data.lower())
-        if resultado != False:
-            return render_template('estoque.html', form=form, resultado=resultado)
-        else:
-            flash('Nenhum resultado encontrado!', category='info')
-    return render_template('estoque.html', form=form)
 
 def consulta(atributo_para_consulta):
-    condicao = Produto.query.filter(and_(Produto.categoria_id.contains(atributo_para_consulta),
-                                        Produto.tamanho_id.in_(['m','gg','g']))).all()
-    if condicao :
-        condicao = condicao
-        return condicao
-    return False
-"""
+    condicao = Produto.query.filter(or_(Produto.categoria_id.contains(atributo_para_consulta),
+                                        Produto.tamanho_id.contains(atributo_para_consulta),
                                         Produto.marca_nome.contains(atributo_para_consulta), 
                                         Produto.ano_colecao == atributo_para_consulta,
                                         Produto.material.contains(atributo_para_consulta),
                                         Produto.descricao.contains(atributo_para_consulta),
-                                        Produto.id.contains(atributo_para_consulta),
                                         Produto.modelo.contains(atributo_para_consulta))).all()
-"""
+    if condicao :
+        return condicao
+    return False
+
 
 #consulta_dinamica(busca_valores_checkbox)
 @app.route('/consulta_filtro', methods=['POST'])
 def busca_valores_checkbox():
-    global masculino
-    global feminino
-    global todos
     lista_tamanhos = request.form.getlist('tamanho')
     lista_categoria = request.form.getlist('categoria')
+    genero = request.form['genero']
+    colunas = gera_nome_colunas()
     if len(lista_categoria) == 0:
         lista_categoria = [(categoria.id) for categoria in Categoria.query.all()]
     if len(lista_tamanhos) == 0:
         lista_tamanhos = [(tamanho.id) for tamanho in Tamanho.query.all()]
 
     resultado = ''
-    if masculino == 1:
-        resultado = Produto.query.filter(and_(Produto.genero == 'masculino',
-                                        Produto.tamanho_id.in_(lista_tamanhos),
-                                        Produto.categoria_id.in_(lista_categoria))).all()
-    elif feminino == 1:
-        resultado = Produto.query.filter(and_(Produto.genero == 'feminino',
+    if genero != "":
+        resultado = Produto.query.filter(and_(Produto.genero == genero,
                                         Produto.tamanho_id.in_(lista_tamanhos),
                                         Produto.categoria_id.in_(lista_categoria))).all()
     else:
@@ -150,7 +98,7 @@ def busca_valores_checkbox():
         flash('Nenhum produto encontrado', category='info')
 
     print(resultado)    
-    return render_template('estoque.html', resultado=resultado)
+    return render_template('estoque.html', resultado=resultado, colunas=colunas, genero=genero)
 
 def consulta_dinamica(lista_de_checkbox):
     resultado = ""

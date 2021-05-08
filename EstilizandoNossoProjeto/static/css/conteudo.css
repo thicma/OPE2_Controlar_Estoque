@@ -1,0 +1,27 @@
+.conteudo{
+    padding: 0 2rem;
+    display: grid;
+    grid-gap: 0.2rem;
+    grid-template-columns: 20% auto;
+    grid-template-rows: auto;
+    height: 100%;
+    width: 100%;
+    }
+
+.conteudo__menu___lateral{
+    height: 100%;
+    width: 100%;
+    grid-column: 1 / 1;
+}
+
+.conteudo__tabela_estoque{
+    height: 100%;
+    width: 100%;
+    grid-column: 2/2;
+    padding: 2rem 0;
+}
+
+.conteudo__tabela_estoque th, td{
+    padding-right: 2.5rem;
+    justify-self: end;
+}
