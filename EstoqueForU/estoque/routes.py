@@ -235,9 +235,17 @@ def validar_preco_informado(preco_informado):
     return False
 
 def validar_quantidade_informada(quantidade_informada):
-    if re.match("[1-9]",quantidade_informada):
-       return True
-    return False
+	try:
+		int(qunatidade_informada)
+	except:
+		return False
+	return True
+
+def validar_texto(texto_informado):
+	if (texto_informado.replace(" ","").isalpha()):
+		return True
+	else:
+		return False
 
 @app.route('/cadastrar_marca', methods=['GET', 'POST'])
 @login_required
