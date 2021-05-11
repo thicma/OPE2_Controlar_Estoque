@@ -236,10 +236,12 @@ def validar_preco_informado(preco_informado):
 
 def validar_quantidade_informada(quantidade_informada):
 	try:
-		int(qunatidade_informada)
+		val=int(qunatidade_informada)
+		if (val>0):
+			return True
 	except:
-		return False
-	return True
+		pass
+	return False
 
 def validar_texto(texto_informado):
 	if (texto_informado.replace(" ","").isalpha()):
