@@ -8,19 +8,18 @@
         "rodape";
     grid-template-columns: auto;
     grid-template-rows: 100px auto auto;
+    padding: 3rem 1rem;
+    padding-right: 3rem;
 }
 .cabecalho {
     grid-area: cabecalho;
     display: flex;
     align-items: center;
-    padding: 1rem 0;
-    padding-bottom: 2rem;
     margin-bottom: 1rem;
 }
  
 .conteudo {
     grid-area: conteudo;
-    padding: 0 2rem;
 }
 
 .rodape {

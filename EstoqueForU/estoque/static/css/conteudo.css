@@ -7,7 +7,7 @@ color: #333333;
     display: grid;
     grid-gap: 0.2rem;
     grid-template-columns: 13% auto;
-    grid-template-rows: auto auto;
+    grid-template-rows: 20% auto;
     height: 100%;
     width: 100%;
     
@@ -17,7 +17,7 @@ color: #333333;
     grid-template-rows: repeat(7);
     grid-template-columns: auto;
     width: 100%;
-    height: 70%;
+    height: 100%;
     grid-column: 1 / 1;
     overflow: scroll
 }
@@ -52,10 +52,8 @@ color: #333333;
 
 .conteudo__titulo_tabelas{
     grid-column: 2/2;
-    grid-row: 1/2;
+    grid-row: 2/2;
     font-size: 1.5rem;
-    align-items: flex-end;
-    display: flex;
     justify-content: center;   
 }
 .conteudo__menu___tamanho{
@@ -134,7 +132,11 @@ color: #333333;
     padding-left: 3rem;
 }
 
-.conteudo__tabela_estoque th, td{
-    padding-right: 3.5rem;
+.conteudo__tabela_estoque th{
+    padding-right: 1rem;
+    justify-self: end;
+}
+.conteudo__tabela_estoque td{
+    padding-right: auto;
     justify-self: end;
 }

@@ -1,72 +1,32 @@
-body {
-    font-family: "Lato", sans-serif;
-    background-color: #EEFBFB ;
-    color: #203647;
+.base{
+    background: #f1f1f1;
+    display: grid;  
+    font-family: Arial, Helvetica, sans-serif;
+    grid-template-areas: 
+        "cabecalho"
+        "conteudo"
+        "rodape";
+    grid-template-columns: auto;
+    grid-template-rows: 100px auto auto;
+    padding: 3rem 1rem;
+    padding-right: 3rem;
 }
-#minha_tabela {
-  background-color: #007CB0;
+.cabecalho {
+    grid-area: cabecalho;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
 }
-
-#minha_tabela td {
-  background-color: #007CC9;
-}
-
-h1 {
-  text-align: center;
-  margin-top: 25px;
-  padding-bottom: 50px;
-  font-weight: bold;
-  font-size: 50px;
-}
-
-#navbarNav li {
-  color: #203647;
-  font-weight: bold;
+ 
+.conteudo {
+    grid-area: conteudo;
 }
 
-.sidenav {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #007CC7;
-  color: #203647;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
-}  
-.sidenav a {
-  padding: 8px 8px 8px 8px;
-  text-align: left;
-  text-decoration: none;
-  font-size: 20px;
-  color: #203647;
-  display: block;
-  transition: 0.3s;
-}
-.menu__link{
-  color: #333333;
-  padding: .5rem 1rem;
-}
-.menu__link:hover, .menu__link.ativo {
-  border-bottom: 2px solid #0073e6;
-}
-
-.sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 20px;
-  margin-left: 50px;
-}
-h3 {
-  font-weight: bold;
-  color: #EEFBFB;
-}
-
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
+.rodape {
+    background: #fdfdfd;
+    color: #333333;
+    font-size: .8rem;
+    grid-area: rodape;
+    padding: 1rem;
+    text-align: center;
 }

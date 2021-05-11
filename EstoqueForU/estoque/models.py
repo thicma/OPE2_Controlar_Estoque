@@ -103,8 +103,12 @@ class Transacao(db.Model):
     user = relationship('User', foreign_keys=[user_id])
     produto = relationship('Produto', foreign_keys=[produto_id])
     
-    
-
     def __repr__(self):
         return f"{self.id}\n{self.data}"
+    
+class Material(db.Model):
+    id = db.Column(db.String(length=15), primary_key=True)
+
+    def __repr__(self) -> str:
+        return f"{self.id}"
 

@@ -1,110 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-   <head>
-      <!-- Required meta tags -->
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <!-- Bootstrap CSS -->
-      <link rel="stylesheet" type= "text/css" href="{{ url_for ('static', filename='css/CSSReset.css') }}" >
-      <link rel="stylesheet" type= "text/css" href="{{ url_for ('static', filename='bootstrap/css/bootstrap.css') }}" crossorigin="anonymous" >
-      <title>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <title>
         {% block title %}
 
         {% endblock %}
-      </title>
-   </head>
-   <body>
-      <!-- Navbar here -->
-      <div class="content">
-        <nav class="py-2 bg-light border-bottom">
-            <div class="container-xxl d-flex flex-wrap justify-content-end">
-                {% if current_user.is_authenticated %}
-                <ul class="nav">
-                  <li class="nav-item">
-                      <a class="nav-link">Bem Vindo, {{ current_user.username.title() }}</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                    </li>
-                </ul>
-                {% else %}
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login_page') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('register_page') }}">Criar conta</a>
-                    </li>
-                </ul>
-            {%endif%}
-            </div>
-          </nav>
-          <header class="py-3 mb-4 border-bottom justify-content-center">
-            <div class="container">
-                <div class="row">
-                    <div class="d-flex justify-content-start">
-                    <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none" href="{{ url_for('home_page') }}">
-                        <img src="{{ url_for ('static', filename='logo_barra.png')}}" alt="">
-                    </a>
+    </title>
+</head>
+<body class="container-fluid p-5">
+    <header>
+        {% if current_user.is_authenticated %}
+        <div class="container-fluid">
+            <div class="row border pt-2">
+                <div class="col-md-4">
+                    <div class="d-flex justify-content-center">
+                        <img src="{{ url_for('static', filename='img/logo_barra.png') }}">
                     </div>
-                    {% if current_user.is_authenticated %}
-                    <div class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
-                        <div class="d-flex justify-content-start">
-                            <a class="nav-link p-2" href="{{ url_for('estoque_page') }}">Estoque</a>
+                </div>
+                <div class="col-md-4 offset-md-4">
+                    <div class="container-fluid">
+                        <nav class="navbar">
+                        <div class="container-fluid">
+                            <a class="navbar-brand">Bem-vindo(a) {{ current_user.username.title() }} </a>
+                            <a class="navbar-brand" href="{{ url_for('logout') }}">Logout</a>
                         </div>
-                        <div class="d-flex justify-content-start">
-                            <a class="nav-link p-2" href="{{ url_for('register_fornecedor') }}">Cadastrar Fornecedor</a>
-                        </div>
-                        <div class="d-flex justify-content-start">
-                            <a class="nav-link p-2" href="{{ url_for('mostrar_tela_de_cadastro_do_produto') }}">Cadastrar Produto</a>
-                        </div>
-                        <div class="d-flex justify-content-start">
-                            <a class="nav-link p-2" href="{{ url_for('cadastrar_marca') }}">Cadastrar Marca</a>
-                        </div>
+                        </nav>
                     </div>
-                    <div class="col">
-                        <form class="form-inline my-2 my-lg-0 justify-content-end" action="./estoque" method="POST">
-                            <input type="text" class="form-control" name="consultar">
-                            <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Button</button>
-                        </form>
-                    </div>
-                    {%endif%}
                 </div>
             </div>
-          </header>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        <button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="="true">&times;</span>
-                        </button>
-                        {{ message }}
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 offset-md-2">
+                    <div class="container-fluid">
+                        <nav class="navbar">
+                        <div class="container-fluid">
+                            <a class="navbar-brand" href="{{ url_for('estoque_page') }}">Estoque </a>
+                            <a class="navbar-brand" href="{{ url_for('register_fornecedor') }}">Fornecedores</a>
+                            <a class="navbar-brand" href="{{ url_for('mostrar_tela_de_cadastro_do_produto') }}">Cadastrar Produto</a>
+                            <a class="navbar-brand" href="{{ url_for('cadastrar_marca') }}">Marcas</a>
+                            <a class="navbar-brand"> Relatórios de Vendas</a>
+                        </div>
+                        </nav>
                     </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        {% block content %}
+                </div>
+                <div class="col-md-4">
+                    <nav class="navbar-brand">
+                        <div class="container-fluid ps-5">
+                        <form class="d-flex" action="./estoque" method="POST">
+                            <input class="form-control me-3" type="form-control" name="consultar">
+                            <button class="btn btn-outline-success" type="submit">Procurar</button>
+                        </form>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="d-flex justify-content-center">
+                        <img src="{{ url_for('static', filename='img/logo_barra.png') }}">
+                    </div>
+                </div>
+                <div class="col-md-4 offset-md-4">
+                    <div class="container-fluid">
+                        <nav class="navbar">
+                        <div class="container-fluid">
+                            <a class="navbar-brand" href="#">Navbar</a>
+                            <a class="navbar-brand" href="#">Navbar</a>
+                        </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                <button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    {% block content %}
 
-        {% endblock %}
-      <!-- Future Content here -->      
-      <!-- Optional JavaScript -->
-      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-      <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-      <script>
-        function openNav() {
-          document.getElementById("mySidenav").style.width = "250px";
-        }
-        
-        function closeNav() {
-          document.getElementById("mySidenav").style.width = "0";
-        }
-        </script>
-    </div>
-    </body>
-
+    {% endblock %}
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
 </html>

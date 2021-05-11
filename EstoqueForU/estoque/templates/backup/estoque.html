@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}
+    Estoque ForU
+{% endblock %}
+{% block content%}
+<div class="container justify-content-center">
+    <div class="row">
+        <div class="col-md-3">
+        </div>
+        <form action="./feminino" method="POST">
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary btn-lg">Feminino</button>
+            </div>
+        </form>
+        <div class="col-md-2">
+
+        </div>
+        <form action="./masculino" method="POST">
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary btn-lg">Masculino</button>
+            </div>
+        </form>
+        </div>
+    <form action="./consulta_filtro" method="POST">
+        <input type="hidden" value="{{genero}}" name="genero">
+        <div class="row">
+            <div class='col-md-2'>
+                    <h4>Tamanho</h4>
+                    {% for tamanho in (['PP','P','M','G','GG'])%}
+                    <div class="form-check justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="tamanho" value="{{tamanho.lower()}}">
+                        <label class="form-check-label" for="{{tamanho.lower()}}">
+                        {{tamanho.upper()}}
+                        </label>
+                    </div>
+                    {%endfor%}
+            </div>
+            <div class='col-md-2'>
+                <h4>Categoria</h4>
+                    {% for categoria in (['blusa','calça','camiseta','shorts','vestido'])%}
+                    <div class="form-check justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="categoria" value="{{categoria.lower()}}">
+                        <label class="form-check-label" for="{{categoria.lower()}}">
+                        {{categoria.title()}}
+                        </label>
+                    </div>        
+                {%endfor%}
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Filtar</button>
+        </div>
+    </form>
+</div> 
+
+
+<div class="container-xxl">
+<div class="row">
+    <div class="col-12">
+        <table id="minha_tabela" class="table table-hover">
+            <thead>
+                <tr>
+                    <!-- Your Columns HERE -->
+                    {% for coluna in colunas %}
+                        {% if "_id" in coluna %}
+                            <th scope="col"> <strong>{{ coluna.replace("_id", " ").title() }}</strong></th>
+                        {% elif "_" in coluna %}
+                            <th scope="col"> <strong>{{ coluna.replace("_", " ").title() }}</strong></th>
+                        {% else %}
+                            <th scope="col"> <strong>{{ coluna.title() }}</strong></th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Your rows inside the table HERE: -->
+                {% for produto in resultado %}
+                {% include 'includes/produtos_modals.html' %}
+                    <tr>
+                        <td>{{produto.categoria_id.title() }}</td>
+                        <td>{{produto.descricao.title() }}</td>
+                        <td>{{produto.modelo.title() }}</td>
+                        <td>{{produto.genero.title() }}</td>
+                        <td>{{produto.ano_colecao }}</td>
+                        <td>{{produto.material.title() }}</td>
+                        <td>{{produto.cor.title() }}</td>
+                        <td>{{(produto.preco | formatar_moeda )}}</td>
+                        <td>{{produto.quantidade }}</td>
+                        <td>{{produto.marca_nome.title() }}</td>
+                        <td>{{produto.tamanho_id.upper() }}</td>
+                        <td>
+                            <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ produto.id }}"> Mais Informações</button>
+                            <button class="btn btn-outline btn-success">Consultar este produto</button>
+                        </td>
+                    </tr>                    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+{% endblock %}

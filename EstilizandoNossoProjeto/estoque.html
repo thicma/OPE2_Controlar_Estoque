@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}
+    Estoque ForU
+{% endblock %}
+{% block content%}
+<main class="conteudo">
+    <div class="botao_feminino">
+        <form action="./feminino" method="POST">
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary btn-lg">Feminino</button>
+            </div>
+        </form>
+    </div>
+    <div class="botao_masculino">
+        <form action="./masculino" method="POST">
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary btn-lg">Masculino</button>
+            </div>
+        </form>
+    </div>
+    <form action="./consulta_filtro" method="POST">
+    <button type="submit" class="conteudo__botao_filtro">Filtrar</button> 
+        <section class="conteudo__menu">
+            <div class="conteudo__menu___tamanho">
+                <h3 class="conteudo__menu___tamanho_titulo">Tamanho</h3>
+                    <div class= "conteudo__menu___tamanho_corpo">
+                    {% for tamanho in (['PP','P','M','G','GG'])%}
+                        <input type="checkbox" name="tamanho" value="{{tamanho.lower()}}">
+                        <label for="{{tamanho.lower()}}">
+                        {{tamanho.upper()}}
+                        </label>
+                    </div>
+                    {%endfor%}
+            </div>
+            <div class="conteudo__menu___categoria">
+                <h3 class="conteudo__menu___categoria_titulo">Categoria</h3>
+                <div class= "conteudo__menu___categoria_corpo">
+                {% for categoria in categorias%}
+                    <input type="checkbox" name="categoria" value="{{categoria.lower()}}">
+                    <label for="{{categoria.lower()}}">
+                    {{categoria.title()}}
+                    </label>
+                </div>
+                {%endfor%}
+                <div class="conteudo__menu___material">
+                    <h3 class="conteudo__menu___material_titulo">Material</h3>
+                    <div class="conteudo__menu___material_corpo">
+                    {% for material in materiais%}
+                        <input type="checkbox" name="material" value="{{material.lower()}}">
+                        <label for="{{material.lower()}}">
+                        {{material.title()}}
+                        </label>
+                    </div>
+                    {%endfor%}
+                </div>
+            </div>
+        </section>
+    </form>
+    <h2 class="conteudo__titulo_tabelas">ESTES SÃO OS PRODUTOS DISPONÍVEIS EM NOSSAS LOJAS</h2>
+    <section class="conteudo__tabela_estoque">
+        <table>
+            <thead>
+                <tr>
+                    {% for coluna in colunas %}
+                        <th scope="col"> <strong>{{ coluna.title() }}</strong></th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for produto in resultado %}
+                {% include 'includes/produtos_modals.html' %}
+                    <tr>
+                        <td>{{produto.categoria_id.title() }}</td>
+                        <td>{{produto.descricao.title() }}</td>
+                        <td>{{produto.modelo.title() }}</td>
+                        <td>{{produto.genero.title() }}</td>
+                        <td>{{produto.ano_colecao }}</td>
+                        <td>{{produto.material.title() }}</td>
+                        <td>{{produto.cor.title() }}</td>
+                        <td>{{(produto.preco | formatar_moeda )}}</td>
+                        <td>{{produto.quantidade }}</td>
+                        <td>{{produto.marca_nome.title() }}</td>
+                        <td>{{produto.tamanho_id.upper() }}</td>
+                    </tr>                    
+                {% endfor %}
+            </tbody>
+        </table>        
+    </section>
+</main>
+{%endblock%}

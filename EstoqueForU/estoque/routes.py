@@ -1,6 +1,6 @@
 from estoque import app
 from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session, request
-from estoque.models import Produto, User, Transacao, Fornecedor, Produto, Marca, Categoria, Tamanho
+from estoque.models import Produto, User, Material, Fornecedor, Produto, Marca, Categoria, Tamanho
 from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm, ConsultaForm
 from estoque import db
 from flask_login import login_user, logout_user, login_required, current_user
@@ -14,8 +14,39 @@ locale.setlocale(locale.LC_MONETARY, 'Portuguese_Brazil.1252')
 def gera_nome_colunas():
     return ['Categoria','Descrição','Modelo','Gênero','Ano da Coleção','Material','Cor','Preço','Quantidade','Nome da Marca','Tamanho']
 
+def gera_label_para_checkbox_categoria():
+    return ['blusa','calça','camisa','camiseta','casaco','macacão','moda íntima','moda praia','saia','shorts','vestido']
+
+def gera_label_para_checkbox_ano_colecao():
+    ano_colecao = Produto.query.all()
+    ano_label_para_checkbox = []
+    for ano in ano_colecao:
+        if ano.ano_colecao not in ano_label_para_checkbox:
+            ano_label_para_checkbox.append(ano.ano_colecao)
+    ano_label_para_checkbox.sort()
+    return ano_label_para_checkbox
+
+def gera_label_para_checkbox_material():
+    materiais = Material.query.all()
+    material_label_checkbox = [material.id for material in materiais]
+    return material_label_checkbox
+
+def gera_label_para_checkbox_marca():
+    marcas = Marca.query.all()
+    marca_label_checkbox = [marca.nome for marca in marcas]
+    marca_label_checkbox.sort()
+    return marca_label_checkbox
+
+
 @app.route('/', methods=['GET'])
 def home_page():
+    ano = gera_label_para_checkbox_ano_colecao()
+    material = gera_label_para_checkbox_material()
+    marca = gera_label_para_checkbox_marca()
+    print(ano)
+    print(material)
+    print(marca)
+
     return render_template('home.html')
 
 @app.route('/estoque', methods=['GET'])
@@ -249,7 +280,3 @@ def logout():
     flash('Você foi deslogado!', category='info')
     return redirect(url_for('home_page'))
 
-@app.route('/logo', methods=['GET'])
-def logo():
-    image = "logo2.png"
-    return send_from_directory("images", image)
