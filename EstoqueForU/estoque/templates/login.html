@@ -4,29 +4,29 @@
 {% endblock %}
 
 {% block content %}
-<body class="text-center">
-    <div class="container">
-        <form method="POST" class="form-signin"">
-            {{ form.hidden_tag() }}
-            <div style="margin-top: 5px;">
-                <img src="{{ url_for('static', filename = 'logo2.png') }}"/>
+<body class="container-fluid">   
+
+    
+        <form method="POST" class="form-signing" style="margin-bottom: 90px; margin-top: 150px">
+        {{ form.hidden_tag() }}
+        <h1 class="h3 mb-3 font-weight-normal text-center">
+            Por favor, efetuar o Login
+        </h1>
+        <br>
+        <div class="center">
+            <div class= "center" style="width: 180px; margin-left: 620px">
+                {{ form.username.label(style="font-size:13px") }}
+                {{ form.username(class="form-control") }}
+                <br>
+                <br>
+                {{ form.password.label(style="font-size:13px") }}
+                {{ form.password(class="form-control") }}
+                <br>
+                <br>
+                {{ form.submit(class="btn btn-lg btn-block btn-primary" ) }}
             </div>
-            <h1 class="h3 mb-3 font-weight-normal">
-                Por favor, efetuar o Login
-            </h1>
-            <br>
-            <div class= "text-left">
-                {{ form.username.label() }}
-                {{ form.username(class="form-control", placeholder="Usuário") }}
+        </div>
+        </form>     
 
-                {{ form.password.label(style="font-size:25px") }}
-                {{ form.password(class="form-control",placeholder="Senha") }}
-            </div>
-            <br>
-
-            {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
-
-        </form>
-    </div>
 </body>
 {% endblock %}
