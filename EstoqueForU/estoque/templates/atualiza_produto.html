@@ -3,38 +3,41 @@
     Estoque ForU
 {% endblock %}
 {% block content%}
-
+{% include 'includes/produtos_modals.html' %}
 <div class="row pt-5">
     <div = class="col-md-6">
-    <form class="row g-3" action="./registra_saida_produto" method="POST">
+    <form class="form-register" action="{{ url_for('atualiza_produto') }}" method="POST">
+        <input type="hidden" name="id_produto" value="{{produto.id}}">
+        {{ atualiza_form.hidden_tag() }}
+        {{ atualiza_form.csrf_token }}
         <input type="hidden" name="produto" value="{{id_produto}}">
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-4">
                     <label for="produto" class="form-label fw-bold fs-4">Descrição do Produto</label>
-                    <input type="text" class="form-control" name="produto" value="{{produto.descricao.title()}}">
+                    {{ atualiza_form.descricao(class="form-control") }}
                 </div>
                 <div class="col-md-3">
                     <label for="ano_colecao" class="form-label fw-bold fs-4">Ano Coleção</label>
-                    <input type="text" class="form-control" name="ano_colecao" value="{{produto.ano_colecao}}">
+                    {{ atualiza_form.ano_colecao(class="form-control") }}
                 </div>
                 <div class="col-md-2">
                     <label for="tamanho" class="form-label fw-bold fs-4">Tamanho</label>
-                    <input type="text" class="form-control" name="tamanho" value="{{produto.tamanho_id.title()}}">
+                    {{ atualiza_form.tamanho(class="form-control") }}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <label for="categoria" class="form-label fw-bold fs-4">Categoria</label>
-                    <input type="text" class="form-control" name="categoria" value="{{produto.categoria.descricao.title()}}">
+                    {{ atualiza_form.categorias(class="form-control") }}
                 </div>
                 <div class="col-md-3">
                     <label for="modelo" class="form-label fw-bold fs-4">Modelo</label>
-                    <input type="text" class="form-control" name="modelo" value="{{produto.modelo.title()}}">
+                    {{ atualiza_form.modelo(class="form-control") }}
                 </div>
                 <div class="col-md-3">
                     <label for="genero" class="form-label fw-bold fs-4">Gênero</label>
-                    <input type="text" class="form-control" name="genero" value="{{produto.genero.title()}}">
+                    {{ atualiza_form.genero(class="form-control") }}
                 </div>
             </div>
         </div>
@@ -42,15 +45,15 @@
             <div class="row">
                 <div class="col-md-3">
                     <label for="material" class="form-label fw-bold fs-4">Material</label>
-                    <input type="text" class="form-control" name="material" value="{{produto.material.descricao.title()}}">
+                    {{ atualiza_form.material(class="form-control") }}
                 </div>
                 <div class="col-md-3">
                     <label for="cor" class="form-label fw-bold fs-4">Cor</label>
-                    <input type="text" class="form-control" name="cor" value="{{produto.cor.title()}}">
+                    {{ atualiza_form.cor(class="form-control") }}
                 </div>
                 <div class="col-md-3">
                     <label for="marca" class="form-label fw-bold fs-4">Marca</label>
-                    <input type="text" class="form-control" name="marca" value="{{produto.marca.nome.title()}}">
+                    {{ atualiza_form.marcas(class="form-control")}}
                 </div>                
             </div>
         </div>
@@ -72,7 +75,7 @@
             <input type="text" class="form-control" name="preco" value="{{(produto.preco | formatar_moeda )}}" disabled>
         </div>
         <div class="col-12">
-          <button type="submit" class="btn btn-success fw-bold fs-4">Atualizar</button>
+          <button type="button" class="btn btn-success fw-bold fs-4" data-toggle="modal" data-target="#Modal-ConfirmaAlteracao-{{produto.id}}">Atualizar</button>
         </div>
       </form>
     </div>

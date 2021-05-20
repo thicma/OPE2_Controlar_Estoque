@@ -149,8 +149,8 @@
                                         </button>
                                     </form>
                                     <form></form>
-                                    <form action="./atualiza_produto" method="POST">
-                                        <input type="hidden" value="{{produto.id}}" name="produto">
+                                    <form action="{{ url_for('mostra_tela_de_atualizacao') }}" method="POST">
+                                        <input type="hidden" value="{{produto.id}}" name="id_produto">
                                         <a class="pe-3"></a>
                                         <button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Atualizar Produto">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">

@@ -2,7 +2,7 @@ from sqlalchemy.orm.session import Session
 from estoque import app
 from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session, request
 from estoque.models import Produto, User, Material, Fornecedor, Produto, Marca, Categoria, Tamanho
-from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm, ConsultaForm
+from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm, ConsultaForm, AtualizacaoForm
 from estoque import db
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import datetime
@@ -50,13 +50,14 @@ def home_page():
 def mostar_tela_de_estoque():
     form=ConsultaForm()
     resultado = Produto.query.all()
+    atualiza_form = AtualizacaoForm()
     colunas = gera_nome_colunas()
     label_categoria = gera_label_para_checkbox_categoria()
     label_ano=gera_label_para_checkbox_ano_colecao()
     label_marca = gera_label_para_checkbox_marca()
     label_material = gera_label_para_checkbox_material()
     return render_template('estoque.html', form=form, resultado=resultado, colunas=colunas, label_categoria=label_categoria, 
-                           label_ano=label_ano, label_marca=label_marca, label_material=label_material)
+                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, atualiza_form = atualiza_form)
 
 @app.route('/estoque', methods=['POST'])
 @login_required
@@ -103,7 +104,7 @@ def produtos_feminino():
 def mostra_tela_de_entrada():
     id_produto = int(request.form['produto'])
     produto = Produto.query.filter_by(id=id_produto).first()
-    return render_template('relatorio_financeiro.html', produto=produto, id_produto=id_produto)
+    return render_template('entrada_produto.html', produto=produto, id_produto=id_produto)
 
 @app.route('/registra_entrada_produto', methods=['POST'])
 def entrada_produto():
@@ -119,7 +120,7 @@ def entrada_produto():
     else:
         flash('A quantidade de entrada deve ser positiva ou 0 para ajuste de preço!')
 
-    return render_template('relatorio_financeiro.html', produto=produto, id_produto=id_produto)
+    return render_template('entrada_produto.html', produto=produto, id_produto=id_produto)
 
 @app.route('/saida_produto', methods=['POST'])
 def mostea_tela_de_saida():
@@ -145,30 +146,40 @@ def saida_produto():
         flash('A saída deve ser realizada apenas com números e positivos!',category='danger')
     return render_template('saida_produto.html', produto=produto, id_produto=id_produto)
 
-@app.route('/atualiza_produto', methods=['POST'])
+@app.route('/mostra_tela_de_atualizacao', methods=['POST'])
 def mostra_tela_de_atualizacao():
-    id_produto = int(request.form['produto'])
+    id_produto = int(request.form['id_produto'])
     produto = Produto.query.filter_by(id=id_produto).first()
-    return render_template('atualiza_produto.html', produto=produto, id_produto=id_produto)
+    atualiza_form = AtualizacaoForm(descricao=produto.descricao, ano_colecao=produto.ano_colecao,
+                        categorias=produto.categoria_id,modelo=produto.modelo, cor=produto.cor,
+                        tamanho=produto.tamanho_id, marcas=produto.marca_id,
+                        genero = produto.genero, material=produto.material_id)
+    return render_template('atualiza_produto.html', produto=produto, id_produto=id_produto, atualiza_form=atualiza_form)
 
-@app.route('/realiza_atualizacao_produto', methods=['POST'])
+@app.route('/atualiza_produto', methods=['GET','POST'])
 def atualiza_produto():
-    id_produto = int(request.form['produto'])
-    produto = Produto.query.filter_by(id=id_produto).first()
-    quantidade_da_saida = validar_quantidade_informada(request.form['quantidade_saida'])
-    if quantidade_da_saida:
-        saida_do_produto = produto.quantidade - quantidade_da_saida
-        if saida_do_produto >= 0:
-            produto.quantidade = saida_do_produto
-            db.session.commit()
-            flash('Saída efetuada com sucesso!', category="success")
-            return redirect(url_for('mostar_tela_de_estoque'))
-        else:
-            flash('Verifique o estoque, saída maior que o total disponível!',category='danger')
+    atualiza_form = AtualizacaoForm()
+    produto = Produto.query.filter_by(id=request.form['id_produto']).first()
+    print(produto)    
+    if atualiza_form.validate_on_submit():
+        produto.descricao = atualiza_form.descricao.data
+        produto.ano_colecao = atualiza_form.ano_colecao.data
+        produto.tamanho_id = atualiza_form.tamanho.data
+        produto.categoria_id = atualiza_form.categorias.form
+        produto.modelo = atualiza_form.modelo.data
+        produto.genero = atualiza_form.genero.data
+        produto.material_id = atualiza_form.material.data
+        produto.cor = atualiza_form.cor.data
+        produto.marca_id = atualiza_form.marcas.data
+        db.session.commit()
+        flash(f'Produto {produto.id} - {produto.descricao} alterado com sucesso', category='success')
+        return redirect(url_for('mostar_tela_de_estoque'))
     else:
-        flash('A saída deve ser realizada apenas com números e positivos!',category='danger')
-    return render_template('atualiza_produto.html', produto=produto, id_produto=id_produto)
+        return redirect(url_for('mostar_tela_de_estoque'))
+    return render_template('atualiza_produto.html', atualiza_form=atualiza_form, id_produto=request.form['id_produto'])
 
+def valida_alteracoes():
+    pass
 
 def consulta(atributo_para_consulta):
     condicao = Produto.query.filter(or_(Produto.categoria.has(Categoria.descricao.contains(atributo_para_consulta)),

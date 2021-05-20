@@ -52,16 +52,44 @@ class FornecedorForm(FlaskForm):
     email = StringField(label='E-mail:', validators=[Length(min=2, max=30), DataRequired()])
     fone = StringField(label='Telefone:', validators=[Length(min=2, max=30), DataRequired()])
     cnpj = StringField(label='CNPJ:', validators=[Length(min=14, max=14), DataRequired()])
-    submit = SubmitField(label='Cadastrar')
+    submit = SubmitField(label='Cadastrar')  
 
 
 def seleciona_categoria():
     categorias= Categoria.query.all()
-    lista_de_categoria = [(categoria.id, categoria.descricao) for categoria in categorias]
+    lista_de_categoria = [(categoria.id, categoria.descricao.title()) for categoria in categorias]
     return lista_de_categoria
 
-class ProdutoForm(FlaskForm):
-    
+def seleciona_marca():
+    marcas = Marca.query.all()
+    lista_de_marcas = [(marca.id, marca.nome.title()) for marca in marcas]
+    return lista_de_marcas
+
+def seleciona_material():
+    materiais = Material.query.all()
+    lista_de_materiais = [(material.id, material.descricao.title()) for material in materiais]
+    return lista_de_materiais
+
+def seleciona_tamanho():
+    tamanhos = Tamanho.query.all()
+    lista_de_tamanhos = [(tamanho.id, tamanho.id.upper()) for tamanho in tamanhos]
+    return lista_de_tamanhos
+
+
+class AtualizacaoForm(FlaskForm):
+    descricao = StringField(label='Descrição do Produto', validators=[Length(max=50), DataRequired()])
+    ano_colecao = StringField(label='Ano da Colecao', validators=[Length(min=4, max=4), DataRequired()])
+    tamanho = SelectField(u'Tamanho', choices = seleciona_tamanho())
+    categorias = SelectField(u'Categoria', choices=seleciona_categoria())
+    modelo = StringField(label='Modelo', validators=[Length(max=20), DataRequired()]) 
+    genero = SelectField('genero', choices = [('feminino','Feminino'), ('masculino','Masculino')])
+    material = SelectField(u'Material', choices = seleciona_material())
+    cor = StringField(label='Cor do Produto', validators=[Length(max=15), DataRequired()])
+    marcas = SelectField(u'Marca', choices = seleciona_marca())
+    submit = SubmitField(label='Confirmar')
+
+
+class ProdutoForm(FlaskForm):    
     categoria = SelectField(u"Categoria", choices=seleciona_categoria())
     descricao = StringField(label='Descrição do Produto', validators=[Length(max=50), DataRequired()])
     modelo = StringField(label='Modelo', validators=[Length(max=20), DataRequired()])

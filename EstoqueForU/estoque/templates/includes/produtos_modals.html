@@ -5,73 +5,31 @@
     }
   </style>
   
-  <!-- More Info -->
-  <div class="modal fade" id="Modal-MoreInfo-{{ produto.id }}"
-       tabindex="-1"
-       aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="ModalLabel">
-            <!-- -->
-            {{produto.categoria_id}}
-           </h5>
-          <button type="button" class="close"
-                  data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-8">
-              DESCRIÇÃO
-            </div>
-            <div class="col-md-2">
-              QUANTIDADE
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-8">
-              {{ produto.descricao }}
-            </div>
-            <div class="col-md-2">
-              {{ produto.quantidade}}
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary"
-                  data-dismiss="modal">Close
-          </button>
-        </div>
+<!-- Modal -->
+<div class="modal fade" id="Modal-ConfirmaAlteracao-{{ produto.id }}"
+      tabindex="-1"
+      role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          ID: {{ produto.id}} Descrição: {{ produto.descricao.title() }}
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h4> Confirma a alteração dos valores do produto? </h4>
+      </div>
+      <div class="modal-footer">
+        <form action="{{ url_for('atualiza_produto') }}" method="POST">
+          {{ atualiza_form.csrf_token }}
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <input type="hidden" name="id_produto" value="{{produto.id}}">
+          {{ atualiza_form.submit(class="btn btn-lg btn-primary" ) }}
+        </form>
       </div>
     </div>
   </div>
-  
-  <!-- Purchase Confirm -->
-  <div class="modal fade" id="Modal-PurchaseConfirm"
-       tabindex="-1"
-       aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="ModalLabel">
-            <!-- -->
-            
-          </h5>
-          <button type="button" class="close"
-                  data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to buy  for $ ?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary"
-                  data-dismiss="modal">Close
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
