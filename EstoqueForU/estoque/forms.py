@@ -61,6 +61,7 @@ def seleciona_categoria():
     return lista_de_categoria
 
 class ProdutoForm(FlaskForm):
+    
     categoria = SelectField(u"Categoria", choices=seleciona_categoria())
     descricao = StringField(label='Descrição do Produto', validators=[Length(max=50), DataRequired()])
     modelo = StringField(label='Modelo', validators=[Length(max=20), DataRequired()])

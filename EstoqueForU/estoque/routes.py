@@ -1,3 +1,4 @@
+from sqlalchemy.orm.session import Session
 from estoque import app
 from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session, request
 from estoque.models import Produto, User, Material, Fornecedor, Produto, Marca, Categoria, Tamanho
@@ -15,7 +16,9 @@ def gera_nome_colunas():
     return ['Categoria','Descrição','Modelo','Gênero','Ano da Coleção','Material','Cor','Preço','Quantidade','Nome da Marca','Tamanho']
 
 def gera_label_para_checkbox_categoria():
-    return ['blusa','calça','camisa','camiseta','casaco','macacão','moda íntima','moda praia','saia','shorts','vestido']
+    categorias = Categoria.query.all()
+    categoria_label_checkbox = [(categoria.id, categoria.descricao) for categoria in categorias]
+    return categoria_label_checkbox
 
 def gera_label_para_checkbox_ano_colecao():
     ano_colecao = Produto.query.all()
@@ -28,25 +31,18 @@ def gera_label_para_checkbox_ano_colecao():
 
 def gera_label_para_checkbox_material():
     materiais = Material.query.all()
-    material_label_checkbox = [material.id for material in materiais]
+    material_label_checkbox = [(material.id, material.descricao) for material in materiais]
     return material_label_checkbox
 
 def gera_label_para_checkbox_marca():
     marcas = Marca.query.all()
-    marca_label_checkbox = [marca.nome for marca in marcas]
+    marca_label_checkbox = [(marca.id, marca.nome) for marca in marcas]
     marca_label_checkbox.sort()
     return marca_label_checkbox
 
 
 @app.route('/', methods=['GET'])
 def home_page():
-    ano = gera_label_para_checkbox_ano_colecao()
-    material = gera_label_para_checkbox_material()
-    marca = gera_label_para_checkbox_marca()
-    print(ano)
-    print(material)
-    print(marca)
-
     return render_template('home.html')
 
 @app.route('/estoque', methods=['GET'])
@@ -55,7 +51,12 @@ def mostar_tela_de_estoque():
     form=ConsultaForm()
     resultado = Produto.query.all()
     colunas = gera_nome_colunas()
-    return render_template('estoque.html', form=form, resultado=resultado, colunas=colunas)
+    label_categoria = gera_label_para_checkbox_categoria()
+    label_ano=gera_label_para_checkbox_ano_colecao()
+    label_marca = gera_label_para_checkbox_marca()
+    label_material = gera_label_para_checkbox_material()
+    return render_template('estoque.html', form=form, resultado=resultado, colunas=colunas, label_categoria=label_categoria, 
+                           label_ano=label_ano, label_marca=label_marca, label_material=label_material)
 
 @app.route('/estoque', methods=['POST'])
 @login_required
@@ -63,9 +64,14 @@ def estoque_page():
     session.modified = True
     resultado = ''
     colunas = gera_nome_colunas()
+    label_categoria = gera_label_para_checkbox_categoria()
+    label_ano=gera_label_para_checkbox_ano_colecao()
+    label_marca = gera_label_para_checkbox_marca()
+    label_material = gera_label_para_checkbox_material()
     resultado = consulta(request.form['consultar'].lower())
     if resultado != False:
-        return render_template('estoque.html',resultado=resultado, colunas=colunas, genero="")
+        return render_template('estoque.html', resultado=resultado, colunas=colunas, label_categoria=label_categoria, 
+                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero="")
     else:
         flash('Nenhum resultado encontrado!', category='info')
     return render_template('estoque.html')
@@ -73,30 +79,103 @@ def estoque_page():
 @app.route('/masculino', methods=['POST'])
 def produtos_masculinos():
     colunas = gera_nome_colunas()
+    label_categoria = gera_label_para_checkbox_categoria()
+    label_ano=gera_label_para_checkbox_ano_colecao()
+    label_marca = gera_label_para_checkbox_marca()
+    label_material = gera_label_para_checkbox_material()
     resultado = Produto.query.filter(Produto.genero == "masculino").all()
-    return render_template('estoque.html', resultado=resultado, colunas=colunas, genero="masculino")
+    return render_template('estoque.html', resultado=resultado, colunas=colunas, label_categoria=label_categoria, 
+                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero="masculino")
 
 @app.route('/feminino', methods=['POST'])
 def produtos_feminino():
     colunas = gera_nome_colunas()
+    label_categoria = gera_label_para_checkbox_categoria()
+    label_ano=gera_label_para_checkbox_ano_colecao()
+    label_marca = gera_label_para_checkbox_marca()
+    label_material = gera_label_para_checkbox_material()
     resultado = Produto.query.filter(Produto.genero == "feminino").all()
-    return render_template('estoque.html', resultado=resultado, colunas=colunas, genero="feminino")
+    return render_template('estoque.html', resultado=resultado, colunas=colunas, label_categoria=label_categoria, 
+                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero="feminino")
 
 
+@app.route('/entrada_produto', methods=['POST'])
+def mostra_tela_de_entrada():
+    id_produto = int(request.form['produto'])
+    produto = Produto.query.filter_by(id=id_produto).first()
+    return render_template('relatorio_financeiro.html', produto=produto, id_produto=id_produto)
+
+@app.route('/registra_entrada_produto', methods=['POST'])
 def entrada_produto():
-    pass
-    
+    id_produto = int(request.form['produto'])
+    produto = Produto.query.filter_by(id=id_produto).first()
+    quantidade_da_entrada = validar_quantidade_informada(request.form['quantidade_entrada'])
+    if quantidade_da_entrada:
+        soma_da_entrada = produto.quantidade + quantidade_da_entrada
+        produto.quantidade = soma_da_entrada
+        db.session.commit()
+        flash('Entrada efetuada com sucesso!', category="success")
+        return redirect(url_for('mostar_tela_de_estoque'))
+    else:
+        flash('A quantidade de entrada deve ser positiva ou 0 para ajuste de preço!')
 
+    return render_template('relatorio_financeiro.html', produto=produto, id_produto=id_produto)
+
+@app.route('/saida_produto', methods=['POST'])
+def mostea_tela_de_saida():
+    id_produto = int(request.form['produto'])
+    produto = Produto.query.filter_by(id=id_produto).first()
+    return render_template('saida_produto.html', produto=produto, id_produto=id_produto)
+
+@app.route('/registra_saida_produto', methods=['POST'])
 def saida_produto():
-    pass
+    id_produto = int(request.form['produto'])
+    produto = Produto.query.filter_by(id=id_produto).first()
+    quantidade_da_saida = validar_quantidade_informada(request.form['quantidade_saida'])
+    if quantidade_da_saida:
+        saida_do_produto = produto.quantidade - quantidade_da_saida
+        if saida_do_produto >= 0:
+            produto.quantidade = saida_do_produto
+            db.session.commit()
+            flash('Saída efetuada com sucesso!', category="success")
+            return redirect(url_for('mostar_tela_de_estoque'))
+        else:
+            flash('Verifique o estoque, saída maior que o total disponível!',category='danger')
+    else:
+        flash('A saída deve ser realizada apenas com números e positivos!',category='danger')
+    return render_template('saida_produto.html', produto=produto, id_produto=id_produto)
+
+@app.route('/atualiza_produto', methods=['POST'])
+def mostra_tela_de_atualizacao():
+    id_produto = int(request.form['produto'])
+    produto = Produto.query.filter_by(id=id_produto).first()
+    return render_template('atualiza_produto.html', produto=produto, id_produto=id_produto)
+
+@app.route('/realiza_atualizacao_produto', methods=['POST'])
+def atualiza_produto():
+    id_produto = int(request.form['produto'])
+    produto = Produto.query.filter_by(id=id_produto).first()
+    quantidade_da_saida = validar_quantidade_informada(request.form['quantidade_saida'])
+    if quantidade_da_saida:
+        saida_do_produto = produto.quantidade - quantidade_da_saida
+        if saida_do_produto >= 0:
+            produto.quantidade = saida_do_produto
+            db.session.commit()
+            flash('Saída efetuada com sucesso!', category="success")
+            return redirect(url_for('mostar_tela_de_estoque'))
+        else:
+            flash('Verifique o estoque, saída maior que o total disponível!',category='danger')
+    else:
+        flash('A saída deve ser realizada apenas com números e positivos!',category='danger')
+    return render_template('atualiza_produto.html', produto=produto, id_produto=id_produto)
 
 
 def consulta(atributo_para_consulta):
-    condicao = Produto.query.filter(or_(Produto.categoria_id.contains(atributo_para_consulta),
+    condicao = Produto.query.filter(or_(Produto.categoria.has(Categoria.descricao.contains(atributo_para_consulta)),
                                         Produto.tamanho_id.contains(atributo_para_consulta),
-                                        Produto.marca_nome.contains(atributo_para_consulta), 
-                                        Produto.ano_colecao == atributo_para_consulta,
-                                        Produto.material.contains(atributo_para_consulta),
+                                        Produto.marca.has(Marca.nome.contains(atributo_para_consulta)), 
+                                        Produto.ano_colecao.contains(atributo_para_consulta),
+                                        Produto.material.has(Material.descricao.contains(atributo_para_consulta)),
                                         Produto.descricao.contains(atributo_para_consulta),
                                         Produto.modelo.contains(atributo_para_consulta))).all()
     if condicao :
@@ -109,33 +188,52 @@ def consulta(atributo_para_consulta):
 def busca_valores_checkbox():
     lista_tamanhos = request.form.getlist('tamanho')
     lista_categoria = request.form.getlist('categoria')
+    lista_ano_colecao = request.form.getlist('ano')
+    lista_marca = request.form.getlist('marca')
+    lista_material = request.form.getlist('material')
     genero = request.form['genero']
+
     colunas = gera_nome_colunas()
+    label_categoria = gera_label_para_checkbox_categoria()
+    label_ano=gera_label_para_checkbox_ano_colecao()
+    label_marca = gera_label_para_checkbox_marca()
+    label_material = gera_label_para_checkbox_material()
     if len(lista_categoria) == 0:
         lista_categoria = [(categoria.id) for categoria in Categoria.query.all()]
     if len(lista_tamanhos) == 0:
         lista_tamanhos = [(tamanho.id) for tamanho in Tamanho.query.all()]
-
+    if len(lista_ano_colecao) == 0:
+        lista_ano_colecao = [(str(ano.ano_colecao)) for ano in Produto.query.all()]
+    if len(lista_marca) == 0:
+        lista_marca = [(marca.id) for marca in Marca.query.all()]
+    if len(lista_material) == 0:
+        lista_material = [(material.id) for material in Material.query.all()]
+    
     resultado = ''
     if genero != "":
         resultado = Produto.query.filter(and_(Produto.genero == genero,
+                                        Produto.categoria_id.in_(lista_categoria),
                                         Produto.tamanho_id.in_(lista_tamanhos),
-                                        Produto.categoria_id.in_(lista_categoria))).all()
+                                        Produto.material_id.in_(lista_material),
+                                        Produto.marca_id.in_(lista_marca),
+                                        Produto.ano_colecao.in_(lista_ano_colecao))).all()
     else:
         resultado = Produto.query.filter(and_(Produto.tamanho_id.in_(lista_tamanhos),
-                                        Produto.categoria_id.in_(lista_categoria))).all()
+                                        Produto.categoria_id.in_(lista_categoria),
+                                        Produto.material_id.in_(lista_material),
+                                        Produto.marca_id.in_(lista_marca),
+                                        Produto.ano_colecao.in_(lista_ano_colecao))).all()
     
     if len(resultado) == 0:
         flash('Nenhum produto encontrado', category='info')
-
-    print(resultado)    
-    return render_template('estoque.html', resultado=resultado, colunas=colunas, genero=genero)
+ 
+    return render_template('estoque.html', resultado=resultado, colunas=colunas, label_categoria=label_categoria, 
+                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero=genero)
 
 def consulta_dinamica(lista_de_checkbox):
     resultado = ""
     for lista in lista_de_checkbox:
         resultado = consulta(lista)
-
     return resultado
 
 @app.template_filter()
@@ -195,25 +293,33 @@ def mostrar_tela_de_cadastro_do_produto():
 def cadastrar_produto():
     session.modified = True    
     form = ProdutoForm()
+    categorias = [(categoria.descricao) for categoria in Categoria.query.all()]
     validar_quantidade = validar_quantidade_informada(form.quantidade.data)
-    if form.validate_on_submit():
-        print(form.categoria.data)      
+    validar_produto = verificar_se_produto_cadastrado(form.categoria.data.lower(),form.modelo.data.lower(), 
+                                                        form.genero.data.lower(), form.ano_colecao.data,
+                                                        form.material.data.lower(), form.cor.data.lower(), 
+                                                        form.marca.data.lower(), form.tamanho.data.lower())
+    if form.validate_on_submit():        
         if validar_preco != False and validar_preco != None:
             if validar_quantidade != False and validar_quantidade != None:
-                produto_criado = Produto(tipo = form.categoria.data.lower(),
-                                    descricao = form.descricao.data.lower(),
-                                    modelo = form.modelo.data.lower(),
-                                    ano_colecao = form.ano_colecao.data,
-                                    material = form.material.data.lower(),
-                                    cor = form.cor.data.lower(),
-                                    preco = validar_preco,
-                                    quantidade = form.quantidade.data,
-                            tamanho_id = form.tamanho.data.lower(),
-                            marca_nome = form.marca.data.lower()) 
-                db.session.add(produto_criado)
-                db.session.commit()
-                flash(f'Produto {produto_criado.tipo} cadastrado com sucesso', category='success')
-                return redirect(url_for("cadastrar_produto"))
+                if validar_produto != False:
+                    produto_criado = Produto(categoria_id = form.categoria.data.lower(),
+                                        descricao = form.descricao.data.lower(),
+                                        modelo = form.modelo.data.lower(),
+                                        ano_colecao = form.ano_colecao.data,
+                                        material_id = form.material.data.lower(),
+                                        cor = form.cor.data.lower(),
+                                        preco = validar_preco,
+                                        quantidade = validar_quantidade,
+                                        tamanho_id = form.tamanho.data.lower(),
+                                        marca_id = form.marca.data.lower()) 
+                    db.session.add(produto_criado)
+                    db.session.commit()
+                    flash(f'Produto {produto_criado.tipo} cadastrado com sucesso', category='success')
+                    return redirect(url_for("cadastrar_produto"))
+                else:
+                    flash("Produto já cadastrado.", category='danger')
+                    return render_template('cadastrar_produto.html', form=form, categorias=categorias)
             else:
                 flash("Quantidade inválida! Informe apenas números inteiros.", category='danger')
                 return render_template('cadastrar_produto.html', form=form, categorias=categorias)
@@ -236,18 +342,33 @@ def validar_preco_informado(preco_informado):
 
 def validar_quantidade_informada(quantidade_informada):
 	try:
-		val=int(qunatidade_informada)
+		val=int(quantidade_informada)
 		if (val>0):
-			return True
+			return val
 	except:
 		pass
-	return False
+	return False    
 
 def validar_texto(texto_informado):
 	if (texto_informado.replace(" ","").isalpha()):
 		return True
 	else:
 		return False
+    
+def verificar_se_produto_cadastrado(categoria_id, modelo, genero, ano_colecao, material_id,
+                                    cor, marca_id, tamanho):
+    produto_verificado = Produto.query.filter(and_(Produto.categoria_id.has(categoria_id),
+                                                    Produto.modelo.has(modelo),
+                                                    Produto.genero.has(genero),
+                                                    Produto.ano_colecao.has(ano_colecao),
+                                                    Produto.material_id.has(material_id),
+                                                    Produto.cor.has(cor),
+                                                    Produto.marca_id.has(marca_id),
+                                                    Produto.tamanho_id(tamanho))).all()
+    if produto_verificado:
+        return True
+    return False
+
 
 @app.route('/cadastrar_marca', methods=['GET', 'POST'])
 @login_required

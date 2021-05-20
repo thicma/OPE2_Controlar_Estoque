@@ -16,7 +16,6 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(length=100), nullable=False, unique=False)
     charge= db.Column(db.String(length=50), nullable=False, unique=False)
     password_hash = db.Column(db.String(length=60), nullable=False)
-    transcao = db.relationship('Transacao', backref='transacao')
 
     @property
     def password(self):
@@ -44,18 +43,6 @@ class Autorizacao(db.Model):
     def __repr__(self):
         return f"ID: {self.id}\n{self.descricao}"
 
-#class Movimentacao_financeira(db.Model):
-"""
-id
-data_hora
-produto_id
-usuario_id
-quantidade
-valor
-tipo (entrada ou saida)
-
-fazer relatório em outra tela de html para retornar o relatório
-"""
 
 class Fornecedor(db.Model):
     id= db.Column(db.Integer(), primary_key=True)
@@ -74,41 +61,55 @@ class Marca (db.Model):
     id = db.Column(db.Integer(), autoincrement=True, nullable=False)
     fornecedor = db.Column(db.Integer(), nullable=False)
 
+class Material(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    descricao= db.Column(db.String(length=15), nullable=False)
 
 class Produto(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    categoria_id = db.Column(db.String(length=15), db.ForeignKey('categoria.id'))
+    categoria_id = db.Column(db.Integer(), db.ForeignKey('categoria.id'))
     categoria = relationship('Categoria', foreign_keys=[categoria_id])
     descricao = db.Column(db.String(length=50), nullable=False)
     modelo = db.Column(db.String(length=20), nullable=False)
     genero = db.Column(db.String(length=9), nullable=False)
-    ano_colecao = db.Column(db.Integer(), nullable=False)
-    material = db.Column(db.String(length=20), nullable=False)
+    ano_colecao = db.Column(db.String(length=4), nullable=False)
+    material_id = db.Column(db.Integer(), db.ForeignKey('material.id'))
+    material = relationship('Material', foreign_keys=[material_id])
     cor = db.Column(db.String(length=15), nullable=False)    
     preco = db.Column(db.Float(), nullable=False)
     quantidade = db.Column(db.Integer(), nullable=False)
-    marca_nome = db.Column(db.String(length=20), db.ForeignKey('marca.nome'))
-    marca = relationship('Marca', foreign_keys=[marca_nome])
+    marca_id = db.Column(db.String(length=20), db.ForeignKey('marca.id'))
+    marca = relationship('Marca', foreign_keys=[marca_id])
     tamanho_id = db.Column(db.String(length=2), db.ForeignKey('tamanho.id'))
     tamanho = relationship('Tamanho', foreign_keys=[tamanho_id])
-    
+
     def __repr__(self):
         return f"{self.categoria.descricao}\n{self.descricao}\n{self.modelo}\n{self.ano_colecao}"
 
-class Transacao(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    data = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now)
-    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
-    produto_id = db.Column(db.Integer(), db.ForeignKey('produto.id'))
-    user = relationship('User', foreign_keys=[user_id])
-    produto = relationship('Produto', foreign_keys=[produto_id])
-    
-    def __repr__(self):
-        return f"{self.id}\n{self.data}"
-    
-class Material(db.Model):
-    id = db.Column(db.String(length=15), primary_key=True)
 
-    def __repr__(self) -> str:
-        return f"{self.id}"
+#class Movimentacao_financeira(db.Model):
+"""
+id
+data_hora
+produto_id
+usuario_id
+quantidade
+valor
+tipo (entrada ou saida)
+
+fazer relatório em outra tela de html para retornar o relatório
+"""
+class Movimentacao_Financeira(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
+    user = relationship('User', foreign_keys=[user_id])
+    produto_id = db.Column(db.Integer(), db.ForeignKey('produto.id'))
+    produto = relationship('Produto', foreign_keys=[produto_id])
+    data_hora = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now)
+    quantidade = db.Column(db.Integer(), nullable=False)
+    valor = db.Column(db.Float(), nullable=False)
+    tipo_movimentacao = db.Column(db.String(length=10), nullable=False)
+    
+
+    
 
