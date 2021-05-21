@@ -6,7 +6,7 @@
 {% include 'includes/produtos_modals.html' %}
 <div class="row pt-5">
     <div = class="col-md-6">
-    <form class="form-register" action="{{ url_for('atualiza_produto') }}" method="POST">
+    <form class="row g-3" action="{{ url_for('atualiza_produto') }}" method="POST">
         <input type="hidden" name="id_produto" value="{{produto.id}}">
         {{ atualiza_form.hidden_tag() }}
         {{ atualiza_form.csrf_token }}
@@ -75,7 +75,7 @@
             <input type="text" class="form-control" name="preco" value="{{(produto.preco | formatar_moeda )}}" disabled>
         </div>
         <div class="col-12">
-          <button type="button" class="btn btn-success fw-bold fs-4" data-toggle="modal" data-target="#Modal-ConfirmaAlteracao-{{produto.id}}">Atualizar</button>
+          {{ atualiza_form.submit(class="btn btn-success")}}
         </div>
       </form>
     </div>

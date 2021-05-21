@@ -1,7 +1,7 @@
 from sqlalchemy.orm.session import Session
 from estoque import app
 from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session, request
-from estoque.models import Produto, User, Material, Fornecedor, Produto, Marca, Categoria, Tamanho
+from estoque.models import Produto, User, Material, Fornecedor, Produto, Marca, Categoria, Tamanho, Autorizacao
 from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm, ConsultaForm, AtualizacaoForm
 from estoque import db
 from flask_login import login_user, logout_user, login_required, current_user
@@ -102,28 +102,79 @@ def produtos_feminino():
 
 @app.route('/entrada_produto', methods=['POST'])
 def mostra_tela_de_entrada():
+    flash('Para ajuste de preço do produto: Deixe a quantidade em 0 (ZERO) e modifique o preço!')
     id_produto = int(request.form['produto'])
     produto = Produto.query.filter_by(id=id_produto).first()
     return render_template('entrada_produto.html', produto=produto, id_produto=id_produto)
 
 @app.route('/registra_entrada_produto', methods=['POST'])
 def entrada_produto():
+    registra_movimentacao = ''
     id_produto = int(request.form['produto'])
     produto = Produto.query.filter_by(id=id_produto).first()
     quantidade_da_entrada = validar_quantidade_informada(request.form['quantidade_entrada'])
-    if quantidade_da_entrada:
-        soma_da_entrada = produto.quantidade + quantidade_da_entrada
-        produto.quantidade = soma_da_entrada
-        db.session.commit()
-        flash('Entrada efetuada com sucesso!', category="success")
-        return redirect(url_for('mostar_tela_de_estoque'))
+    preco_do_produto = validar_preco_informado(request.form['preco'])
+    print(preco_do_produto)
+
+    if quantidade_da_entrada >= 0:
+        if preco_do_produto != produto.preco and quantidade_da_entrada == 0:
+            if preco_do_produto > produto.preco:
+                valor_ajuste = (produto.quantidade * preco_do_produto) - (produto.quantidade * produto.preco)
+                tipo_ajuste = 'ajuste'
+            else:
+                valor_ajuste = (produto.quantidade * preco_do_produto) - (produto.quantidade * produto.preco)
+                tipo_ajuste = 'desconto'
+
+            registra_movimentacao = Autorizacao(user_id = current_user.id,
+                                                        produto_id = id_produto,
+                                                        quantidade = quantidade_da_entrada,
+                                                        valor = valor
+                                                        tipo_movimentacao = 'ajuste')
+            produto.preco = preco_do_produto
+            soma_da_entrada = produto.quantidade + quantidade_da_entrada
+            produto.quantidade = soma_da_entrada
+            db.session.add(registra_movimentacao)
+            db.session.commit()
+            flash('Ajuste de preço realizado com sucesso!', category="success")
+            return redirect(url_for('mostar_tela_de_estoque'))
+        elif preco_do_produto == produto.preco and quantidade_da_entrada > 0:
+            registra_movimentacao = Autorizacao(user_id = current_user.id,
+                                                        produto_id = id_produto,
+                                                        quantidade = quantidade_da_entrada,
+                                                        valor = quantidade_da_entrada * produto.preco,
+                                                        tipo_movimentacao = 'entrada')
+            produto.preco = preco_do_produto
+            soma_da_entrada = produto.quantidade + quantidade_da_entrada
+            produto.quantidade = soma_da_entrada
+            db.session.add(registra_movimentacao)
+            db.session.commit()
+            flash('Entrada efetuada com sucesso!', category="success")
+            return redirect(url_for('mostar_tela_de_estoque'))
+        elif preco_do_produto != produto.preco and quantidade_da_entrada != produto.quantidade:
+            registra_movimentacao = Autorizacao(user_id = current_user.id,
+                                                        produto_id = id_produto,
+                                                        quantidade = quantidade_da_entrada,
+                                                        valor = (quantidade_da_entrada * preco_do_produto) - (produto.preco * produto.quantidade),
+                                                        tipo_movimentacao = 'entrada com ajuste')
+            produto.preco = preco_do_produto
+            soma_da_entrada = produto.quantidade + quantidade_da_entrada
+            produto.quantidade = soma_da_entrada
+            db.session.add(registra_movimentacao)
+            db.session.commit()
+            flash('Entrada efetuada com sucesso!', category="success")
+            return redirect(url_for('mostar_tela_de_estoque'))
+        else:
+            flash('Nenhuma alteração efetuada', category="success")
+            return redirect(url_for('mostar_tela_de_estoque'))
+
+        
     else:
         flash('A quantidade de entrada deve ser positiva ou 0 para ajuste de preço!')
-
     return render_template('entrada_produto.html', produto=produto, id_produto=id_produto)
 
 @app.route('/saida_produto', methods=['POST'])
-def mostea_tela_de_saida():
+def mostra_tela_de_saida():
+    flash('Para ajuste de preço do produto: Deixe a quantidade em 0 (ZERO) e modifique o preço!')
     id_produto = int(request.form['produto'])
     produto = Produto.query.filter_by(id=id_produto).first()
     return render_template('saida_produto.html', produto=produto, id_produto=id_produto)
@@ -133,13 +184,34 @@ def saida_produto():
     id_produto = int(request.form['produto'])
     produto = Produto.query.filter_by(id=id_produto).first()
     quantidade_da_saida = validar_quantidade_informada(request.form['quantidade_saida'])
+    preco_do_produto = validar_preco_informado(request.form['preco'])    
     if quantidade_da_saida:
         saida_do_produto = produto.quantidade - quantidade_da_saida
         if saida_do_produto >= 0:
-            produto.quantidade = saida_do_produto
-            db.session.commit()
-            flash('Saída efetuada com sucesso!', category="success")
-            return redirect(url_for('mostar_tela_de_estoque'))
+            if preco_do_produto != produto.preco and quantidade_da_saida == 0:
+                registra_movimentacao = Autorizacao(user_id = current_user.id,
+                                                        produto_id = id_produto,
+                                                        quantidade = quantidade_da_saida,
+                                                        valor = preco_do_produto * produto.preco,
+                                                        tipo_movimentacao = 'ajuste')
+                produto.quantidade = saida_do_produto
+                produto.preco = preco_do_produto
+                db.session.add(registra_movimentacao)
+                db.session.commit()
+                flash('Ajuste de preço realizado com sucesso!', category="success")
+                return redirect(url_for('mostar_tela_de_estoque'))
+            else:
+                registra_movimentacao = Autorizacao(user_id = current_user.id,
+                                                            produto_id = id_produto,
+                                                            quantidade = quantidade_da_saida,
+                                                            valor = quantidade_da_saida * preco_do_produto,
+                                                            tipo_movimentacao = 'saida')
+                produto.quantidade = saida_do_produto
+                produto.preco = preco_do_produto
+                db.session.add(registra_movimentacao)
+                db.session.commit()
+                flash('Saída efetuada com sucesso!', category="success")
+                return redirect(url_for('mostar_tela_de_estoque'))
         else:
             flash('Verifique o estoque, saída maior que o total disponível!',category='danger')
     else:
@@ -151,7 +223,7 @@ def mostra_tela_de_atualizacao():
     id_produto = int(request.form['id_produto'])
     produto = Produto.query.filter_by(id=id_produto).first()
     atualiza_form = AtualizacaoForm(descricao=produto.descricao, ano_colecao=produto.ano_colecao,
-                        categorias=produto.categoria_id,modelo=produto.modelo, cor=produto.cor,
+                        categorias=produto.categoria_id,modelo=produto.modelo, cor=produto.cor.title(),
                         tamanho=produto.tamanho_id, marcas=produto.marca_id,
                         genero = produto.genero, material=produto.material_id)
     return render_template('atualiza_produto.html', produto=produto, id_produto=id_produto, atualiza_form=atualiza_form)
@@ -160,23 +232,18 @@ def mostra_tela_de_atualizacao():
 def atualiza_produto():
     atualiza_form = AtualizacaoForm()
     produto = Produto.query.filter_by(id=request.form['id_produto']).first()
-    print(produto)    
-    if atualiza_form.validate_on_submit():
-        produto.descricao = atualiza_form.descricao.data
-        produto.ano_colecao = atualiza_form.ano_colecao.data
-        produto.tamanho_id = atualiza_form.tamanho.data
-        produto.categoria_id = atualiza_form.categorias.form
-        produto.modelo = atualiza_form.modelo.data
-        produto.genero = atualiza_form.genero.data
-        produto.material_id = atualiza_form.material.data
-        produto.cor = atualiza_form.cor.data
-        produto.marca_id = atualiza_form.marcas.data
-        db.session.commit()
-        flash(f'Produto {produto.id} - {produto.descricao} alterado com sucesso', category='success')
-        return redirect(url_for('mostar_tela_de_estoque'))
-    else:
-        return redirect(url_for('mostar_tela_de_estoque'))
-    return render_template('atualiza_produto.html', atualiza_form=atualiza_form, id_produto=request.form['id_produto'])
+    produto.descricao = atualiza_form.descricao.data
+    produto.ano_colecao = atualiza_form.ano_colecao.data
+    produto.tamanho_id = atualiza_form.tamanho.data
+    produto.categoria_id = atualiza_form.categorias.data
+    produto.modelo = atualiza_form.modelo.data
+    produto.genero = atualiza_form.genero.data
+    produto.material_id = atualiza_form.material.data
+    produto.cor = atualiza_form.cor.data
+    produto.marca_id = atualiza_form.marcas.data
+    db.session.commit()
+    flash(f'Produto {produto.id} - {produto.descricao} alterado com sucesso', category='success')
+    return redirect(url_for('mostar_tela_de_estoque'))
 
 def valida_alteracoes():
     pass
@@ -344,17 +411,19 @@ def cadastrar_produto():
 
 def validar_preco_informado(preco_informado):
     preco_formatado = ''
+    if 'R$ ' in preco_informado:
+        preco_informado = preco_informado.replace('R$ ','')
     if re.match("^[1-9]\d{0,7}((\.|\,)\d{1,4})$",preco_informado):
         preco_formatado = preco_informado.replace(',', '.')
-        return preco_formatado
+        return float(preco_formatado)
     elif re.match("^[1-9]",preco_informado):
-        return preco_informado
+        return float(preco_informado)
     return False
 
 def validar_quantidade_informada(quantidade_informada):
 	try:
 		val=int(quantidade_informada)
-		if (val>0):
+		if (val>=0):
 			return val
 	except:
 		pass

@@ -36,7 +36,7 @@ class Categoria(db.Model)   :
     def __repr__(self):
         return f'{self.descricao}'
 
-class Autorizacao(db.Model):
+class Autorizacao_Velha(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     descricao = db.Column(db.String(15))
 
@@ -99,7 +99,7 @@ tipo (entrada ou saida)
 
 fazer relatório em outra tela de html para retornar o relatório
 """
-class Movimentacao_Financeira(db.Model):
+class Autorizacao(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
     user = relationship('User', foreign_keys=[user_id])
