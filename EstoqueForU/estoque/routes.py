@@ -1,3 +1,4 @@
+from operator import methodcaller
 from sqlalchemy.orm.session import Session
 from estoque import app
 from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session, request
@@ -62,6 +63,7 @@ def mostar_tela_de_estoque():
 @app.route('/estoque', methods=['POST'])
 @login_required
 def estoque_page():
+    atualiza_form = AtualizacaoForm()
     session.modified = True
     resultado = ''
     colunas = gera_nome_colunas()
@@ -72,13 +74,14 @@ def estoque_page():
     resultado = consulta(request.form['consultar'].lower())
     if resultado != False:
         return render_template('estoque.html', resultado=resultado, colunas=colunas, label_categoria=label_categoria, 
-                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero="")
+                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero="", atualiza_form=atualiza_form)
     else:
         flash('Nenhum resultado encontrado!', category='info')
     return render_template('estoque.html')
 
 @app.route('/masculino', methods=['POST'])
 def produtos_masculinos():
+    atualiza_form = AtualizacaoForm()
     colunas = gera_nome_colunas()
     label_categoria = gera_label_para_checkbox_categoria()
     label_ano=gera_label_para_checkbox_ano_colecao()
@@ -86,10 +89,11 @@ def produtos_masculinos():
     label_material = gera_label_para_checkbox_material()
     resultado = Produto.query.filter(Produto.genero == "masculino").all()
     return render_template('estoque.html', resultado=resultado, colunas=colunas, label_categoria=label_categoria, 
-                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero="masculino")
+                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero="masculino", atualiza_form=atualiza_form)
 
 @app.route('/feminino', methods=['POST'])
 def produtos_feminino():
+    atualiza_form = AtualizacaoForm()
     colunas = gera_nome_colunas()
     label_categoria = gera_label_para_checkbox_categoria()
     label_ano=gera_label_para_checkbox_ano_colecao()
@@ -97,8 +101,9 @@ def produtos_feminino():
     label_material = gera_label_para_checkbox_material()
     resultado = Produto.query.filter(Produto.genero == "feminino").all()
     return render_template('estoque.html', resultado=resultado, colunas=colunas, label_categoria=label_categoria, 
-                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero="feminino")
+                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero="feminino", atualiza_form=atualiza_form)
 
+#==========================================================================================================
 
 @app.route('/entrada_produto', methods=['POST'])
 def mostra_tela_de_entrada():
@@ -118,17 +123,11 @@ def entrada_produto():
 
     if quantidade_da_entrada >= 0:
         if preco_do_produto != produto.preco and quantidade_da_entrada == 0:
-            if preco_do_produto > produto.preco:
-                valor_ajuste = (produto.quantidade * preco_do_produto) - (produto.quantidade * produto.preco)
-                tipo_ajuste = 'ajuste'
-            else:
-                valor_ajuste = (produto.quantidade * preco_do_produto) - (produto.quantidade * produto.preco)
-                tipo_ajuste = 'desconto'
-
+            valor_ajuste = (produto.quantidade * preco_do_produto)
             registra_movimentacao = Autorizacao(user_id = current_user.id,
                                                         produto_id = id_produto,
                                                         quantidade = quantidade_da_entrada,
-                                                        valor = valor
+                                                        valor = valor_ajuste,
                                                         tipo_movimentacao = 'ajuste')
             produto.preco = preco_do_produto
             soma_da_entrada = produto.quantidade + quantidade_da_entrada
@@ -154,7 +153,7 @@ def entrada_produto():
             registra_movimentacao = Autorizacao(user_id = current_user.id,
                                                         produto_id = id_produto,
                                                         quantidade = quantidade_da_entrada,
-                                                        valor = (quantidade_da_entrada * preco_do_produto) - (produto.preco * produto.quantidade),
+                                                        valor = (quantidade_da_entrada * preco_do_produto) + ((preco_do_produto - produto.preco) * produto.quantidade),
                                                         tipo_movimentacao = 'entrada com ajuste')
             produto.preco = preco_do_produto
             soma_da_entrada = produto.quantidade + quantidade_da_entrada
@@ -164,13 +163,12 @@ def entrada_produto():
             flash('Entrada efetuada com sucesso!', category="success")
             return redirect(url_for('mostar_tela_de_estoque'))
         else:
-            flash('Nenhuma alteração efetuada', category="success")
-            return redirect(url_for('mostar_tela_de_estoque'))
-
-        
+            flash('A entrada deve ser realizada apenas com números e positivos!',category='danger')        
     else:
         flash('A quantidade de entrada deve ser positiva ou 0 para ajuste de preço!')
     return render_template('entrada_produto.html', produto=produto, id_produto=id_produto)
+
+# ===========================================================================================================
 
 @app.route('/saida_produto', methods=['POST'])
 def mostra_tela_de_saida():
@@ -200,7 +198,7 @@ def saida_produto():
                 db.session.commit()
                 flash('Ajuste de preço realizado com sucesso!', category="success")
                 return redirect(url_for('mostar_tela_de_estoque'))
-            else:
+            elif preco_do_produto == produto.preco and quantidade_da_saida > 0:
                 registra_movimentacao = Autorizacao(user_id = current_user.id,
                                                             produto_id = id_produto,
                                                             quantidade = quantidade_da_saida,
@@ -212,6 +210,20 @@ def saida_produto():
                 db.session.commit()
                 flash('Saída efetuada com sucesso!', category="success")
                 return redirect(url_for('mostar_tela_de_estoque'))
+            elif preco_do_produto != produto.preco and quantidade_da_saida > 0:
+                registra_movimentacao = Autorizacao(user_id = current_user.id,
+                                            produto_id = id_produto,
+                                            quantidade = quantidade_da_saida,
+                                            valor = (quantidade_da_saida * preco_do_produto) + ((preco_do_produto - produto.preco) * produto.quantidade),
+                                            tipo_movimentacao = 'saida com ajuste')
+                produto.quantidade = saida_do_produto
+                produto.preco = preco_do_produto
+                db.session.add(registra_movimentacao)
+                db.session.commit()
+                flash('Saída efetuada com sucesso!', category="success")
+                return redirect(url_for('mostar_tela_de_estoque'))
+            else:
+                flash('Nenhuma alteração efetuada!', category='danger')
         else:
             flash('Verifique o estoque, saída maior que o total disponível!',category='danger')
     else:
@@ -232,21 +244,23 @@ def mostra_tela_de_atualizacao():
 def atualiza_produto():
     atualiza_form = AtualizacaoForm()
     produto = Produto.query.filter_by(id=request.form['id_produto']).first()
-    produto.descricao = atualiza_form.descricao.data
+    produto.descricao = atualiza_form.descricao.data.lower()
     produto.ano_colecao = atualiza_form.ano_colecao.data
     produto.tamanho_id = atualiza_form.tamanho.data
     produto.categoria_id = atualiza_form.categorias.data
-    produto.modelo = atualiza_form.modelo.data
+    produto.modelo = atualiza_form.modelo.data.lower()
     produto.genero = atualiza_form.genero.data
     produto.material_id = atualiza_form.material.data
-    produto.cor = atualiza_form.cor.data
+    produto.cor = atualiza_form.cor.data.lower()
     produto.marca_id = atualiza_form.marcas.data
     db.session.commit()
     flash(f'Produto {produto.id} - {produto.descricao} alterado com sucesso', category='success')
     return redirect(url_for('mostar_tela_de_estoque'))
 
-def valida_alteracoes():
-    pass
+@app.route('/relatorio_movimentacao', methods=['GET'])
+def relatorio_movimentacao():
+    return render_template('relatorio_movimentacao.html')
+    
 
 def consulta(atributo_para_consulta):
     condicao = Produto.query.filter(or_(Produto.categoria.has(Categoria.descricao.contains(atributo_para_consulta)),
@@ -264,6 +278,7 @@ def consulta(atributo_para_consulta):
 #consulta_dinamica(busca_valores_checkbox)
 @app.route('/consulta_filtro', methods=['POST'])
 def busca_valores_checkbox():
+    atualiza_form = AtualizacaoForm()
     lista_tamanhos = request.form.getlist('tamanho')
     lista_categoria = request.form.getlist('categoria')
     lista_ano_colecao = request.form.getlist('ano')
@@ -306,7 +321,7 @@ def busca_valores_checkbox():
         flash('Nenhum produto encontrado', category='info')
  
     return render_template('estoque.html', resultado=resultado, colunas=colunas, label_categoria=label_categoria, 
-                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero=genero)
+                           label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero=genero, atualiza_form=atualiza_form)
 
 def consulta_dinamica(lista_de_checkbox):
     resultado = ""

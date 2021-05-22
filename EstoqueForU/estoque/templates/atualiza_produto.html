@@ -3,10 +3,11 @@
     Estoque ForU
 {% endblock %}
 {% block content%}
-{% include 'includes/produtos_modals.html' %}
+
 <div class="row pt-5">
     <div = class="col-md-6">
     <form class="row g-3" action="{{ url_for('atualiza_produto') }}" method="POST">
+        {% include 'includes/produtos_modals.html' %}
         <input type="hidden" name="id_produto" value="{{produto.id}}">
         {{ atualiza_form.hidden_tag() }}
         {{ atualiza_form.csrf_token }}
@@ -75,7 +76,9 @@
             <input type="text" class="form-control" name="preco" value="{{(produto.preco | formatar_moeda )}}" disabled>
         </div>
         <div class="col-12">
-          {{ atualiza_form.submit(class="btn btn-success")}}
+            <button type="button" data-toggle="modal" data-target="#Modal-ConfirmaAlteracao-{{ produto.id }}">
+                Atualizar        
+            </button>
         </div>
       </form>
     </div>
