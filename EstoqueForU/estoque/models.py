@@ -1,9 +1,9 @@
 from estoque import db, login_manager
 from estoque import bcrypt
 from flask_login import UserMixin
-from sqlalchemy import DateTime, or_
-from datetime import datetime, timezone
+from datetime import datetime
 from sqlalchemy.orm import relationship
+
 
 
 @login_manager.user_loader
@@ -85,27 +85,14 @@ class Produto(db.Model):
 
     def __repr__(self):
         return f"{self.categoria.descricao}\n{self.descricao}\n{self.modelo}\n{self.ano_colecao}"
-
-
-#class Movimentacao_financeira(db.Model):
-"""
-id
-data_hora
-produto_id
-usuario_id
-quantidade
-valor
-tipo (entrada ou saida)
-
-fazer relatório em outra tela de html para retornar o relatório
-"""
 class Autorizacao(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
     user = relationship('User', foreign_keys=[user_id])
     produto_id = db.Column(db.Integer(), db.ForeignKey('produto.id'))
     produto = relationship('Produto', foreign_keys=[produto_id])
-    data_hora = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now)
+    data = db.Column(db.Date(), nullable=False, default=datetime.today())
+    hora = db.Column(db.Time(timezone=True), nullable=False, default=datetime.now().time())
     quantidade = db.Column(db.Integer(), nullable=False)
     valor = db.Column(db.Float(), nullable=False)
     tipo_movimentacao = db.Column(db.String(length=10), nullable=False)

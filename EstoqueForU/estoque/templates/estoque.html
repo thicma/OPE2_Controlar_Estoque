@@ -33,14 +33,12 @@
     <div class="col-1 justify-content-start">
         <form action="./consulta_filtro" method="POST">
             <input type="hidden" value="{{genero}}" name="genero">
-            <div class="row">
-                <div class="col-1 pt-2 pb-2">
-                    <button type="submit" class="btn btn-primary btn-lg">Filtrar</button>
-                </div>
+            <div class="row border">
+                <button type="submit" class="btn btn-primary btn-lg">Filtrar</button>
             </div>
             <div class="row">
                 <div class="col border">
-                    <div class="row">
+                    <div class="row border">
                         <h4>Tamanho</h4>
                         {% for tamanho in (['PP','P','M','G','GG'])%}
                         <div class="form-check">
@@ -53,7 +51,7 @@
                         </div>
                         {%endfor%}
                     </div>
-                    <div class="row">
+                    <div class="row border">
                         <h4>Categoria</h4>
                         {% for categoria in label_categoria%}
                         <div class="form-check justify-content-center">
@@ -64,7 +62,7 @@
                         </div>        
                         {%endfor%}
                     </div>
-                    <div class="row">
+                    <div class="row border">
                         <h4>Ano da Coleção</h4>
                         {% for ano in label_ano%}
                         <div class="form-check justify-content-center">
@@ -75,7 +73,7 @@
                         </div>        
                         {%endfor%}
                     </div>
-                    <div class="row">
+                    <div class="row border">
                         <h4>Marca</h4>
                         {% for marca in label_marca%}
                         <div class="form-check justify-content-center">
@@ -86,7 +84,7 @@
                         </div>        
                         {%endfor%}
                     </div>
-                    <div class="row">
+                    <div class="row border">
                         <h4>Material</h4>
                         {% for material in label_material%}
                         <div class="form-check justify-content-center">
@@ -173,4 +171,3 @@
     </div>
 </div>        
 {% endblock %}
-</html>

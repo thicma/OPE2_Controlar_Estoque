@@ -3,10 +3,10 @@ from sqlalchemy.orm.session import Session
 from estoque import app
 from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session, request
 from estoque.models import Produto, User, Material, Fornecedor, Produto, Marca, Categoria, Tamanho, Autorizacao
-from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm, ConsultaForm, AtualizacaoForm
+from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm, ConsultaForm, AtualizacaoForm, SelecionaDataForm
 from estoque import db
 from flask_login import login_user, logout_user, login_required, current_user
-from datetime import datetime
+from datetime import date, timedelta
 from sqlalchemy import or_, and_
 import re
 import locale
@@ -80,7 +80,9 @@ def estoque_page():
     return render_template('estoque.html')
 
 @app.route('/masculino', methods=['POST'])
+@login_required
 def produtos_masculinos():
+    session.modified = True
     atualiza_form = AtualizacaoForm()
     colunas = gera_nome_colunas()
     label_categoria = gera_label_para_checkbox_categoria()
@@ -92,7 +94,9 @@ def produtos_masculinos():
                            label_ano=label_ano, label_marca=label_marca, label_material=label_material, genero="masculino", atualiza_form=atualiza_form)
 
 @app.route('/feminino', methods=['POST'])
+@login_required
 def produtos_feminino():
+    session.modified = True
     atualiza_form = AtualizacaoForm()
     colunas = gera_nome_colunas()
     label_categoria = gera_label_para_checkbox_categoria()
@@ -106,6 +110,7 @@ def produtos_feminino():
 #==========================================================================================================
 
 @app.route('/entrada_produto', methods=['POST'])
+@login_required
 def mostra_tela_de_entrada():
     flash('Para ajuste de preço do produto: Deixe a quantidade em 0 (ZERO) e modifique o preço!')
     id_produto = int(request.form['produto'])
@@ -113,7 +118,9 @@ def mostra_tela_de_entrada():
     return render_template('entrada_produto.html', produto=produto, id_produto=id_produto)
 
 @app.route('/registra_entrada_produto', methods=['POST'])
+@login_required
 def entrada_produto():
+    session.modified = True
     registra_movimentacao = ''
     id_produto = int(request.form['produto'])
     produto = Produto.query.filter_by(id=id_produto).first()
@@ -171,6 +178,7 @@ def entrada_produto():
 # ===========================================================================================================
 
 @app.route('/saida_produto', methods=['POST'])
+@login_required
 def mostra_tela_de_saida():
     flash('Para ajuste de preço do produto: Deixe a quantidade em 0 (ZERO) e modifique o preço!')
     id_produto = int(request.form['produto'])
@@ -178,7 +186,9 @@ def mostra_tela_de_saida():
     return render_template('saida_produto.html', produto=produto, id_produto=id_produto)
 
 @app.route('/registra_saida_produto', methods=['POST'])
+@login_required
 def saida_produto():
+    session.modified = True
     id_produto = int(request.form['produto'])
     produto = Produto.query.filter_by(id=id_produto).first()
     quantidade_da_saida = validar_quantidade_informada(request.form['quantidade_saida'])
@@ -203,7 +213,7 @@ def saida_produto():
                                                             produto_id = id_produto,
                                                             quantidade = quantidade_da_saida,
                                                             valor = quantidade_da_saida * preco_do_produto,
-                                                            tipo_movimentacao = 'saida')
+                                                            tipo_movimentacao = 'saída')
                 produto.quantidade = saida_do_produto
                 produto.preco = preco_do_produto
                 db.session.add(registra_movimentacao)
@@ -215,7 +225,7 @@ def saida_produto():
                                             produto_id = id_produto,
                                             quantidade = quantidade_da_saida,
                                             valor = (quantidade_da_saida * preco_do_produto) + ((preco_do_produto - produto.preco) * produto.quantidade),
-                                            tipo_movimentacao = 'saida com ajuste')
+                                            tipo_movimentacao = 'saída com ajuste')
                 produto.quantidade = saida_do_produto
                 produto.preco = preco_do_produto
                 db.session.add(registra_movimentacao)
@@ -231,6 +241,7 @@ def saida_produto():
     return render_template('saida_produto.html', produto=produto, id_produto=id_produto)
 
 @app.route('/mostra_tela_de_atualizacao', methods=['POST'])
+@login_required
 def mostra_tela_de_atualizacao():
     id_produto = int(request.form['id_produto'])
     produto = Produto.query.filter_by(id=id_produto).first()
@@ -240,8 +251,11 @@ def mostra_tela_de_atualizacao():
                         genero = produto.genero, material=produto.material_id)
     return render_template('atualiza_produto.html', produto=produto, id_produto=id_produto, atualiza_form=atualiza_form)
 
+
 @app.route('/atualiza_produto', methods=['GET','POST'])
+@login_required
 def atualiza_produto():
+    session.modified = True
     atualiza_form = AtualizacaoForm()
     produto = Produto.query.filter_by(id=request.form['id_produto']).first()
     produto.descricao = atualiza_form.descricao.data.lower()
@@ -258,8 +272,70 @@ def atualiza_produto():
     return redirect(url_for('mostar_tela_de_estoque'))
 
 @app.route('/relatorio_movimentacao', methods=['GET'])
+@login_required
+def mostra_tela_relatorio_movimentacao():
+    gera_nome_colunas_movimentacao = ['Produto','Marca', 'Usuário', 'Data da Movimentação', 'Quantidade', 'Valor', 'Tipo da Movimentação']
+    produto=Produto.query.all()
+    ultimos_trinta_dias = (date.today()) - timedelta(days=30)
+    form = SelecionaDataForm(data_inicial=ultimos_trinta_dias, data_final=date.today())
+    label_categoria = gera_label_para_checkbox_categoria()
+    label_marca = gera_label_para_checkbox_marca()
+    return render_template('relatorio_movimentacao.html', label_categoria=label_categoria, 
+                           label_marca=label_marca, produto=produto, form=form, colunas=gera_nome_colunas_movimentacao, compras=0, vendas=0, ajuste=0)
+
+@app.route('/relatorio_movimentacao', methods=['GET','POST'])
+@login_required
 def relatorio_movimentacao():
-    return render_template('relatorio_movimentacao.html')
+    session.modified = True
+    gera_nome_colunas_movimentacao = ['Produto','Marca', 'Usuário', 'Data da Movimentação', 'Quantidade', 'Valor', 'Tipo da Movimentação']
+    produto=Produto.query.all()
+    form = SelecionaDataForm()
+    label_categoria = gera_label_para_checkbox_categoria()
+    label_marca = gera_label_para_checkbox_marca()
+    data_inicial = form.data_inicial.data
+    data_final = form.data_final.data
+    hoje = date.today()
+    lista_categoria = request.form.getlist('categoria')
+    lista_marca = request.form.getlist('marca')
+    lista_movimentacao = request.form.getlist('movimento')
+    vendas = 0
+    compras = 0
+    ajuste = 0
+    if data_final > hoje:
+        flash('A data final da pesquisa não pode ser maior que a data atual!', category='info')
+        return redirect(url_for('mostra_tela_relatorio_movimentacao'))
+    elif data_inicial > data_final:
+        flash('A data inicial da pesquisa não pode ser maior que a final!', category='info')
+        return redirect(url_for('mostra_tela_relatorio_movimentacao'))
+    if len(lista_categoria) == 0:
+        lista_categoria = [(categoria.id) for categoria in Categoria.query.all()]
+    if len(lista_marca) == 0:
+        lista_marca = [(marca.id) for marca in Marca.query.all()]
+    if len(lista_movimentacao) == 0:
+        lista_movimentacao = ['ajuste','entrada','entrada com ajuste','saída', 'saída com ajuste']
+    
+    produtos_movimentados = Autorizacao.query.filter(and_(Autorizacao.data.between(data_inicial, data_final),
+                                                        Autorizacao.produto.has(Produto.categoria_id.in_(lista_categoria)),
+                                                        Autorizacao.produto.has(Produto.marca_id.in_(lista_marca)),
+                                                        Autorizacao.tipo_movimentacao.in_(lista_movimentacao))).all()
+    
+    if len(produtos_movimentados) > 0:
+        for produto in produtos_movimentados:
+            if produto.tipo_movimentacao == 'saída':
+                vendas += produto.valor
+            elif produto.tipo_movimentacao == 'entrada':
+                compras += produto.valor
+            elif produto.tipo_movimentacao == 'entrada com ajuste':
+                compras += produto.valor
+            elif produto.tipo_movimentacao == 'saída com ajuste':
+                vendas += produto.valor
+            else:
+                ajuste += produto.valor
+    else:
+        flash('Nenhum produto resultado encontrado!', category='info')
+    return render_template('relatorio_movimentacao.html', label_categoria=label_categoria, 
+                           label_marca=label_marca, produtos_movimentados=produtos_movimentados, form=form, 
+                           colunas=gera_nome_colunas_movimentacao, compras=compras, vendas=vendas, ajuste=ajuste)
     
 
 def consulta(atributo_para_consulta):
@@ -277,7 +353,9 @@ def consulta(atributo_para_consulta):
 
 #consulta_dinamica(busca_valores_checkbox)
 @app.route('/consulta_filtro', methods=['POST'])
+@login_required
 def busca_valores_checkbox():
+    session.modified = True
     atualiza_form = AtualizacaoForm()
     lista_tamanhos = request.form.getlist('tamanho')
     lista_categoria = request.form.getlist('categoria')

@@ -3,5 +3,113 @@
     Estoque ForU
 {% endblock %}
 {% block content%}
+{% from "_formhelpers.html" import render_field %}
 
+<form class="row g-3" action="{{ url_for('relatorio_movimentacao') }}" method="POST">
+    {{ form.hidden_tag() }}
+    <div class="row pb-3">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-md-2 offset-md-4">
+                    <dl>                        
+                        {{ render_field(form.data_inicial)}}
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl>
+                        {{ render_field(form.data_final)}}
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="d-flex justify-content-center p-5 border">
+            <h3>PRODUTOS DISPONÍVEIS EM NOSSO ESTOQUE</h3>  
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-1 justify-content-start">                
+            <div class="row border">                
+                <button type="submit" class="btn btn-primary btn-lg">Filtrar</button>                
+            </div>
+            <div class="row">
+                <div class="col border">
+                    <div class="row border">
+                        <h4 class="text-center">Categoria</h4>
+                        {% for categoria in label_categoria%}
+                        <div class="form-check justify-content-center">
+                            <input class="form-check-input" type="checkbox" name="categoria" value="{{categoria[0]}}">
+                            <label class="form-check-label" for="{{categoria[1].lower()}}">
+                            {{categoria[1].title()}}
+                            </label>
+                        </div>        
+                        {%endfor%}
+                    </div>
+                    <div class="row border">
+                        <h4 class="text-center">Marca</h4>
+                        {% for marca in label_marca%}
+                        <div class="form-check justify-content-center">
+                            <input class="form-check-input" type="checkbox" name="marca" value="{{marca[0]}}">
+                            <label class="form-check-label" for="{{marca[1].lower()}}">
+                                {{marca[1].title()}}
+                            </label>
+                        </div>        
+                        {%endfor%}
+                    </div>
+                    <div class="row border">
+                        <h5 class='text-center'>Tipo da Movimentação</h5>
+                        {% for movimentacao in ['ajuste','entrada','entrada com ajuste','saída', 'saída com ajuste']%}
+                        <div class="form-check justify-content-center">
+                            <input class="form-check-input" type="checkbox" name="movimento" value="{{movimentacao}}">
+                            <label class="form-check-label" for="{{movimento}}">
+                                {{movimentacao.title()}}
+                            </label>
+                        </div>        
+                        {%endfor%}
+                    </div>
+                </div>
+            </div>
+        </div>      
+        <div class="col-11 border">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td class="bg-danger fw-bold" style="color: white">Valor Total das Entradas</td>
+                        <td class="bg-danger fw-bold" style="color: white">{{compras | formatar_moeda}}</td>
+                        <td></td>
+                        <td class="bg-success fw-bold">Valor Total das Saídas</td>
+                        <td class="bg-success fw-bold">{{vendas | formatar_moeda}}</td>
+                        <td></td>
+                        <td class="bg-warning fw-bold">Valor Total dos Ajustes</td>
+                        <td class="bg-warning fw-bold">{{ajuste | formatar_moeda}}</td>
+
+                    </tr>
+
+                    <tr>
+                        <!-- Your Columns HERE -->
+                        {% for coluna in colunas %}
+                        <th scope="col"> <strong>{{ coluna.replace("_id", " ").title() }}</strong></th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Your rows inside the table HERE: -->
+                    {% for produto in produtos_movimentados %}
+                    <tr>
+                        <td>{{produto.produto.descricao.title() }}</td>
+                        <td>{{produto.produto.marca.nome.title() }}</td>
+                        <td>{{produto.user.name.title() }}</td>
+                        <td>{{produto.data.strftime('%d/%m/%Y')}}</td>
+                        <td>{{produto.quantidade}}</td>
+                        <td>{{produto.valor | formatar_moeda}}</td>
+                        <td>{{produto.tipo_movimentacao.title() }}</td>
+                    </tr>                  
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>     
 {% endblock %}
+</html>

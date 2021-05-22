@@ -1,8 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField, BooleanField
+#from wtforms.fields.core import DateField
+from wtforms.fields.html5 import DateField
 from wtforms.validators import Length, EqualTo, DataRequired, ValidationError
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from estoque.models import *
 
 
@@ -75,6 +76,9 @@ def seleciona_tamanho():
     lista_de_tamanhos = [(tamanho.id, tamanho.id.upper()) for tamanho in tamanhos]
     return lista_de_tamanhos
 
+class SelecionaDataForm(FlaskForm):
+    data_inicial = DateField('Data Inicial', format='%Y-%m-%d')
+    data_final = DateField('Data Final', format='%Y-%m-%d')
 
 class AtualizacaoForm(FlaskForm):
     descricao = StringField(label='Descrição do Produto', validators=[Length(max=50), DataRequired()])
