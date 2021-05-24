@@ -4,170 +4,176 @@
 {% endblock %}
 {% block content%}
 
-<div class="row pb-3">
-    <div class="col-12">
-        <div class="row">
-            <div class="col-md-6">
-                <form action="./feminino" method="POST">
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary btn-lg">Feminino</button>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-6">
-                <form action="./masculino" method="POST">
-                    <div class="d-flex justify-content-start">
-                        <button type="submit" class="btn btn-primary btn-lg">Masculino</button>
-                    </div>
-                </form>
+<div class=" container-fluid">
+    <div class="row pb-3 pt-3 border">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-6">
+                    <form action="./feminino" method="POST">
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary btn-lg">Feminino</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-6">
+                    <form action="./masculino" method="POST">
+                        <div class="d-flex justify-content-start">
+                            <button type="submit" class="btn btn-primary btn-lg">Masculino</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="d-flex justify-content-center p-5 border">
-        <h3>PRODUTOS DISPONÍVEIS EM NOSSO ESTOQUE</h3>  
+    <div class="row">
+        <div class="text-center border  pb-3 pt-3">
+            <h3>PRODUTOS DISPONÍVEIS EM NOSSO ESTOQUE</h3>  
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-1 justify-content-start">
-        <form action="./consulta_filtro" method="POST">
-            <input type="hidden" value="{{genero}}" name="genero">
-            <div class="row border">
-                <button type="submit" class="btn btn-primary btn-lg">Filtrar</button>
-            </div>
-            <div class="row">
-                <div class="col border">
-                    <div class="row border">
-                        <h4>Tamanho</h4>
-                        {% for tamanho in (['PP','P','M','G','GG'])%}
-                        <div class="form-check">
-                            <div class="justify-content-start">
-                                <input class="form-check-input" type="checkbox" name="tamanho" value="{{tamanho.lower()}}">
-                                <label class="form-check-label" for="{{tamanho.lower()}}">
-                                {{tamanho.upper()}}
-                                </label>
+    <div class="row">
+        <div class="col-1 justify-content-start">
+            <form action="./consulta_filtro" method="POST">
+                <input type="hidden" value="{{genero}}" name="genero">
+                <div class="row border">
+                    <button type="submit" class="btn btn-primary btn-lg">Filtrar</button>
+                </div>
+                <div class="row">
+                    <div class="col border">
+                        <h4 class="text-center">Tamanho</h4>
+                        <div class="row mx-auto">
+                            {% for tamanho in (['PP','P','M','G','GG'])%}
+                            <div class="form-check">
+                                <div class="justify-content-start">
+                                    <input class="form-check-input" type="checkbox" name="tamanho" value="{{tamanho.lower()}}">
+                                    <label class="form-check-label" for="{{tamanho.lower()}}">
+                                    {{tamanho.upper()}}
+                                    </label>
+                                </div>
                             </div>
+                            {%endfor%}
                         </div>
-                        {%endfor%}
-                    </div>
-                    <div class="row border">
-                        <h4>Categoria</h4>
-                        {% for categoria in label_categoria%}
-                        <div class="form-check justify-content-center">
-                            <input class="form-check-input" type="checkbox" name="categoria" value="{{categoria[0]}}">
-                            <label class="form-check-label" for="{{categoria[1].lower()}}">
-                            {{categoria[1].title()}}
-                            </label>
-                        </div>        
-                        {%endfor%}
-                    </div>
-                    <div class="row border">
-                        <h4>Ano da Coleção</h4>
-                        {% for ano in label_ano%}
-                        <div class="form-check justify-content-center">
-                            <input class="form-check-input" type="checkbox" name="ano" value="{{ano}}">
-                            <label class="form-check-label" for="{{ano}}">
-                            {{ano}}
-                            </label>
-                        </div>        
-                        {%endfor%}
-                    </div>
-                    <div class="row border">
-                        <h4>Marca</h4>
-                        {% for marca in label_marca%}
-                        <div class="form-check justify-content-center">
-                            <input class="form-check-input" type="checkbox" name="marca" value="{{marca[0]}}">
-                            <label class="form-check-label" for="{{marca[1].lower()}}">
-                                {{marca[1].title()}}
-                            </label>
-                        </div>        
-                        {%endfor%}
-                    </div>
-                    <div class="row border">
-                        <h4>Material</h4>
-                        {% for material in label_material%}
-                        <div class="form-check justify-content-center">
-                            <input class="form-check-input" type="checkbox" name="material" value="{{material[0]}}">
-                            <label class="form-check-label" for="{{material[1].lower()}}">
-                                {{material[1].title()}}
-                            </label>
-                        </div>        
-                        {%endfor%}
+                        <div class="border border-5"></div>
+                        <h4 class="text-center">Categoria</h4>
+                        <div class="row mx-auto">
+                            {% for categoria in label_categoria%}
+                            <div class="form-check justify-content-center">
+                                <input class="form-check-input" type="checkbox" name="categoria" value="{{categoria[0]}}">
+                                <label class="form-check-label" for="{{categoria[1].lower()}}">
+                                {{categoria[1].title()}}
+                                </label>
+                            </div>        
+                            {%endfor%}
+                        </div>
+                        <div class="border border-5"></div>
+                        <h4 class="text-center">Ano da Coleção</h4>
+                        <div class="row mx-auto">
+                            {% for ano in label_ano%}
+                            <div class="form-check justify-content-center">
+                                <input class="form-check-input" type="checkbox" name="ano" value="{{ano}}">
+                                <label class="form-check-label" for="{{ano}}">
+                                {{ano}}
+                                </label>
+                            </div>        
+                            {%endfor%}
+                        </div>
+                        <div class="border border-5"></div>
+                        <h4 class="text-center">Marca</h4>
+                        <div class="row mx-auto">
+                            {% for marca in label_marca%}
+                            <div class="form-check justify-content-center">
+                                <input class="form-check-input" type="checkbox" name="marca" value="{{marca[0]}}">
+                                <label class="form-check-label" for="{{marca[1].lower()}}">
+                                    {{marca[1].title()}}
+                                </label>
+                            </div>        
+                            {%endfor%}
+                        </div>
+                        <div class="border border-5"></div>
+                        <h4 class="text-center">Material</h4>
+                        <div class="row mx-auto">
+                            {% for material in label_material%}
+                            <div class="form-check justify-content-center">
+                                <input class="form-check-input" type="checkbox" name="material" value="{{material[0]}}">
+                                <label class="form-check-label" for="{{material[1].lower()}}">
+                                    {{material[1].title()}}
+                                </label>
+                            </div>        
+                            {%endfor%}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>        
-    </div>
-    <div class="col-11 border">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <!-- Your Columns HERE -->
-                    {% for coluna in colunas %}
-                    <th scope="col"> <strong>{{ coluna.replace("_id", " ").title() }}</strong></th>
-                    {% endfor %}
-                    <th scope="col"> <strong> Movimentação </strong></th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Your rows inside the table HERE: -->
-                {% for produto in resultado %}
-                <tr>
-                    <td>{{produto.categoria.descricao.title() }}</td>
-                    <td>{{produto.descricao.title() }}</td>
-                    <td>{{produto.modelo.title() }}</td>
-                    <td>{{produto.genero.title() }}</td>
-                    <td>{{produto.ano_colecao }}</td>
-                    <td>{{produto.material.descricao.title() }}</td>
-                    <td>{{produto.cor.title() }}</td>
-                    <td>{{(produto.preco | formatar_moeda )}}</td>
-                    <td>{{produto.quantidade }}</td>
-                    <td>{{produto.marca.nome.title() }}</td>
-                    <td>{{produto.tamanho_id.upper() }}</td>
-                    <td>
-                        <div class="d-flex justify-content-center">
-                            <span>
-                                <form action="./entrada_produto" method="POST">
-                                    <input type="hidden" value="{{produto.id}}" name="produto"/>
-                                    <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Realizar Entrada">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
-                                        </svg>
-                                    </button>
-                                </form>
-                            </span>
-                            <a class="pe-3"></a>
-                            <span>
-                                <form action="./saida_produto" method="POST">
-                                    <input type="hidden" value="{{produto.id}}" name="produto">
-                                    <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Realizar Saída">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
-                                        </svg>
-                                    </button>
-                                </form>
-                            </span>
-                            <a class="pe-3"></a>
-                            <span>
-                                <form action="{{ url_for('mostra_tela_de_atualizacao') }}" method="POST">
-                                    <input type="hidden" value="{{produto.id}}" name="id_produto">
-                                    <button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Atualizar Produto">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-                                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+            </form>        
+        </div>
+        <div class="col-11 border">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <!-- Your Columns HERE -->
+                        {% for coluna in colunas %}
+                        <th scope="col"> <strong>{{ coluna.replace("_id", " ").title() }}</strong></th>
+                        {% endfor %}
+                        <th scope="col"> <strong> Movimentação </strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Your rows inside the table HERE: -->
+                    {% for produto in resultado %}
+                    <tr>
+                        <td>{{produto.categoria.descricao.title() }}</td>
+                        <td>{{produto.descricao.title() }}</td>
+                        <td>{{produto.modelo.title() }}</td>
+                        <td>{{produto.genero.title() }}</td>
+                        <td>{{produto.ano_colecao }}</td>
+                        <td>{{produto.material.descricao.title() }}</td>
+                        <td>{{produto.cor.title() }}</td>
+                        <td>{{(produto.preco | formatar_moeda )}}</td>
+                        <td>{{produto.quantidade }}</td>
+                        <td>{{produto.marca.nome.title() }}</td>
+                        <td>{{produto.tamanho_id.upper() }}</td>
+                        <td>
+                            <div class="d-flex justify-content-center">
+                                <span>
+                                    <form action="./entrada_produto" method="POST">
+                                        <input type="hidden" value="{{produto.id}}" name="produto"/>
+                                        <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Realizar Entrada">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
                                             </svg>
-                                    </button>
-                                </form>
-                            </span>
-                        </div>
-                    </td>
-                </tr>                    
-                {% endfor %}
-            </tbody>
-        </table>
+                                        </button>
+                                    </form>
+                                </span>
+                                <a class="pe-3"></a>
+                                <span>
+                                    <form action="./saida_produto" method="POST">
+                                        <input type="hidden" value="{{produto.id}}" name="produto">
+                                        <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Realizar Saída">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </span>
+                                <a class="pe-3"></a>
+                                <span>
+                                    <form action="{{ url_for('mostra_tela_de_atualizacao') }}" method="POST">
+                                        <input type="hidden" value="{{produto.id}}" name="id_produto">
+                                        <button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Atualizar Produto">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                                                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                                                </svg>
+                                        </button>
+                                    </form>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>                    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>        
+</div>       
 {% endblock %}

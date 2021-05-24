@@ -1,10 +1,12 @@
 from operator import methodcaller
+from os import abort
 from sqlalchemy.orm.session import Session
 from estoque import app
 from flask import render_template, redirect, url_for, flash, get_flashed_messages, send_from_directory, session, request
 from estoque.models import Produto, User, Material, Fornecedor, Produto, Marca, Categoria, Tamanho, Autorizacao
 from estoque.forms import RegisterForm, LoginForm, FornecedorForm, ProdutoForm, MarcaForm, ConsultaForm, AtualizacaoForm, SelecionaDataForm
 from estoque import db
+from estoque.gerar_pdf import *
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date, timedelta
 from sqlalchemy import or_, and_
@@ -133,7 +135,7 @@ def entrada_produto():
             valor_ajuste = (produto.quantidade * preco_do_produto)
             registra_movimentacao = Autorizacao(user_id = current_user.id,
                                                         produto_id = id_produto,
-                                                        quantidade = quantidade_da_entrada,
+                                                        quantidade = produto.quantidade,
                                                         valor = valor_ajuste,
                                                         tipo_movimentacao = 'ajuste')
             produto.preco = preco_do_produto
@@ -199,7 +201,7 @@ def saida_produto():
             if preco_do_produto != produto.preco and quantidade_da_saida == 0:
                 registra_movimentacao = Autorizacao(user_id = current_user.id,
                                                         produto_id = id_produto,
-                                                        quantidade = quantidade_da_saida,
+                                                        quantidade = produto.quantidade,
                                                         valor = preco_do_produto * produto.preco,
                                                         tipo_movimentacao = 'ajuste')
                 produto.quantidade = saida_do_produto
@@ -245,10 +247,10 @@ def saida_produto():
 def mostra_tela_de_atualizacao():
     id_produto = int(request.form['id_produto'])
     produto = Produto.query.filter_by(id=id_produto).first()
-    atualiza_form = AtualizacaoForm(descricao=produto.descricao, ano_colecao=produto.ano_colecao,
-                        categorias=produto.categoria_id,modelo=produto.modelo, cor=produto.cor.title(),
+    atualiza_form = AtualizacaoForm(descricao=produto.descricao.title(), ano_colecao=produto.ano_colecao,
+                        categorias=produto.categoria_id,modelo=produto.modelo.title(), cor=produto.cor.title(),
                         tamanho=produto.tamanho_id, marcas=produto.marca_id,
-                        genero = produto.genero, material=produto.material_id)
+                        genero = produto.genero.title(), material=produto.material_id)
     return render_template('atualiza_produto.html', produto=produto, id_produto=id_produto, atualiza_form=atualiza_form)
 
 
@@ -331,12 +333,24 @@ def relatorio_movimentacao():
                 vendas += produto.valor
             else:
                 ajuste += produto.valor
+        pdf = PDF('L','mm','A4')
+        nome_do_arquivo = pdf.body(produtos_movimentados)
+
     else:
         flash('Nenhum produto resultado encontrado!', category='info')
     return render_template('relatorio_movimentacao.html', label_categoria=label_categoria, 
                            label_marca=label_marca, produtos_movimentados=produtos_movimentados, form=form, 
-                           colunas=gera_nome_colunas_movimentacao, compras=compras, vendas=vendas, ajuste=ajuste)
-    
+                           colunas=gera_nome_colunas_movimentacao, compras=compras, vendas=vendas, ajuste=ajuste, nome_do_arquivo=nome_do_arquivo)
+
+@app.route('/relatorio_pdf/<string:nome_do_arquivo>')
+def gerar_pdf(nome_do_arquivo):
+    try:
+        return send_from_directory(app.config['CLIENT_PDF'],
+                                    nome_do_arquivo,
+                                    as_attachment=True)
+    except FileNotFoundError:
+        abort(400)
+
 
 def consulta(atributo_para_consulta):
     condicao = Produto.query.filter(or_(Produto.categoria.has(Categoria.descricao.contains(atributo_para_consulta)),

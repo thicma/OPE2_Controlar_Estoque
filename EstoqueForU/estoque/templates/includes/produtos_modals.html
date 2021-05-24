@@ -24,7 +24,7 @@
       </div>
       <div class="modal-footer">
           {{ atualiza_form.csrf_token }}
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-lg btn-danger" data-dismiss="modal">Cancelar</button>
           <input type="hidden" name="id_produto" value="{{produto.id}}">
           {{ atualiza_form.submit(class="btn btn-lg btn-primary" ) }}
       </div>

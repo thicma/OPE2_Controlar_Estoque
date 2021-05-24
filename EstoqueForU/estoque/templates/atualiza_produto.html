@@ -24,13 +24,13 @@
                 </div>
                 <div class="col-md-2">
                     <label for="tamanho" class="form-label fw-bold fs-4">Tamanho</label>
-                    {{ atualiza_form.tamanho(class="form-control") }}
+                    {{ atualiza_form.tamanho(class="form-select") }}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <label for="categoria" class="form-label fw-bold fs-4">Categoria</label>
-                    {{ atualiza_form.categorias(class="form-control") }}
+                    {{ atualiza_form.categorias(class="form-select") }}
                 </div>
                 <div class="col-md-3">
                     <label for="modelo" class="form-label fw-bold fs-4">Modelo</label>
@@ -38,7 +38,7 @@
                 </div>
                 <div class="col-md-3">
                     <label for="genero" class="form-label fw-bold fs-4">Gênero</label>
-                    {{ atualiza_form.genero(class="form-control") }}
+                    {{ atualiza_form.genero(class="form-select") }}
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <label for="material" class="form-label fw-bold fs-4">Material</label>
-                    {{ atualiza_form.material(class="form-control") }}
+                    {{ atualiza_form.material(class="form-select") }}
                 </div>
                 <div class="col-md-3">
                     <label for="cor" class="form-label fw-bold fs-4">Cor</label>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="col-md-3">
                     <label for="marca" class="form-label fw-bold fs-4">Marca</label>
-                    {{ atualiza_form.marcas(class="form-control")}}
+                    {{ atualiza_form.marcas(class="form-select")}}
                 </div>                
             </div>
         </div>
@@ -76,7 +76,7 @@
             <input type="text" class="form-control" name="preco" value="{{(produto.preco | formatar_moeda )}}" disabled>
         </div>
         <div class="col-12">
-            <button type="button" data-toggle="modal" data-target="#Modal-ConfirmaAlteracao-{{ produto.id }}">
+            <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#Modal-ConfirmaAlteracao-{{ produto.id }}">
                 Atualizar        
             </button>
         </div>

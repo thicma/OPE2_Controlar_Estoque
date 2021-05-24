@@ -11,12 +11,12 @@
         {% endblock %}
     </title>
 </head>
-<body class="container-fluid p-5">
+<body class="container-fluid p-3">
     <header>
         {% if current_user.is_authenticated %}
         <div class="container-fluid">
             <div class="row border pt-2">
-                <div class="col-md-4">
+                <div class="col-4">
                     <div class="d-flex justify-content-center">
                         <img src="{{ url_for('static', filename='img/logo_barra.png') }}">
                     </div>
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid">
+        <div class="container-fluid border">
             <div class="row">
                 <div class="col-md-6 offset-md-2">
                     <div class="container-fluid">
@@ -73,7 +73,7 @@
                         <nav class="navbar">
                         <div class="container-fluid">
                             <a class="nav-link" href="{{ url_for('login_page') }}">Login</a>
-                            <a class="nav-link" href="{{ url_for('register_page') }}">Criar conta</a>
+                            <a class="nav-link" >Solicite a criação de uma conta ao gestor.</a>
                         </div>
                         </nav>
                     </div>

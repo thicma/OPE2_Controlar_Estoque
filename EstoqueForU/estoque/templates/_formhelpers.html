@@ -1,6 +1,6 @@
 {% macro render_field(field) %}
-  <dt>{{ field.label }}
-  <dd>{{ field(**kwargs)|safe }}
+  <dt class="text-center">{{ field.label(class_='fs-4 fw-bold') }}
+  <dd class="text-center">{{ field(class_='form-select fw-bold text-center',**kwargs)|safe }}
   {% if field.errors %}
     <ul class=errors>
     {% for error in field.errors %}
