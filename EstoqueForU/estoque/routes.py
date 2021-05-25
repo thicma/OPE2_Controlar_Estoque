@@ -11,8 +11,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date, timedelta
 from sqlalchemy import or_, and_
 import re
-import locale
-locale.setlocale(locale.LC_MONETARY, 'Portuguese_Brazil.1252')
+
 
 
 def gera_nome_colunas():
@@ -424,8 +423,11 @@ def consulta_dinamica(lista_de_checkbox):
 @app.template_filter()
 def formatar_moeda(preco):
     preco = float(preco)
-    preco = locale.currency(preco,grouping=True)
-    return preco
+    a = f'{preco:,.2f}'
+    b = a.replace(',','v')
+    c = b.replace('.',',')
+    preco = c.replace('v','.')
+    return f'R${preco}'
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():

@@ -51,7 +51,7 @@ class PDF(FPDF):
             self.cell(20,10,f'R${linha.valor:.2f}', border=True)
             self.cell(60,10,f'{linha.tipo_movimentacao.title()}', border=True, ln=True)
         
-        nome_do_arquivo = f"C:/Users/HeJuThBb/Documents/GitHub/OPE2_Controlar_Estoque/EstoqueForU/estoque/static/client/pdf/ForU_{datetime.now().strftime('%d-%m-%Y_%H-%M-%S')}.pdf"
+        nome_do_arquivo = f"temp/ForU_{datetime.now().strftime('%d-%m-%Y_%H-%M-%S')}.pdf"
         
         self.output(nome_do_arquivo, 'F')
         return f"ForU_{datetime.now().strftime('%d-%m-%Y_%H-%M-%S')}.pdf"

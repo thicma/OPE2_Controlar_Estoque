@@ -3,12 +3,20 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from datetime import timedelta
+import os
+import os.path
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///estoque.db'
 app.config['SECRET_KEY'] = 'd1e8ab4c46d1d1d40c592ef2'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
-app.config['CLIENT_PDF'] = "C:/Users/HeJuThBb/Documents/GitHub/OPE2_Controlar_Estoque/EstoqueForU/estoque/static/client/pdf"
+client_pdf = ""
+if os.path.exists('temp'):
+    pass
+else:
+    client_pdf = os.mkdir('temp')
+
+app.config['CLIENT_PDF'] = client_pdf
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)

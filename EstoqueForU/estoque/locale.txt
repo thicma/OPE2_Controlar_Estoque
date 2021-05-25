@@ -1,0 +1,1 @@
+locale.setlocale(locale.LC_MONETARY, 'Portuguese_Brazil.1252')
