@@ -302,6 +302,7 @@ def relatorio_movimentacao():
     vendas = 0
     compras = 0
     ajuste = 0
+    nome_do_arquivo = ""
     if data_final > hoje:
         flash('A data final da pesquisa não pode ser maior que a data atual!', category='info')
         return redirect(url_for('mostra_tela_relatorio_movimentacao'))
@@ -341,14 +342,15 @@ def relatorio_movimentacao():
                            label_marca=label_marca, produtos_movimentados=produtos_movimentados, form=form, 
                            colunas=gera_nome_colunas_movimentacao, compras=compras, vendas=vendas, ajuste=ajuste, nome_do_arquivo=nome_do_arquivo)
 
-@app.route('/relatorio_pdf/<string:nome_do_arquivo>')
-def gerar_pdf(nome_do_arquivo):
+@app.route('/relatorio_pdf/<arquivo>')
+def gerar_pdf(arquivo):
     try:
         return send_from_directory(app.config['CLIENT_PDF'],
-                                    nome_do_arquivo,
+                                    arquivo,
                                     as_attachment=True)
     except FileNotFoundError:
-        abort(400)
+        flash('Nenhum arquivo encontrado.')
+        return redirect(url_for('relatorio_movimentacao'))
 
 
 def consulta(atributo_para_consulta):

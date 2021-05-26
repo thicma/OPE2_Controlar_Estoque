@@ -6,8 +6,8 @@
 {% from "_formhelpers.html" import render_field %}
 
 <div class="container-fluid">
-    <form class="form" action="{{ url_for('gerar_pdf', nome_do_arquivo=nome_do_arquivo ) }}" method="get">
-        <input type="hidden" name="nome_do_arquivo" value="{{nome_do_arquivo}}">
+    <form class="form" action="{{ url_for('gerar_pdf', arquivo=nome_do_arquivo) }}">
+        <input type="hidden" name="nome_do_arquivo" value= {{nome_do_arquivo}}
         <div class="col">
             <button type="submit" class='btn btn-lg btn-primary'>Gerar PDF</button>
         </div>

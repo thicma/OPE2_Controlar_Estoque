@@ -105,7 +105,7 @@ class ProdutoForm(FlaskForm):
     quantidade = StringField(label='Quantidade', validators=[DataRequired()])
     tamanho = SelectField(u"Tamanho", choices=[(tamanho.id, tamanho.descricao) for tamanho in Tamanho.query.all()])
     marca = StringField(label='Marca', validators=[Length(max=20), DataRequired()])
-    submit = SubmitField(label='Cadastar Produto')
+    submit = SubmitField(label='Cadastrar Produto')
 
 class MarcaForm(FlaskForm):
     nome = StringField(label='Marca', validators=[Length(max=20), DataRequired()])
