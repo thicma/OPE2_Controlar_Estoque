@@ -10,8 +10,8 @@ from estoque.gerar_pdf import *
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date, timedelta
 from sqlalchemy import or_, and_
-import re
-
+import re, os
+import os.path
 
 
 def gera_nome_colunas():
@@ -345,12 +345,39 @@ def relatorio_movimentacao():
 @app.route('/relatorio_pdf/<arquivo>')
 def gerar_pdf(arquivo):
     try:
-        return send_from_directory(app.config['CLIENT_PDF'],
+        leitura_do_arquivo = send_from_directory(app.config['CLIENT_PDF'],
                                     arquivo,
                                     as_attachment=True)
+        para_apagar_arquivo = apagar_arquivo(arquivo)
+        return leitura_do_arquivo
+                                    
     except FileNotFoundError:
         flash('Nenhum arquivo encontrado.')
         return redirect(url_for('relatorio_movimentacao'))
+
+def apagar_arquivo(nome_do_arquivo):
+
+    caminho = f'arquivos/{nome_do_arquivo}'
+    pasta_raiz = os.getcwd()
+    print(pasta_raiz)
+    print(caminho)
+    caminho_formatado = os.path.join(f"{app.config['CLIENT_PDF']}/",nome_do_arquivo)
+    print(caminho_formatado)
+    if caminho_formatado == caminho:
+        print("1")
+        os.chdir(f"estoque/{os.path.join(app.config['CLIENT_PDF'])}")
+        for arquivo in os.listdir('.'):
+            if os.path.isfile(arquivo):
+                if arquivo != nome_do_arquivo:
+                    print('seria removido')
+        os.chdir(pasta_raiz)
+
+        return True
+    else:
+        print('não deu certo')
+        return False
+    return False
+
 
 
 def consulta(atributo_para_consulta):

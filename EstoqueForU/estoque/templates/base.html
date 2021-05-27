@@ -11,95 +11,97 @@
         {% endblock %}
     </title>
 </head>
-<body class="container-fluid p-3">
-    <header>
-        {% if current_user.is_authenticated %}
-        <div class="container-fluid">
-            <div class="row border pt-2">
-                <div class="col-4">
-                    <div class="d-flex justify-content-center">
-                        <img src="{{ url_for('static', filename='img/logo_barra.png') }}">
+<body>
+    <div class="container-fluid p-3 bg.primary.bg-blue-100">
+        <header>
+            {% if current_user.is_authenticated %}
+            <div class="container-fluid" style="background-color: #63c5da;">
+                <div class="row border pt-2">
+                    <div class="col-4">
+                        <div class="d-flex justify-content-center">
+                            <img src="{{ url_for('static', filename='img/logo_barra.png') }}">
+                        </div>
+                    </div>
+                    <div class="col-md-4 offset-md-4">
+                        <div class="container-fluid">
+                            <nav class="navbar">
+                            <div class="container-fluid">
+                                <a class="navbar-brand">Bem-vindo(a) {{ current_user.username.title() }} </a>
+                                <a class="navbar-brand" href="{{ url_for('logout') }}">Logout</a>
+                            </div>
+                            </nav>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4 offset-md-4">
-                    <div class="container-fluid">
-                        <nav class="navbar">
+            </div>
+            <div class="container-fluid border">
+                <div class="row">
+                    <div class="col-md-6 offset-md-2">
                         <div class="container-fluid">
-                            <a class="navbar-brand">Bem-vindo(a) {{ current_user.username.title() }} </a>
-                            <a class="navbar-brand" href="{{ url_for('logout') }}">Logout</a>
+                            <nav class="navbar">
+                            <div class="container-fluid">
+                                <a class="navbar-brand" href="{{ url_for('estoque_page') }}">Estoque </a>
+                                <a class="navbar-brand" href="{{ url_for('register_fornecedor') }}">Fornecedores</a>
+                                <a class="navbar-brand" href="{{ url_for('mostrar_tela_de_cadastro_do_produto') }}">Cadastrar Produto</a>
+                                <a class="navbar-brand" href="{{ url_for('cadastrar_marca') }}">Marcas</a>
+                                <a class="navbar-brand" href="{{ url_for('mostra_tela_relatorio_movimentacao') }}">Relatórios de Vendas</a>
+                            </div>
+                            </nav>
                         </div>
+                    </div>
+                    <div class="col-md-4">
+                        <nav class="navbar-brand">
+                            <div class="container-fluid ps-5">
+                            <form class="d-flex" action="./estoque" method="POST">
+                                <input class="form-control me-3" type="form-control" name="consultar">
+                                <button class="btn btn-outline-success" type="submit">Procurar</button>
+                            </form>
+                            </div>
                         </nav>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="container-fluid border">
-            <div class="row">
-                <div class="col-md-6 offset-md-2">
-                    <div class="container-fluid">
-                        <nav class="navbar">
-                        <div class="container-fluid">
-                            <a class="navbar-brand" href="{{ url_for('estoque_page') }}">Estoque </a>
-                            <a class="navbar-brand" href="{{ url_for('register_fornecedor') }}">Fornecedores</a>
-                            <a class="navbar-brand" href="{{ url_for('mostrar_tela_de_cadastro_do_produto') }}">Cadastrar Produto</a>
-                            <a class="navbar-brand" href="{{ url_for('cadastrar_marca') }}">Marcas</a>
-                            <a class="navbar-brand" href="{{ url_for('mostra_tela_relatorio_movimentacao') }}">Relatórios de Vendas</a>
+            {% else %}
+            <div class="container-fluid" style="background-color: #63c5da;">
+                <div class="row border pt-2">
+                    <div class="col-md-4">
+                        <div class="d-flex justify-content-center">
+                            <img src="{{ url_for('static', filename='./img/logo_barra.png') }}">
                         </div>
-                        </nav>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <nav class="navbar-brand">
-                        <div class="container-fluid ps-5">
-                        <form class="d-flex" action="./estoque" method="POST">
-                            <input class="form-control me-3" type="form-control" name="consultar">
-                            <button class="btn btn-outline-success" type="submit">Procurar</button>
-                        </form>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
-        {% else %}
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="d-flex justify-content-center">
-                        <img src="{{ url_for('static', filename='./img/logo_barra.png') }}">
-                    </div>
-                </div>
-                <div class="col-md-4 offset-md-4">
-                    <div class="container-fluid">
-                        <nav class="navbar">
+                    <div class="col-md-4 offset-md-4">
                         <div class="container-fluid">
-                            <a class="nav-link" href="{{ url_for('login_page') }}">Login</a>
-                            <a class="nav-link" >Solicite a criação de uma conta ao gestor.</a>
+                            <nav class="navbar">
+                            <div class="container-fluid">
+                                <a class="nav-link" href="{{ url_for('login_page') }}">Login</a>
+                                <a class="nav-link" >Solicite a criação de uma conta ao gestor.</a>
+                            </div>
+                            </nav>
                         </div>
-                        </nav>
                     </div>
                 </div>
             </div>
-        </div>
+            {% endif %}
+        </header>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="="true">&times;</span>
+                    </button>
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endif %}
-    </header>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">
-                <button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="="true">&times;</span>
-                </button>
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-    {% endwith %}
-    {% block content %}
+        {% endwith %}
+        {% block content %}
 
-    {% endblock %}
-    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        {% endblock %}
+        <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    </div>
 </body>
 </html>

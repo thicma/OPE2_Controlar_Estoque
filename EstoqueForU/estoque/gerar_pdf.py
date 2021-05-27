@@ -10,7 +10,7 @@ title = 'Relatório de movimentação financeira ForU'
 class PDF(FPDF):
     def header(self):
         #logo
-        self.image('logo_ForU_Login.png', 10, 10, 50)
+        self.image('estoque/static/img/logo_ForU_Login.png', 10, 10, 50)
         #font
         self.set_font('helvetica', 'B', 20)
         title_w = self.get_string_width(title)
