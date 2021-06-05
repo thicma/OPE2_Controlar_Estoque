@@ -130,8 +130,7 @@
                     </div>  
                 </form>
             </div>     
-        </div>        
-        <div class="row">
+        </div> 
             <div class="col border-top border-bot">
                 <table class="table table-striped" id="tabela_estoque">
                     <thead>
@@ -201,11 +200,22 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination">
+                    <ul class="pagination">                    
+                        <input type="hidden" name="genero" value="{{genero}}">
+                        <input type="hidden" name="lista_tamanhos" value='{{lista_tamanhos}}'>
+                        <input type="hidden" name="lista_categoria" value='{{lista_categoria}}'>
+                        <input type="hidden" name="lista_ano_colecao" value='{{lista_ano_colecao}}'>
+                        <input type="hidden" name="lista_marca" value='{{lista_marca}}'>
+                        <input type="hidden" name="lista_material" value='{{lista_material}}'>
+                        <input type="hidden" name="quantidade" value='{{quantidade}}'>
                         {% if resultado.has_prev %}
-                        <input type="hidden" name='consultar' value="{{consultar}}">
-                            <li class="page-item"><a class="page-link" href="{{ url_for('estoque_page', pagina=resultado.prev_num, consultar=consultar) }}">
+                            <li class="page-item"><a class="page-link" href="{{ url_for('mostra_resultado_checkbox',
+                                                                            pagina=resultado.prev_num, genero=genero,
+                                                                            lista_tamanhos=lista_tamanhos,lista_categoria=lista_categoria,
+                                                                            lista_ano_colecao=lista_ano_colecao, lista_marca=lista_marca,
+                                                                            lista_material=lista_material, quantidade=quantidade) }}">
                                 Anterior
                             </a></li>
                         {% else %}
@@ -214,15 +224,23 @@
 
                         {% for page in resultado.iter_pages(left_edge=3, right_edge=3) %}
                         {% if page %}
-                            <li class="page-item"><a class="page-link" href="{{ url_for('estoque_page', pagina=page, consultar=consultar) }}">
+                            <li class="page-item"><a class="page-link" href="{{ url_for('mostra_resultado_checkbox',
+                                                                            pagina=page, genero=genero,
+                                                                            lista_tamanhos=lista_tamanhos,lista_categoria=lista_categoria,
+                                                                            lista_ano_colecao=lista_ano_colecao, lista_marca=lista_marca,
+                                                                            lista_material=lista_material, quantidade=quantidade) }}">
                                 {{ page }}
                             </a></li>
                         {% else %}
-                            <li class="page-item disabled" id="exemple_ellipsis"><a class="page-link" href="#">..</a></li>
+                            <li class="page-item disabled" id="exemple_ellipsis"><a class="page-link" href="#">...</a></li>
                         {% endif%}
                         {%endfor%}
                         {% if resultado.has_next %}
-                            <li class="page-item"><a class="page-link" href="{{ url_for('estoque_page', pagina=resultado.next_num, consultar=consultar) }}">
+                            <li class="page-item"><a class="page-link" href="{{ url_for('mostra_resultado_checkbox',
+                                                                                pagina=resultado.next_num, genero=genero,
+                                                                                lista_tamanhos=lista_tamanhos,lista_categoria=lista_categoria,
+                                                                                lista_ano_colecao=lista_ano_colecao, lista_marca=lista_marca,
+                                                                                lista_material=lista_material, quantidade=quantidade) }}">
                                 Próxima
                             </a> </li>
                         {% else %}
@@ -232,6 +250,7 @@
                             <li class="page-item disabled"><span class="page-link">Qtde de itens encontrados {{quantidade}}</span></li>
                         </ul>
                     </ul>
+
                 </nav>
             </div>
         </div>

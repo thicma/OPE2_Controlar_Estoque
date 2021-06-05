@@ -1,0 +1,9 @@
+Importante!!
+
+Antes de iniciar a aplicação rodar!
+
+1 - abrir o terminal python
+
+2 - digitar o comando: from estoque import db
+
+3 - digitar : db.create_all()

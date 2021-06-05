@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}
+    Estoque ForU
+{% endblock %}
+{% block content%}
+<div class="col">
+    <div class="row pb-3 pt-3 border">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-7">
+                    <form action="{{url_for('mostrar_tela_de_cadastrar_fornecedor')}}" method="GET">
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary btn-lg">Cadastrar Novo Fornecedor</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-5">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-center border  pb-3 pt-3">
+            <h3>NOSSOS FORNECEDORES</h3>  
+        </div>
+    </div>
+    <div class="row pt-2">
+        <div class="col-2"></div>
+        <div class="col-8 border">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="fs-5">
+                        <!-- Your Columns HERE -->
+                        {% for coluna in ['Fornecedor', 'E-mail', 'Telefone', 'CNPJ'] %}
+                        <th scope="col border"> <strong>{{ coluna }}</strong></th>
+                        {% endfor %}
+                        <th scope="col border"> <strong> Opções </strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Your rows inside the table HERE: -->
+                    {% for fornecedor in fornecedores %}
+                        <tr>
+                            <td>{{fornecedor.name.title() }}</td>
+                            <td>{{fornecedor.email}}</td>
+                            <td>{{fornecedor.fone}}</td>
+                            <td>{{fornecedor.cnpj }}</td>
+                            <td>
+                                <div class="d-flex justify-content-center">
+                                    <span>
+                                        <form action="./atualiza_fornecedor" method="POST">
+                                            <input type="hidden" value="{{fornecedor.id}}" name="fornecedor"/>
+                                            <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Atualiza Fornecedor">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </span>
+                                    <a class="pe-3"></a>
+                                    <span>
+                                        <button type="button" class="btn btn-success" data-bs-toggle="offcanvas" data-bs-target="#lista_marcas{{fornecedor.id}}" aria-controls="lista_marcas{{fornecedor.id}}" title="Marcas Fornecidas">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                                            </svg>
+                                        </button>
+                                        <div class="offcanvas offcanvas-end" tabindex="-1" id="lista_marcas{{fornecedor.id}}" aria-labelledby="lista_marcas_label{{fornecedor.id}}"
+                                                style="background: teal; 
+                                                background-image: linear-gradient(#1d88b9, #dae3e7);
+                                                color: #132c33;
+                                                font-size: 20px;
+                                                font-weight: 600;">                                                
+                                                <div class="offcanvas-header">
+                                                <h3 id="lista_marcas_label{{fornecedor.id}}">Marcas Fornecidas</h3>
+                                            </div>
+                                            <div class="offcanvas-body">
+                                                <table class="table table-striped">
+                                                    <tr>
+                                                        <th scope="col">ID</th>
+                                                        <th scope="col">Marca</th>
+                                                    </tr>
+                                                    <tbody>
+                                                        {% for marca in marcas %}
+                                                            {%if marca.fornecedor_id == fornecedor.id %}
+                                                            <tr>
+                                                                <td>{{marca.id}}</td>
+                                                                <td>{{marca.nome.title()}}</td>
+                                                            </tr>
+                                                            {%endif%}
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>                                                
+                                            </div>                                            
+                                        </div>
+                                    </span>                                    
+                                </div>
+                            </td>
+                        </tr>                    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>       
+{% endblock %}

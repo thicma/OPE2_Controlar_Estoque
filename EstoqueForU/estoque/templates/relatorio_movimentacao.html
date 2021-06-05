@@ -5,125 +5,214 @@
 {% block content%}
 {% from "_formhelpers.html" import render_field %}
 
-<div class="container-fluid">
-    <form class="form" action="{{ url_for('gerar_pdf', arquivo=nome_do_arquivo) }}">
-        <input type="hidden" name="nome_do_arquivo" value= {{nome_do_arquivo}}
-        <div class="col">
-            <button type="submit" class='btn btn-lg btn-primary'>Gerar PDF</button>
-        </div>
-    </form>
-    <form class="from" action="{{ url_for('relatorio_movimentacao') }}" method="POST">
-        {{ form.hidden_tag() }}
-        <div class="row border">
-            <div class="col-12">
-                <div class="row pt-4 border">
-                    <div class="col-4"></div>
-                    <div class="col-2">
-                        <dl>                        
-                            {{ render_field(form.data_inicial)}}
-                        </dl>
-                    </div>
-                    <div class="col-2">
-                        <dl>
-                            {{ render_field(form.data_final)}}
-                        </dl>
-                    </div>
-                    <div class="col-4"></div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="text-center pt-2 pb-2 border">
-                <h3>PRODUTOS DISPONÍVEIS EM NOSSO ESTOQUE</h3>  
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-1">                
-                <div class="row border border-5">                
-                    <button type="submit" class="btn btn-primary btn-lg">Filtrar</button>                
-                </div>
+<div class="col">
+    <div class="container-fluid">
+        <div class="row border pt-2 pb-2">
+            <div class="col-5">&nbsp;</div>
+            <div class="col-6">
                 <div class="row">
-                    <div class="col border">
-                        <h4 class="text-center">Categoria</h4>
-                        <div class="row mx-auto">                            
-                            {% for categoria in label_categoria%}
-                            <div class="form-check justify-content-center">
-                                <input class="form-check-input" type="checkbox" name="categoria" value="{{categoria[0]}}">
-                                <label class="form-check-label" for="{{categoria[1].lower()}}">
-                                {{categoria[1].title()}}
-                                </label>
-                            </div>        
-                            {%endfor%}                            
+                    <form class="form" action="{{ url_for('gerar_pdf', arquivo=nome_do_arquivo) }}">
+                        <button type="submit" class='btn btn-lg btn-primary'>Gerar Relatório em PDF</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-1">&nbsp;</div>
+        </div>
+        <form class="from" action="{{ url_for('relatorio_movimentacao') }}" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="row border">
+                <div class="col-12">
+                    <div class="row pt-4 border">
+                        <div class="col-4"></div>
+                        <div class="col-2">
+                            <dl>                        
+                                {{ render_field(form.data_inicial)}}
+                            </dl>
                         </div>
-                        <div class="border border-5"></div>
-                        <h4 class="text-center">Marca</h4>
-                        <div class="row mx-auto">
-                            {% for marca in label_marca%}
-                            <div class="form-check justify-content-center">
-                                <input class="form-check-input" type="checkbox" name="marca" value="{{marca[0]}}">
-                                <label class="form-check-label" for="{{marca[1].lower()}}">
-                                    {{marca[1].title()}}
-                                </label>
-                            </div>        
-                            {%endfor%}
+                        <div class="col-2">
+                            <dl>
+                                {{ render_field(form.data_final)}}
+                            </dl>
                         </div>
-                        <div class="border border-5"></div>
-                        <h5 class='text-center'>Tipo da Movimentação</h5>
-                        <div class="row mx-auto">
-                            {% for movimentacao in ['ajuste','entrada','entrada com ajuste','saída', 'saída com ajuste']%}
-                            <div class="form-check justify-content-center">
-                                <input class="form-check-input" type="checkbox" name="movimento" value="{{movimentacao}}">
-                                <label class="form-check-label" for="{{movimento}}">
-                                    {{movimentacao.title()}}
-                                </label>
-                            </div>        
-                            {%endfor%}
-                        </div>
+                        <div class="col-4"></div>
                     </div>
                 </div>
-            </div>      
-            <div class="col-11 border">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <td class="bg-danger fw-bold text-white" >Valor Total das Entradas</td>
-                            <td class="bg-danger fw-bold text-white" >{{compras | formatar_moeda}}</td>
-                            <td></td>
-                            <td class="bg-success fw-bold text-white">Valor Total das Saídas</td>
-                            <td class="bg-success fw-bold text-white">{{vendas | formatar_moeda}}</td>
-                            <td></td>
-                            <td class="bg-warning fw-bold">Valor Total dos Ajustes</td>
-                            <td class="bg-warning fw-bold">{{ajuste | formatar_moeda}}</td>
-                        </tr>
-                    </thead>
-                </table>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <!-- Your Columns HERE -->
-                            {% for coluna in colunas %}
-                            <th scope="col"> <strong>{{ coluna.replace("_id", " ").title() }}</strong></th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Your rows inside the table HERE: -->
-                        {% for produto in produtos_movimentados %}
-                        <tr>
-                            <td>{{produto.produto.descricao.title() }}</td>
-                            <td>{{produto.produto.marca.nome.title() }}</td>
-                            <td>{{produto.user.name.title() }}</td>
-                            <td>{{produto.data.strftime('%d/%m/%Y')}}</td>
-                            <td>{{produto.quantidade}}</td>
-                            <td>{{produto.valor | formatar_moeda}}</td>
-                            <td>{{produto.tipo_movimentacao.title() }}</td>
-                        </tr>                  
-                        {% endfor %}
-                    </tbody>
-                </table>
             </div>
-        </div>
-    </form>     
+            <div class="row">
+                <div class="text-center pt-2 pb-2 border">
+                    <h3>PRODUTOS DISPONÍVEIS EM NOSSO ESTOQUE</h3>  
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">                
+                    <div class="row border-top pt-1">                
+                        <button type="submit" class="btn btn-primary btn-lg bg-primary.bg-gradient">Filtrar</button>                
+                    </div>
+                    <div class="row">
+                        <div class="dropdown pt-5">
+                            <div class="row border-top pt-1">
+                                <button class="btn btn-primary btn-lg bg-primary.bg-gradient dropdown-toggle" type="button" id="button_categoria" data-bs-toggle="dropdown" aria-expanded="false">
+                                Categoria
+                                </button>
+                                <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_categoria">
+                                    {% for categoria in label_categoria%}
+                                    <li class="dropdown-item">
+                                        <input class="form-check-input" type="checkbox" name="categoria" value="{{categoria[0]}}">
+                                        <label class="form-check-label" for="{{categoria[1].lower()}}">
+                                            {{categoria[1].title()}}
+                                        </label>
+                                    </li>
+                                    {%endfor%}
+                                </ul>
+                            </div>                    
+                        </div>
+                        <div class="dropdown pt-5">
+                            <div class="row border-top pt-1">
+                                <button class="btn btn-primary btn-lg bg-primary.bg-gradient dropdown-toggle" type="button" id="button_marca" data-bs-toggle="dropdown" aria-expanded="false">
+                                Marca
+                                </button>
+                                <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_marca">
+                                    {% for marca in label_marca%}
+                                    <li class="dropdown-item">
+                                        <input class="form-check-input" type="checkbox" name="marca" value="{{marca[0]}}">
+                                        <label class="form-check-label" for="{{marca[1].lower()}}">
+                                            {{marca[1].title()}}
+                                        </label>
+                                    </li>
+                                    {%endfor%}
+                                </ul>
+                            </div>                    
+                        </div>    
+                        <div class="dropdown pt-5">
+                            <div class="row border-top pt-1">
+                                <button class="btn btn-primary btn-lg bg-primary.bg-gradient dropdown-toggle" type="button" id="button_movimentacao" data-bs-toggle="dropdown" aria-expanded="false">
+                                Tipo da Movimentação
+                                </button>
+                                <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_movimentacao">
+                                    {% for movimentacao in ['ajuste','entrada','entrada com ajuste','saída', 'saída com ajuste']%}
+                                    <li class="dropdown-item">
+                                        <input class="form-check-input" type="checkbox" name="movimento" value="{{movimentacao}}">
+                                        <label class="form-check-label" for="{{movimento}}">
+                                            {{movimentacao.title()}}
+                                        </label>
+                                    </li>
+                                    {%endfor%}
+                                </ul>
+                            </div>                    
+                        </div>                    
+                    </div>
+                </div>      
+                <div class="col">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <td class="bg-danger fw-bold text-white" >Valor Total das Entradas</td>
+                                <td class="bg-danger fw-bold text-white" >{{compras | formatar_moeda}}</td>
+                                <td></td>
+                                <td class="bg-success fw-bold text-white">Valor Total das Saídas</td>
+                                <td class="bg-success fw-bold text-white">{{vendas | formatar_moeda}}</td>
+                                <td></td>
+                                <td class="bg-warning fw-bold">Valor Total dos Ajustes</td>
+                                <td class="bg-warning fw-bold">{{ajuste | formatar_moeda}}</td>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <!-- Your Columns HERE -->
+                                {% for coluna in colunas %}
+                                <th scope="col"> <strong>{{ coluna.replace("_id", " ").title() }}</strong></th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Your rows inside the table HERE: -->
+                            {% for produto in produtos_movimentados.items %}
+                            <tr>
+                                <td>{{produto.produto.descricao.title() }}</td>
+                                <td>{{produto.produto.marca.nome.title() }}</td>
+                                <td>{{produto.user.name.title() }}</td>
+                                <td>{{produto.data.strftime('%d/%m/%Y')}}</td>
+                                <td>{{produto.quantidade}}</td>
+                                <td>{{produto.valor | formatar_moeda}}</td>
+                                <td>{{produto.tipo_movimentacao.title() }}</td>
+                            </tr>                  
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <input type="hidden" name="lista_categoria" value='{{lista_categoria}}'>
+                            <input type="hidden" name="lista_marca" value='{{lista_marca}}'>
+                            <input type="hidden" name="lista_movimentacao" value='{{lista_movimentacao}}'>
+                            <input type="hidden" name="quantidade" value='{{quantidade}}'>                            
+                            {% if produtos_movimentados.has_prev %}
+                                <li class="page-item"><a class="page-link" href="{{ url_for('mostra_tela_relatorio_movimentacao', pagina=resultado.prev_num,
+                                                                                    lista_categoria=lista_categoria, lista_marca=lista_marca,
+                                                                                    lista_movimentacao=lista_movimentacao, quantidade=quantidade) }}">
+                                    Anterior
+                                </a></li>
+                            {% else %}
+                                <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+                            {% endif%}
+    
+                            {% for page in produtos_movimentados.iter_pages(left_edge=3, right_edge=3) %}
+                            {% if page %}
+                                <li class="page-item"><a class="page-link active" href="{{ url_for('mostra_tela_relatorio_movimentacao', pagina=page,
+                                                                                        lista_categoria=lista_categoria, lista_marca=lista_marca,
+                                                                                        lista_movimentacao=lista_movimentacao, quantidade=quantidade) }}">
+                                    {{ page }}
+                                </a></li>
+                            {% else %}
+                                <li class="page-item disabled" id="exemple_ellipsis"><a class="page-link" href="#">..</a></li>
+                            {% endif%}
+                            {%endfor%}
+                            {% if produtos_movimentados.has_next %}
+                                <li class="page-item"><a class="page-link" href="{{ url_for('mostra_tela_relatorio_movimentacao', pagina=produtos_movimentados.next_num,
+                                                                                    lista_categoria=lista_categoria, lista_marca=lista_marca,
+                                                                                    lista_movimentacao=lista_movimentacao, quantidade=quantidade) }}">
+                                    Próxima
+                                </a> </li>
+                            {% else %}
+                                <li class="page-item disabled"><span class="page-link">Próxima</span></li>
+                            {% endif%}
+                            <ul class="pagination">
+                                <li class="page-item disabled"><span class="page-link">Qtde de itens encontrados {{quantidade}}</span></li>
+                            </ul>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </form>     
+    </div>
 </div>
+<style>
+    .pagination{
+        align-items:flex-end;
+        display: flex;
+        justify-content: center;
+    }
+    .rotulo{
+        display: inline-flex;
+        margin-bottom: .5rem;
+        margin-top: .5rem;
+    }
+    a.page-link{
+        color: #132c33 ;
+        font-size: 15px;
+        background-color: #fff;
+        border-color:  #dee2e6;
+        background-image: linear-gradient(#dae3e7, #1d88b9 );
+    }
+    .page-item.disabled .page-link{
+        color: #6c757d;
+        pointer-events: none;
+        cursor: auto;
+        background-color: #fff;
+        border-color:  #dee2e6;
+        background-image: linear-gradient(#dae3e7, #1d88b9 );
+    }
+</style> 
 {% endblock %}
 

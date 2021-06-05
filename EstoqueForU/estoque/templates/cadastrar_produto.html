@@ -1,75 +1,99 @@
 {% extends 'base.html' %}
+{% block title %}
+    Cadastramento de Produtos
+{% endblock %}
+{% block content %}
 
-    {% block title %}
-        Cadastramento de Produtos
-    {% endblock %}
-
-    {% block content %}
-
-    <body id="formularios">
-      <link rel="stylesheet" type= "text/css" href="{{ url_for ('static', filename='css/style.css') }}" >
-        <div class="text-center pb-2">
-            <img src="{{ url_for('static', filename='img/logo_ForU_Login.png') }}">
+<div class="col">
+    <link rel="stylesheet" type= "text/css" href="{{ url_for ('static', filename='css/style.css') }}" >
+    <div class="text-center pt-3 pb-2">
+        <img src="{{ url_for('static', filename='img/logo_ForU_Login.png') }}">
+    </div>
+    <div class="row fs-3 fw-bold text-center">
+        <div class="col">
+            <h1 >
+                Cadastramento de Produto
+            </h1>
         </div>
-        <h1 class="h3 mb-3 font-weight-normal">
-            Cadastramento de Produto
-        </h1>
-
-        <form method="POST" class="form-register">
-            {{ form.hidden_tag() }}
-            <ul class="list-group col-md-2">
-                {{ form.categoria(class="btn btn-lg btn-outline-primary") }}
-            </ul>
-            <div class="form-row">
-              <div class="form-group col-md-4">
-                {{ form.descricao.label() }}
-                {{ form.descricao(class="form-control", placeholder="Descrição do produto")}}
-              </div>
-              <div class="form-group col-md-2">
-                {{ form.ano_colecao.label() }}
-                {{ form.ano_colecao(class="form-control", placeholder="XXXX")}}
-              </div>
-              <ul class="list-group col-md-2">
-                {{ form.tamanho(class="btn btn-lg btn-outline-primary") }}
-              </ul>
-            </div>
-            <div class="form-row">
-               <div class="form-group col-md-4">
-                   {{ form.modelo.label()}}
-                   {{ form.modelo(class="form-control", placeholder="Esporte, gola V, cintura alta, etc...")}}
-               </div>
-               <div class="form-group col-md-2">
-                    {{ form.material.label()}}
-                    {{ form.material(class="form-control", placeholder="Algodão, seda, poliester, etc...")}}
+    </div>
+    <div class="row">
+        <div class="col-3">
+            &nbsp;                
+        </div>
+        <div class="col-8 ps-5">
+            <form method="POST" class="form-register">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row fw-bold fs-4">
+                            <div class="col-6">
+                                {{ form.descricao.label() }}
+                                {{ form.descricao(class="form-control", placeholder="Descrição do produto")}}
+                            </div>
+                            <div class="col-3">
+                                {{ form.categoria.label()}}
+                                {{ form.categoria(class="form-select") }}
+                            </div>
+                            <div class="col-3">
+                                {{ form.ano_colecao.label() }}
+                                {{ form.ano_colecao(class="form-control", placeholder="XXXX")}}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group col-md-2">
-                    {{ form.cor.label()}}            
-                    {{ form.cor(class="form-control", placeholder="Estampado, branco, preto, etc...")}}        
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row fw-bold fs-4">
+                            <div class="col">
+                                {{ form.tamanho.label()}}
+                                {{ form.tamanho(class="form-select") }}
+                            </div>
+                            <div class="col">
+                                {{ form.modelo.label()}}
+                                {{ form.modelo(class="form-control", placeholder="Esporte, gola V, cintura alta, etc...")}}
+                            </div>
+                            <div class="col">
+                                {{ form.genero.label()}}            
+                                {{ form.genero(class="form-select")}}   
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group col-md-4">
-                    {{ form.marca.label()}}            
-                    {{ form.marca(class="form-control", placeholder="Nome da marca")}}        
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row fw-bold fs-4">
+                            <div class="col">
+                                {{ form.material.label()}}
+                                {{ form.material(class="form-select")}}
+                            </div>
+                            <div class="col">
+                                {{ form.cor.label()}}            
+                                {{ form.cor(class="form-control", placeholder="Estampado, branco, preto, etc...")}}   
+                            </div>
+                            <div class="col">
+                                {{ form.marca.label()}}            
+                                {{ form.marca(class="form-select")}}   
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-3">
-                    {{ form.quantidade.label()}}
-                    {{ form.quantidade(class="form-control", placeholder="Quantidade")}}                    
+                <div class="row fw-bold fs-4">
+                    <div class="col-3">
+                        {{ form.quantidade.label()}}
+                        {{ form.quantidade(class="form-control", placeholder="Quantidade")}}                    
+                    </div>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-3">
-                    {{ form.preco.label()}}
-                    {{ form.preco(class="form-control", placeholder="R$XX,xx")}}
+                <div class="row fw-bold fs-4">
+                    <div class="col-3">
+                        {{ form.preco.label()}}
+                        {{ form.preco(class="form-control", placeholder="R$XX,xx")}}
+                    </div>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-2">
-                    {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
+                <div class="col pt-3">
+                    {{ form.submit(class="btn btn-lg btn-primary") }}
                 </div>
-            </div>
-          </form>
-
-  
-    </body>
+            </form>
+        </div>
+    </div>  
+</div>
     {% endblock %}

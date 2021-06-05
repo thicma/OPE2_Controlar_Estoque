@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}
+    Estoque ForU
+{% endblock %}
+{% block content%}
+<body>
+    <div class="container-fluid">
+      <h1>Arquivo não encontrado</h1>
+      <p>Para gerar um relatório PDF você precisa:</p>
+      <p>   - Realizar um filtro; </p>
+      <p>   - Depois Gerar o relatório. </p>
+      <p><a href="{{ url_for('mostra_tela_relatorio_movimentacao') }}">Volte para tentar novamente</a>
+    </div>    
+</body>
+</html>
+{%endblock%}

@@ -1,6 +1,7 @@
 from fpdf import FPDF
 from estoque.models import *
 from datetime import *
+from estoque import app
 
 # create FPDF object
 # Layout ('P', 'L')
@@ -43,7 +44,7 @@ class PDF(FPDF):
         self.cell(20,10,'Valor', border=True)
         self.cell(60,10,'Tipo da Movimentação', border=True, ln=True)        
         self.set_font('helvetica', '', 10)
-        for linha in lista_resultados:
+        for linha in lista_resultados.items:
             self.cell(70,10, f'{linha.produto.descricao.title()}', border=True)
             self.cell(70,10,f'{linha.produto.marca.nome.title()}', border=True)
             self.cell(20,10,f"{linha.data.strftime('%d/%m/%Y')}", border=True)
@@ -51,7 +52,7 @@ class PDF(FPDF):
             self.cell(20,10,f'R${linha.valor:.2f}', border=True)
             self.cell(60,10,f'{linha.tipo_movimentacao.title()}', border=True, ln=True)
         
-        nome_do_arquivo = f"estoque/arquivos/ForU_{datetime.now().strftime('%d-%m-%Y_%H-%M-%S')}.pdf"
+        nome_do_arquivo = f"{app.config['RAIZ']}/{app.config['CLIENT_PDF']}/ForU_{datetime.now().strftime('%d-%m-%Y_%H-%M-%S')}.pdf"
         
         self.output(nome_do_arquivo, 'F')
         return f"ForU_{datetime.now().strftime('%d-%m-%Y_%H-%M-%S')}.pdf"

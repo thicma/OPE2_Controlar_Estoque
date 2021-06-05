@@ -4,29 +4,40 @@
 {% endblock %}
 
 {% block content %}
-<body class="text-center">
-    <div class="container">
-        <form method="POST" class="form-signin">
+<div class="col">
+    <div class="container pt-3">
+        <form method="POST" class="form-register">
             {{ form.hidden_tag() }}
             <div class="text-center pb-2">
                 <img src="{{ url_for('static', filename='img/logo_ForU_Login.png') }}">
             </div>
-            <h1 class="h3 mb-3 font-weight-normal">
-                Cadastramento de Marcas
-            </h1>
-            <br>
-            <div class= "text-left">
-                {{ form.nome.label() }}
-                {{ form.nome(class="form-control") }}
-
-                {{ form.fornecedor.label() }}
-                {{ form.fornecedor(class="form-control", placeholder="Fornecedor da Marca") }}
+            <div class="row pt-2">
+                <div class="col-3"></div>
+                <div class="col-6 text-center">
+                    <h1 class="h3 mb-3 font-weight-normal">
+                        CADASTRAMENTO MARCAS
+                    </h1>
+                </div>
             </div>
-            <br>
-
-            {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
-
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6 fs-5 fw-bold">
+                    {{form.nome.label()}}
+                    {{form.nome(class="form-control", placeholder="Nome da Marca")}}
+                    
+                    {{form.fornecedor.label()}}
+                    {{form.fornecedor(class="form-select")}}             
+                </div>
+            </div>
+            <div class = "row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <div class="row ps-3 pe-3 pt-3">
+                        {{form.submit(class="btn btn-lg btn-block btn-primary")}}                    
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
-</body>
+</div>
 {% endblock %}

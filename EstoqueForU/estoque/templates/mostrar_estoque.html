@@ -130,8 +130,8 @@
                     </div>  
                 </form>
             </div>     
-        </div>        
-        <div class="row">
+        </div> 
+        <div class="row"> 
             <div class="col border-top border-bot">
                 <table class="table table-striped" id="tabela_estoque">
                     <thead>
@@ -201,11 +201,11 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
                         {% if resultado.has_prev %}
-                        <input type="hidden" name='consultar' value="{{consultar}}">
-                            <li class="page-item"><a class="page-link" href="{{ url_for('estoque_page', pagina=resultado.prev_num, consultar=consultar) }}">
+                            <li class="page-item"><a class="page-link" href="{{ url_for('mostrar_tela_de_estoque', pagina=resultado.prev_num) }}">
                                 Anterior
                             </a></li>
                         {% else %}
@@ -214,7 +214,7 @@
 
                         {% for page in resultado.iter_pages(left_edge=3, right_edge=3) %}
                         {% if page %}
-                            <li class="page-item"><a class="page-link" href="{{ url_for('estoque_page', pagina=page, consultar=consultar) }}">
+                            <li class="page-item"><a class="page-link active" href="{{ url_for('mostrar_tela_de_estoque', pagina=page) }}">
                                 {{ page }}
                             </a></li>
                         {% else %}
@@ -222,7 +222,7 @@
                         {% endif%}
                         {%endfor%}
                         {% if resultado.has_next %}
-                            <li class="page-item"><a class="page-link" href="{{ url_for('estoque_page', pagina=resultado.next_num, consultar=consultar) }}">
+                            <li class="page-item"><a class="page-link" href="{{ url_for('mostrar_tela_de_estoque', pagina=resultado.next_num) }}">
                                 Próxima
                             </a> </li>
                         {% else %}

@@ -5,10 +5,11 @@ from flask_login import LoginManager
 from datetime import timedelta
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///estoque.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///estoque2.db'
 app.config['SECRET_KEY'] = 'd1e8ab4c46d1d1d40c592ef2'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
 app.config['CLIENT_PDF'] = 'arquivos'
+app.config['RAIZ'] = 'estoque'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)

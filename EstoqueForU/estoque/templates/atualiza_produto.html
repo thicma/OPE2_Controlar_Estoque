@@ -4,87 +4,88 @@
 {% endblock %}
 {% block content%}
 
-<div class="row pt-5">
-    <div = class="col-md-6">
-    <form class="row g-3" action="{{ url_for('atualiza_produto') }}" method="POST">
-        {% include 'includes/produtos_modals.html' %}
-        <input type="hidden" name="id_produto" value="{{produto.id}}">
-        {{ atualiza_form.hidden_tag() }}
-        {{ atualiza_form.csrf_token }}
-        <input type="hidden" name="produto" value="{{id_produto}}">
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-4">
-                    <label for="produto" class="form-label fw-bold fs-4">Descrição do Produto</label>
-                    {{ atualiza_form.descricao(class="form-control") }}
+<div class="col">
+    <div class="row pt-5">
+        <div = class="col-md-6">
+        <form class="row g-3" action="{{ url_for('atualiza_produto') }}" method="POST">
+            {% include 'includes/produtos_modals.html' %}
+            <input type="hidden" name="id_produto" value="{{produto.id}}">
+            {{ atualiza_form.hidden_tag() }}
+            {{ atualiza_form.csrf_token }}
+            <input type="hidden" name="produto" value="{{id_produto}}">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="produto" class="form-label fw-bold fs-4">Descrição do Produto</label>
+                        {{ atualiza_form.descricao(class="form-control") }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="ano_colecao" class="form-label fw-bold fs-4">Ano Coleção</label>
+                        {{ atualiza_form.ano_colecao(class="form-control") }}
+                    </div>
+                    <div class="col-md-2">
+                        <label for="tamanho" class="form-label fw-bold fs-4">Tamanho</label>
+                        {{ atualiza_form.tamanho(class="form-select") }}
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label for="ano_colecao" class="form-label fw-bold fs-4">Ano Coleção</label>
-                    {{ atualiza_form.ano_colecao(class="form-control") }}
-                </div>
-                <div class="col-md-2">
-                    <label for="tamanho" class="form-label fw-bold fs-4">Tamanho</label>
-                    {{ atualiza_form.tamanho(class="form-select") }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="categoria" class="form-label fw-bold fs-4">Categoria</label>
-                    {{ atualiza_form.categorias(class="form-select") }}
-                </div>
-                <div class="col-md-3">
-                    <label for="modelo" class="form-label fw-bold fs-4">Modelo</label>
-                    {{ atualiza_form.modelo(class="form-control") }}
-                </div>
-                <div class="col-md-3">
-                    <label for="genero" class="form-label fw-bold fs-4">Gênero</label>
-                    {{ atualiza_form.genero(class="form-select") }}
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="material" class="form-label fw-bold fs-4">Material</label>
-                    {{ atualiza_form.material(class="form-select") }}
-                </div>
-                <div class="col-md-3">
-                    <label for="cor" class="form-label fw-bold fs-4">Cor</label>
-                    {{ atualiza_form.cor(class="form-control") }}
-                </div>
-                <div class="col-md-3">
-                    <label for="marca" class="form-label fw-bold fs-4">Marca</label>
-                    {{ atualiza_form.marcas(class="form-select")}}
-                </div>                
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-4">
-                    <label for="quantidade" class="form-label fw-bold fs-4">Quantidade Atual</label>
-                    <input type="text" class="form-control" name="quantidade_atual" value="{{produto.quantidade}}" disabled>
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-4">
-                    <label for="quantidade" class="form-label fw-bold fs-4">Quantidade da Saída</label>
-                    <input type="text" class="form-control" name="quantidade_saida" disabled>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="categoria" class="form-label fw-bold fs-4">Categoria</label>
+                        {{ atualiza_form.categorias(class="form-select") }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="modelo" class="form-label fw-bold fs-4">Modelo</label>
+                        {{ atualiza_form.modelo(class="form-control") }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="genero" class="form-label fw-bold fs-4">Gênero</label>
+                        {{ atualiza_form.genero(class="form-select") }}
+                    </div>
                 </div>
             </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="material" class="form-label fw-bold fs-4">Material</label>
+                        {{ atualiza_form.material(class="form-select") }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="cor" class="form-label fw-bold fs-4">Cor</label>
+                        {{ atualiza_form.cor(class="form-control") }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="marca" class="form-label fw-bold fs-4">Marca</label>
+                        {{ atualiza_form.marcas(class="form-select")}}
+                    </div>                
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="quantidade" class="form-label fw-bold fs-4">Quantidade Atual</label>
+                        <input type="text" class="form-control" name="quantidade_atual" value="{{produto.quantidade}}" disabled>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <label for="quantidade" class="form-label fw-bold fs-4">Quantidade da Saída</label>
+                        <input type="text" class="form-control" name="quantidade_saida" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="preco" class="form-label fw-bold fs-4">Preço</label>
+                <input type="text" class="form-control" name="preco" value="{{(produto.preco | formatar_moeda )}}" disabled>
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#Modal-ConfirmaAlteracao-{{ produto.id }}">
+                    Atualizar        
+                </button>
+            </div>
+        </form>
         </div>
-        <div class="col-md-4">
-            <label for="preco" class="form-label fw-bold fs-4">Preço</label>
-            <input type="text" class="form-control" name="preco" value="{{(produto.preco | formatar_moeda )}}" disabled>
+        <div class="col-md-8">
         </div>
-        <div class="col-12">
-            <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#Modal-ConfirmaAlteracao-{{ produto.id }}">
-                Atualizar        
-            </button>
-        </div>
-      </form>
-    </div>
-    <div class="col-md-8">
     </div>
 </div>
-
 
 {% endblock %}

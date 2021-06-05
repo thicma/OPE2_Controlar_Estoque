@@ -1,3 +1,4 @@
+from sqlalchemy.orm.relationships import foreign
 from estoque import db, login_manager
 from estoque import bcrypt
 from flask_login import UserMixin
@@ -36,14 +37,6 @@ class Categoria(db.Model)   :
     def __repr__(self):
         return f'{self.descricao}'
 
-class Autorizacao_Velha(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    descricao = db.Column(db.String(15))
-
-    def __repr__(self):
-        return f"ID: {self.id}\n{self.descricao}"
-
-
 class Fornecedor(db.Model):
     id= db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(length=30), nullable=False, unique=True)
@@ -57,13 +50,24 @@ class Tamanho(db.Model):
     descricao = db.Column(db.String(length=15), nullable=False)
 
 class Marca (db.Model):
-    nome = db.Column(db.String(length=20), primary_key=True)
-    id = db.Column(db.Integer(), autoincrement=True, nullable=False)
-    fornecedor = db.Column(db.Integer(), nullable=False)
+    id = db.Column(db.Integer(), primary_key=True, autoincrement=True, nullable=False)
+    nome = db.Column(db.String(length=20), nullable=False)
+    fornecedor_id = db.Column(db.Integer(), db.ForeignKey('fornecedor.id'))
+    fornecedor = relationship('Fornecedor', foreign_keys=[fornecedor_id])
 
 class Material(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     descricao= db.Column(db.String(length=15), nullable=False)
+
+class HistoricoPrecos(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    id_produto = db.Column(db.Integer(), db.ForeignKey('produto.id'))
+    produto = relationship('Produto', foreign_keys=[id_produto])
+    preco = db.Column(db.Float(), db.ForeignKey('produto.preco'))
+    preco_produto = relationship('Produto', foreign_keys=[preco])
+    quantidade = db.Column(db.Integer(), db.ForeignKey('produto.quantidade'))
+    quantidade_produto = relationship('Produto', foreign_keys=[quantidade])
+
 
 class Produto(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
@@ -75,7 +79,7 @@ class Produto(db.Model):
     ano_colecao = db.Column(db.String(length=4), nullable=False)
     material_id = db.Column(db.Integer(), db.ForeignKey('material.id'))
     material = relationship('Material', foreign_keys=[material_id])
-    cor = db.Column(db.String(length=15), nullable=False)    
+    cor = db.Column(db.String(length=15), nullable=False)  
     preco = db.Column(db.Float(), nullable=False)
     quantidade = db.Column(db.Integer(), nullable=False)
     marca_id = db.Column(db.String(length=20), db.ForeignKey('marca.id'))
@@ -85,7 +89,8 @@ class Produto(db.Model):
 
     def __repr__(self):
         return f"{self.categoria.descricao}\n{self.descricao}\n{self.modelo}\n{self.ano_colecao}"
-class Autorizacao(db.Model):
+
+class Movimentacao_Produto(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
     user = relationship('User', foreign_keys=[user_id])

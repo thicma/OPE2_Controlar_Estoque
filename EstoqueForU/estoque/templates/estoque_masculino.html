@@ -130,110 +130,107 @@
                     </div>  
                 </form>
             </div>     
-        </div>        
-        <div class="row">
-            <div class="col border-top border-bot">
-                <table class="table table-striped" id="tabela_estoque">
-                    <thead>
-                        <tr class="fs-5">
-                            <!-- Your Columns HERE -->
-                            {% for coluna in colunas %}
-                            <th scope="col"> <strong>{{ coluna.replace("_id", " ").title() }}</strong></th>
-                            {% endfor %}
-                            <th scope="col"> <strong> Movimentação </strong></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Your rows inside the table HERE: -->
-                        {% for produto in resultado.items %}
-                        <tr>
-                            <td>{{produto.categoria.descricao.title() }}</td>
-                            <td>{{produto.descricao.title() }}</td>
-                            <td>{{produto.modelo.title() }}</td>
-                            <td>{{produto.genero.title() }}</td>
-                            <td>{{produto.ano_colecao }}</td>
-                            <td>{{produto.material.descricao.title() }}</td>
-                            <td>{{produto.cor.title() }}</td>
-                            <td>{{(produto.preco | formatar_moeda )}}</td>
-                            <td>{{produto.quantidade }}</td>
-                            <td>{{produto.marca.nome.title() }}</td>
-                            <td>{{produto.tamanho_id.upper() }}</td>
-                            <td>
-                                <div class="d-flex justify-content-center">
-                                    <span>
-                                        <form action="./entrada_produto" method="POST">
-                                            <input type="hidden" value="{{produto.id}}" name="produto"/>
-                                            <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Realizar Entrada">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    </span>
-                                    <a class="pe-3"></a>
-                                    <span>
-                                        <form action="./saida_produto" method="POST">
-                                            <input type="hidden" value="{{produto.id}}" name="produto">
-                                            <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Realizar Saída">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
-                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    </span>
-                                    <a class="pe-3"></a>
-                                    <span>
-                                        <form action="{{ url_for('mostra_tela_de_atualizacao') }}" method="POST">
-                                            <input type="hidden" value="{{produto.id}}" name="id_produto">
-                                            <button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Atualizar Produto">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-                                                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-                                                    </svg>
-                                            </button>
-                                        </form>
-                                    </span>
-                                </div>
-                            </td>
-                        </tr>                    
+        </div> 
+        <div class="col border-top border-bot">
+            <table class="table table-striped" id="tabela_estoque">
+                <thead>
+                    <tr class="fs-5">
+                        <!-- Your Columns HERE -->
+                        {% for coluna in colunas %}
+                        <th scope="col"> <strong>{{ coluna.replace("_id", " ").title() }}</strong></th>
                         {% endfor %}
-                    </tbody>
-                </table>
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        {% if resultado.has_prev %}
-                        <input type="hidden" name='consultar' value="{{consultar}}">
-                            <li class="page-item"><a class="page-link" href="{{ url_for('estoque_page', pagina=resultado.prev_num, consultar=consultar) }}">
-                                Anterior
-                            </a></li>
-                        {% else %}
-                            <li class="page-item disabled"><span class="page-link">Anterior</span></li>
-                        {% endif%}
+                        <th scope="col"> <strong> Movimentação </strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Your rows inside the table HERE: -->
+                    {% for produto in resultado.items %}
+                    <tr>
+                        <td>{{produto.categoria.descricao.title() }}</td>
+                        <td>{{produto.descricao.title() }}</td>
+                        <td>{{produto.modelo.title() }}</td>
+                        <td>{{produto.genero.title() }}</td>
+                        <td>{{produto.ano_colecao }}</td>
+                        <td>{{produto.material.descricao.title() }}</td>
+                        <td>{{produto.cor.title() }}</td>
+                        <td>{{(produto.preco | formatar_moeda )}}</td>
+                        <td>{{produto.quantidade }}</td>
+                        <td>{{produto.marca.nome.title() }}</td>
+                        <td>{{produto.tamanho_id.upper() }}</td>
+                        <td>
+                            <div class="d-flex justify-content-center">
+                                <span>
+                                    <form action="./entrada_produto" method="POST">
+                                        <input type="hidden" value="{{produto.id}}" name="produto"/>
+                                        <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Realizar Entrada">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </span>
+                                <a class="pe-3"></a>
+                                <span>
+                                    <form action="./saida_produto" method="POST">
+                                        <input type="hidden" value="{{produto.id}}" name="produto">
+                                        <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Realizar Saída">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </span>
+                                <a class="pe-3"></a>
+                                <span>
+                                    <form action="{{ url_for('mostra_tela_de_atualizacao') }}" method="POST">
+                                        <input type="hidden" value="{{produto.id}}" name="id_produto">
+                                        <button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Atualizar Produto">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                                                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                                                </svg>
+                                        </button>
+                                    </form>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>                    
+                    {% endfor %}
+                </tbody>
+            </table>                
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if resultado.has_prev %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for('produtos_masculinos', pagina=resultado.prev_num) }}">
+                            Anterior
+                        </a></li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+                    {% endif%}
 
-                        {% for page in resultado.iter_pages(left_edge=3, right_edge=3) %}
-                        {% if page %}
-                            <li class="page-item"><a class="page-link" href="{{ url_for('estoque_page', pagina=page, consultar=consultar) }}">
-                                {{ page }}
-                            </a></li>
-                        {% else %}
-                            <li class="page-item disabled" id="exemple_ellipsis"><a class="page-link" href="#">..</a></li>
-                        {% endif%}
-                        {%endfor%}
-                        {% if resultado.has_next %}
-                            <li class="page-item"><a class="page-link" href="{{ url_for('estoque_page', pagina=resultado.next_num, consultar=consultar) }}">
-                                Próxima
-                            </a> </li>
-                        {% else %}
-                            <li class="page-item disabled"><span class="page-link">Próxima</span></li>
-                        {% endif%}
-                        <ul class="pagination">
-                            <li class="page-item disabled"><span class="page-link">Qtde de itens encontrados {{quantidade}}</span></li>
-                        </ul>
+                    {% for page in resultado.iter_pages(left_edge=3, right_edge=3) %}
+                    {% if page %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for('produtos_masculinos', pagina=page) }}">
+                            {{ page }}
+                        </a></li>
+                    {% else %}
+                        <li class="page-item disabled" id="exemple_ellipsis"><a class="page-link" href="#">..</a></li>
+                    {% endif%}
+                    {%endfor%}
+                    {% if resultado.has_next %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for('produtos_masculinos', pagina=resultado.next_num) }}">
+                            Próxima
+                        </a> </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">Próxima</span></li>
+                    {% endif%}
+                    <ul class="pagination">
+                        <li class="page-item disabled"><span class="page-link">Qtde de itens encontrados {{quantidade}}</span></li>
                     </ul>
-                </nav>
-            </div>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
