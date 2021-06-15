@@ -3,7 +3,6 @@
     Estoque ForU
 {% endblock %}
 {% block content%}
-
 <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
 
 <div class="row botoes">
@@ -240,14 +239,14 @@
                             {%endif%}
                         </td>
                     </tr>
-                    {%endif%}                    
+                    {%endif%}                 
                 {% endfor %}
             </tbody>
-        </table>                  
+        </table>              
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     {% if resultado.has_prev %}
-                        <li class="page-item"><a class="page-link" href="{{ url_for('produtos_masculinos', pagina=resultado.prev_num) }}">
+                        <li class="page-item"><a class="page-link" href="{{ url_for('produtos_feminino', pagina=resultado.prev_num) }}">
                             Anterior
                         </a></li>
                     {% else %}
@@ -256,7 +255,7 @@
 
                     {% for page in resultado.iter_pages(left_edge=3, right_edge=3) %}
                     {% if page %}
-                        <li class="page-item"><a class="page-link" href="{{ url_for('produtos_masculinos', pagina=page) }}">
+                        <li class="page-item"><a class="page-link" href="{{ url_for('produtos_feminino', pagina=page) }}">
                             {{ page }}
                         </a></li>
                     {% else %}
@@ -264,7 +263,7 @@
                     {% endif%}
                     {%endfor%}
                     {% if resultado.has_next %}
-                        <li class="page-item"><a class="page-link" href="{{ url_for('produtos_masculinos', pagina=resultado.next_num) }}">
+                        <li class="page-item"><a class="page-link" href="{{ url_for('produtos_feminino', pagina=resultado.next_num) }}">
                             Próxima
                         </a> </li>
                     {% else %}
@@ -272,7 +271,7 @@
                     {% endif%}
                     <ul class="pagination">
                         <li class="page-item disabled" id="li_pequena"><span class="page-link">Itens {{quantidade}}</span></li>
-                    <li class="page-item disabled" id="li_grande"><span class="page-link">Qtde de itens encontrados {{quantidade}}</span></li>
+                        <li class="page-item disabled" id="li_grande"><span class="page-link">Qtde de itens encontrados {{quantidade}}</span></li>
                     </ul>
                 </ul>
             </nav>
@@ -302,5 +301,4 @@
         }
     }
 </style>
- 
 {% endblock %}

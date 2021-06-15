@@ -3,284 +3,320 @@
     Estoque ForU
 {% endblock %}
 {% block content%}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
 
-<div class="col">
-    <div class=" container-fluid">
-        <div class="row pb-3 pt-3 border-bottom">
-            <div class="col ps-5">
-                <div class="row">
-                    <div class="col ps-5">
-                        <form action="{{url_for ('produtos_feminino')}}" methods="POST">
-                            <input type="hidden" value="{{genero}}" name="genero">
-                                <button type="submit" class="btn btn-primary btn-lg">Feminino</button>
-                        </form>
-                    </div>
-                    <div class="col ps-4">
-                        <form action="{{url_for('produtos_masculinos')}}" methods="POST">
-                            <input type="hidden" value="{{genero}}" name="genero">
-                            <button type="submit" class="btn btn-primary btn-lg">Masculino</button>                    
-                        </form>                
-                    </div>
+<div class="row botoes">
+    <div class="col">
+        <form action="{{url_for ('produtos_feminino')}}" methods="POST">
+            <div class="row">
+                <input type="hidden" value="{{genero}}" name="genero">
+                <button type="submit" class="btn btn-primary btn-lg">Feminino</button>
+            </div>
+        </form>
+    </div>
+    <div class="col">
+        <form action="{{url_for('produtos_masculinos')}}" methods="POST">
+            <div class="row">
+                <input type="hidden" value="{{genero}}" name="genero">
+                <button type="submit" class="btn btn-primary btn-lg">Masculino</button>                    
+            </div>      
+        </form>
+    </div>   
+    <div class="col">
+        <form action="{{url_for('busca_valores_checkbox')}}" method="POST">
+            <input type="hidden" value="{{genero}}" name="genero">
+            <div class="dropdown">
+                <div class="row">  
+                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_tamanho" data-bs-toggle="dropdown" aria-expanded="false">
+                    Tamanho
+                    </button>
+                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_tamanho">
+                        {% for tamanho in (['PP','P','M','G','GG'])%}
+                        <li class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" name="tamanho" value="{{tamanho.lower()}}">
+                            <label class="form-check-label" for="{{tamanho[0].lower()}}">
+                                {{tamanho.upper()}}
+                            </label>
+                        </li>
+                        {%endfor%}
+                    </ul>                         
                 </div>
             </div>
-            <div class="col-9 ps-5 pe-5">
-                <form action="{{url_for('busca_valores_checkbox')}}" method="POST">
-                <input type="hidden" value="{{genero}}" name="genero">
-                    <div class="row">
-                        <div class="col pe-5">
-                            <div class="dropdown">
-                                <div class="row">  
-                                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_tamanho" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Tamanho
-                                    </button>
-                                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_tamanho">
-                                        {% for tamanho in (['PP','P','M','G','GG'])%}
-                                        <li class="dropdown-item">
-                                            <input class="form-check-input" type="checkbox" name="tamanho" value="{{tamanho.lower()}}">
-                                            <label class="form-check-label" for="{{tamanho[0].lower()}}">
-                                                {{tamanho.upper()}}
-                                            </label>
-                                        </li>
-                                        {%endfor%}
-                                    </ul>                         
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col pe-5">              
-                            <div class="dropdown">
-                                <div class="row">
-                                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_categoria" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Categoria
-                                    </button>
-                                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_categoria">
-                                        {% for categoria in label_categoria%}
-                                        <li class="dropdown-item">
-                                            <input class="form-check-input" type="checkbox" name="categoria" value="{{categoria[0]}}">
-                                            <label class="form-check-label" for="{{categoria[1].lower()}}">
-                                                {{categoria[1].title()}}
-                                            </label>
-                                        </li>
-                                        {%endfor%}
-                                    </ul>                  
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col pe-5">
-                            <div class="dropdown">   
-                                <div class="row">  
-                                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_ano" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Ano da Coleção
-                                    </button>
-                                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_ano">
-                                        {% for ano in label_ano%}
-                                        <li class="dropdown-item">
-                                            <input class="form-check-input" type="checkbox" name="ano" value="{{ano}}">
-                                            <label class="form-check-label" for="{{ano}}">
-                                                {{ano}}
-                                            </label>
-                                        </li>
-                                        {%endfor%}
-                                    </ul>                                                      
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col pe-5">
-                            <div class="dropdown">
-                                <div class="row">
-                                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_marca" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Marca
-                                    </button>
-                                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_marca">
-                                        {% for marca in label_marca%}
-                                        <li class="dropdown-item">
-                                            <input class="form-check-input" type="checkbox" name="marca" value="{{marca[0]}}">
-                                            <label class="form-check-label" for="{{marca[1].lower()}}">
-                                                {{marca[1].title()}}
-                                            </label>
-                                        </li>
-                                        {%endfor%}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col pe-5">
-                            <div class="dropdown">
-                                <div class="row">
-                                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_material" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Material
-                                    </button>
-                                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_material">
-                                        {% for material in label_material%}
-                                        <li class="dropdown-item">
-                                            <input class="form-check-input" type="checkbox" name="material" value="{{material[0]}}">
-                                            <label class="form-check-label" for="{{material[1].lower()}}">
-                                                {{material[1].title()}}
-                                            </label>
-                                        </li>
-                                        {%endfor%}
-                                    </ul>                   
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="row">
-                                <button type="submit" name="filtrar" class="btn btn-success btn-lg bg-primary.bg-gradient">Filtrar</button>
-                            </div>
-                        </div>
-                    </div>  
-                </form>
-            </div>     
-        </div> 
-            <div class="col border-top border-bot">
-                <table class="table table-striped" id="tabela_estoque">
-                    <thead>
-                        <tr class="fs-5">
-                            <!-- Your Columns HERE -->
-                            {% for coluna in colunas %}
-                            <th scope="col"> <strong>{{ coluna.replace("_id", " ").title() }}</strong></th>
-                            {% endfor %}
-                            <th scope="col"> <strong> Movimentação </strong></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Your rows inside the table HERE: -->
-                        {% for produto in resultado.items %}
-                        <tr>
-                            <td>{{produto.categoria.descricao.title() }}</td>
-                            <td>{{produto.descricao.title() }}</td>
-                            <td>{{produto.modelo.title() }}</td>
-                            <td>{{produto.genero.title() }}</td>
-                            <td>{{produto.ano_colecao }}</td>
-                            <td>{{produto.material.descricao.title() }}</td>
-                            <td>{{produto.cor.title() }}</td>
-                            <td>{{(produto.preco | formatar_moeda )}}</td>
-                            <td>{{produto.quantidade }}</td>
-                            <td>{{produto.marca.nome.title() }}</td>
-                            <td>{{produto.tamanho_id.upper() }}</td>
-                            <td>
-                                <div class="d-flex justify-content-center">
-                                    <span>
-                                        <form action="./entrada_produto" method="POST">
-                                            <input type="hidden" value="{{produto.id}}" name="produto"/>
-                                            <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Realizar Entrada">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    </span>
-                                    <a class="pe-3"></a>
-                                    <span>
-                                        <form action="./saida_produto" method="POST">
-                                            <input type="hidden" value="{{produto.id}}" name="produto">
-                                            <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Realizar Saída">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
-                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    </span>
-                                    <a class="pe-3"></a>
-                                    <span>
-                                        <form action="{{ url_for('mostra_tela_de_atualizacao') }}" method="POST">
-                                            <input type="hidden" value="{{produto.id}}" name="id_produto">
-                                            <button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Atualizar Produto">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-                                                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-                                                    </svg>
-                                            </button>
-                                        </form>
-                                    </span>
-                                </div>
-                            </td>
-                        </tr>                    
-                        {% endfor %}
-                    </tbody>
-                </table>
-                
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">                    
-                        <input type="hidden" name="genero" value="{{genero}}">
-                        <input type="hidden" name="lista_tamanhos" value='{{lista_tamanhos}}'>
-                        <input type="hidden" name="lista_categoria" value='{{lista_categoria}}'>
-                        <input type="hidden" name="lista_ano_colecao" value='{{lista_ano_colecao}}'>
-                        <input type="hidden" name="lista_marca" value='{{lista_marca}}'>
-                        <input type="hidden" name="lista_material" value='{{lista_material}}'>
-                        <input type="hidden" name="quantidade" value='{{quantidade}}'>
-                        {% if resultado.has_prev %}
-                            <li class="page-item"><a class="page-link" href="{{ url_for('mostra_resultado_checkbox',
-                                                                            pagina=resultado.prev_num, genero=genero,
-                                                                            lista_tamanhos=lista_tamanhos,lista_categoria=lista_categoria,
-                                                                            lista_ano_colecao=lista_ano_colecao, lista_marca=lista_marca,
-                                                                            lista_material=lista_material, quantidade=quantidade) }}">
-                                Anterior
-                            </a></li>
-                        {% else %}
-                            <li class="page-item disabled"><span class="page-link">Anterior</span></li>
-                        {% endif%}
-
-                        {% for page in resultado.iter_pages(left_edge=3, right_edge=3) %}
-                        {% if page %}
-                            <li class="page-item"><a class="page-link" href="{{ url_for('mostra_resultado_checkbox',
-                                                                            pagina=page, genero=genero,
-                                                                            lista_tamanhos=lista_tamanhos,lista_categoria=lista_categoria,
-                                                                            lista_ano_colecao=lista_ano_colecao, lista_marca=lista_marca,
-                                                                            lista_material=lista_material, quantidade=quantidade) }}">
-                                {{ page }}
-                            </a></li>
-                        {% else %}
-                            <li class="page-item disabled" id="exemple_ellipsis"><a class="page-link" href="#">...</a></li>
-                        {% endif%}
+        </div>
+        <div class="col">              
+            <div class="dropdown">
+                <div class="row">
+                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_categoria" data-bs-toggle="dropdown" aria-expanded="false">
+                    Categoria
+                    </button>
+                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_categoria">
+                        {% for categoria in label_categoria%}
+                        <li class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" name="categoria" value="{{categoria[0]}}">
+                            <label class="form-check-label" for="{{categoria[1].lower()}}">
+                                {{categoria[1].title()}}
+                            </label>
+                        </li>
                         {%endfor%}
-                        {% if resultado.has_next %}
-                            <li class="page-item"><a class="page-link" href="{{ url_for('mostra_resultado_checkbox',
-                                                                                pagina=resultado.next_num, genero=genero,
-                                                                                lista_tamanhos=lista_tamanhos,lista_categoria=lista_categoria,
-                                                                                lista_ano_colecao=lista_ano_colecao, lista_marca=lista_marca,
-                                                                                lista_material=lista_material, quantidade=quantidade) }}">
-                                Próxima
-                            </a> </li>
-                        {% else %}
-                            <li class="page-item disabled"><span class="page-link">Próxima</span></li>
-                        {% endif%}
-                        <ul class="pagination">
-                            <li class="page-item disabled"><span class="page-link">Qtde de itens encontrados {{quantidade}}</span></li>
-                        </ul>
-                    </ul>
-
-                </nav>
+                    </ul>                  
+                </div>
             </div>
         </div>
+        <div class="col">
+            <div class="dropdown">   
+                <div class="row">  
+                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_ano" data-bs-toggle="dropdown" aria-expanded="false">
+                    Ano
+                    </button>
+                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_ano">
+                        {% for ano in label_ano%}
+                        <li class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" name="ano" value="{{ano}}">
+                            <label class="form-check-label" for="{{ano}}">
+                                {{ano}}
+                            </label>
+                        </li>
+                        {%endfor%}
+                    </ul>                                                      
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dropdown">
+                <div class="row">
+                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_marca" data-bs-toggle="dropdown" aria-expanded="true">
+                    Marca
+                    </button>
+                    <ul class="dropdown-menu checkbox-menul" aria-labelledby="button_marca">
+                        {% for marca in label_marca%}
+                        <li class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" name="marca" value="{{marca[0]}}">
+                            <label class="form-check-label" for="{{marca[1].lower()}}">
+                                {{marca[1].title()}}
+                            </label>
+                        </li>
+                        {%endfor%}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dropdown">
+                <div class="row">
+                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_material" data-bs-toggle="dropdown" aria-expanded="false">
+                    Material
+                    </button>
+                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_material">
+                        {% for material in label_material%}
+                        <li class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" name="material" value="{{material[0]}}">
+                            <label class="form-check-label" for="{{material[1].lower()}}">
+                                {{material[1].title()}}
+                            </label>
+                        </li>
+                        {%endfor%}
+                    </ul>                   
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+                <button type="submit" name="filtrar" class="btn btn-success btn-lg bg-primary.bg-gradient">Filtrar</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row" id="tabela"> 
+    <div class="col border-top border-bot">
+        <table class="table table-striped" id="tabela_estoque">
+            <thead>
+                <tr class="fs-5">
+                    <!-- Your Columns HERE -->
+                    {% for coluna in colunas %}
+                    <th scope="col" id="coluna{{loop.index}}"> <strong>{{ coluna.title() }}</strong></th>
+                    {% endfor %}
+                    <th scope="col" id="movimentacao"> <strong> Movimentação </strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Your rows inside the table HERE: -->
+                {% for produto in resultado.items %}
+                {% include 'includes/produtos_modals.html' %}
+                <input type="hidden" name="id_produto" value='{{produto.id}}'>
+                {%if produto.quantidade <= 5 %}
+                    <tr style="background-color:rgb(204, 63, 63); color:white;">
+                        <td>{{produto.descricao.title() }}</td>
+                        <td class="modelo">{{produto.modelo.title() }}</td>
+                        <td class="genero">{{produto.genero.title() }}</td>
+                        <td class="ano">{{produto.ano_colecao }}</td>
+                        <td class="material">{{produto.material.descricao.title() }}</td>
+                        <td class="cor">{{produto.cor.title() }}</td>
+                        <td>{{(produto.preco | formatar_moeda )}}</td>
+                        <td>{{produto.quantidade }}</td>
+                        <td class="marca">{{produto.marca.nome.title() }}</td>
+                        <td class="tamanho">{{produto.tamanho_id.upper() }}</td>
+                        <td>
+                            {%if current_user.cargo_id != 4%}
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#Modal_Alteracao_Preco-{{produto.id}}" title="Alteração de Preço">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-coin" viewBox="0 0 16 16">
+                                    <path d="M5.5 9.511c.076.954.83 1.697 2.182 1.785V12h.6v-.709c1.4-.098 2.218-.846 2.218-1.932 0-.987-.626-1.496-1.745-1.76l-.473-.112V5.57c.6.068.982.396 1.074.85h1.052c-.076-.919-.864-1.638-2.126-1.716V4h-.6v.719c-1.195.117-2.01.836-2.01 1.853 0 .9.606 1.472 1.613 1.707l.397.098v2.034c-.615-.093-1.022-.43-1.114-.9H5.5zm2.177-2.166c-.59-.137-.91-.416-.91-.836 0-.47.345-.822.915-.925v1.76h-.005zm.692 1.193c.717.166 1.048.435 1.048.91 0 .542-.412.914-1.135.982V8.518l.087.02z"/>
+                                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path fill-rule="evenodd" d="M8 13.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zm0 .5A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/>
+                                </svg>
+                            </button>     
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal_Entrada-{{produto.id}}" title="Realizar Entrada">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#Modal_Saida-{{produto.id}}" title="Realizar Saída">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#Modal-ConfirmaAlteracao-{{ produto.id }}"  title="Atualizar Produto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#Modal-DeletarProduto-{{ produto.id }}" title="Deletar Produto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                </svg>
+                            </button>
+                            {%endif%}
+                        </td>
+                    </tr>                    
+                    {%else%}
+                    <tr>
+                        <td>{{produto.descricao.title() }}</td>
+                        <td class="modelo">{{produto.modelo.title() }}</td>
+                        <td class="genero">{{produto.genero.title() }}</td>
+                        <td class="ano">{{produto.ano_colecao }}</td>
+                        <td class="material">{{produto.material.descricao.title() }}</td>
+                        <td class="cor">{{produto.cor.title() }}</td>
+                        <td>{{(produto.preco | formatar_moeda )}}</td>
+                        <td>{{produto.quantidade }}</td>
+                        <td class="marca">{{produto.marca.nome.title() }}</td>
+                        <td class="tamanho">{{produto.tamanho_id.upper() }}</td>
+                        <td>
+                            {%if current_user.cargo_id != 4%}
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#Modal_Alteracao_Preco-{{produto.id}}" title="Alteração de Preço">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-coin" viewBox="0 0 16 16">
+                                    <path d="M5.5 9.511c.076.954.83 1.697 2.182 1.785V12h.6v-.709c1.4-.098 2.218-.846 2.218-1.932 0-.987-.626-1.496-1.745-1.76l-.473-.112V5.57c.6.068.982.396 1.074.85h1.052c-.076-.919-.864-1.638-2.126-1.716V4h-.6v.719c-1.195.117-2.01.836-2.01 1.853 0 .9.606 1.472 1.613 1.707l.397.098v2.034c-.615-.093-1.022-.43-1.114-.9H5.5zm2.177-2.166c-.59-.137-.91-.416-.91-.836 0-.47.345-.822.915-.925v1.76h-.005zm.692 1.193c.717.166 1.048.435 1.048.91 0 .542-.412.914-1.135.982V8.518l.087.02z"/>
+                                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path fill-rule="evenodd" d="M8 13.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zm0 .5A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/>
+                                    </svg>
+                            </button>     
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal_Entrada-{{produto.id}}" title="Realizar Entrada">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#Modal_Saida-{{produto.id}}" title="Realizar Saída">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#Modal-ConfirmaAlteracao-{{ produto.id }}"  title="Atualizar Produto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#Modal-DeletarProduto-{{ produto.id }}" title="Deletar Produto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                </svg>
+                            </button>
+                            {%endif%}
+                        </td>
+                    </tr>
+                    {%endif%}                    
+                {% endfor %}
+            </tbody>
+        </table>      
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">                    
+                <input type="hidden" name="genero" value="{{genero}}">
+                <input type="hidden" name="lista_tamanhos" value='{{lista_tamanhos}}'>
+                <input type="hidden" name="lista_categoria" value='{{lista_categoria}}'>
+                <input type="hidden" name="lista_ano_colecao" value='{{lista_ano_colecao}}'>
+                <input type="hidden" name="lista_marca" value='{{lista_marca}}'>
+                <input type="hidden" name="lista_material" value='{{lista_material}}'>
+                <input type="hidden" name="quantidade" value='{{quantidade}}'>
+                {% if resultado.has_prev %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('mostra_resultado_checkbox',
+                                                                    pagina=resultado.prev_num, genero=genero,
+                                                                    lista_tamanhos=lista_tamanhos,lista_categoria=lista_categoria,
+                                                                    lista_ano_colecao=lista_ano_colecao, lista_marca=lista_marca,
+                                                                    lista_material=lista_material, quantidade=quantidade) }}">
+                        Anterior
+                    </a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+                {% endif%}
+
+                {% for page in resultado.iter_pages(left_edge=3, right_edge=3) %}
+                {% if page %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('mostra_resultado_checkbox',
+                                                                    pagina=page, genero=genero,
+                                                                    lista_tamanhos=lista_tamanhos,lista_categoria=lista_categoria,
+                                                                    lista_ano_colecao=lista_ano_colecao, lista_marca=lista_marca,
+                                                                    lista_material=lista_material, quantidade=quantidade) }}">
+                        {{ page }}
+                    </a></li>
+                {% else %}
+                    <li class="page-item disabled" id="exemple_ellipsis"><a class="page-link" href="#">...</a></li>
+                {% endif%}
+                {%endfor%}
+                {% if resultado.has_next %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('mostra_resultado_checkbox',
+                                                                        pagina=resultado.next_num, genero=genero,
+                                                                        lista_tamanhos=lista_tamanhos,lista_categoria=lista_categoria,
+                                                                        lista_ano_colecao=lista_ano_colecao, lista_marca=lista_marca,
+                                                                        lista_material=lista_material, quantidade=quantidade) }}">
+                        Próxima
+                    </a> </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Próxima</span></li>
+                {% endif%}
+                <ul class="pagination">
+                    <li class="page-item disabled" id="li_pequena"><span class="page-link">Itens {{quantidade}}</span></li>
+                <li class="page-item disabled" id="li_grande"><span class="page-link">Qtde de itens encontrados {{quantidade}}</span></li>
+                </ul>
+            </ul>
+        </nav>               
     </div>
 </div>
 <style>
-    .pagination{
-        align-items:flex-end;
-        display: flex;
-        justify-content: center;
+    @media screen and (max-width: 556px) {
+        #li_grande{
+            display: none;
+            
+        }
+        #li_pequena{
+            display: flex;
+        }
+        button {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
     }
-    .rotulo{
-        display: inline-flex;
-        margin-bottom: .5rem;
-        margin-top: .5rem;
+    @media screen and (max-width: 700px){
+        .row.botes.col{
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
     }
-    a.page-link{
-        color: #132c33 ;
-        font-size: 15px;
-        background-color: #fff;
-        border-color:  #dee2e6;
-        background-image: linear-gradient(#dae3e7, #1d88b9 );
-    }
-    .page-item.disabled .page-link{
-        color: #6c757d;
-        pointer-events: none;
-        cursor: auto;
-        background-color: #fff;
-        border-color:  #dee2e6;
-        background-image: linear-gradient(#dae3e7, #1d88b9 );
-    }
-</style> 
+</style>
 {% endblock %}

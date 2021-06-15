@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}
+    Cadastramento de Marca
+{% endblock %}
+{% block content %}
+
+    <div class="col pt-3 pb-3">
+        <a href="{{url_for('mostrar_tela_de_cadastramento_de_marcas')}}">
+            <button type="submit" class="btn btn-primary btn-lg">Marcas Ativas</button>
+        </a>
+    </div>
+    <div class="row text-center border-bot border-top pt-2 pb-2">
+        <h3 style="font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        font-style: italic;">
+            Marcas Inativas
+        </h3>
+    </div>
+    <div class="col border-top">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    {% for coluna in ['ID', 'Nome', 'Fornecedor', 'Fornecedor 2', 'Fornecedor 3'] %}
+                    <th scope="col"><strong>{{coluna}}</strong></th>
+                    {% endfor %}
+                    <th scope="col" style="width: 2%;"><strong>Opções</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for marca in marcas.items%}
+                {% include 'includes/marca_modals.html' %}
+                <tr>
+                    <td>{{marca.id}}</td>
+                    <td>{{marca.nome.title()}}</td>
+                    <td>{{marca.fornecedor.name.title()}}</td>
+                    <td>{{marca.fornecedor2.name.title()}}</td>
+                    <td>{{marca.fornecedor3.name.title()}}</td>
+                    <td>
+                        <div class="d-flex">
+                            <span>
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#Modal-AtualizacaoMarca-{{ marca.id }}" title="Atualizar Marca" disabled>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                                        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                                    </svg>
+                                </button>
+                            </span>
+                            <a class="pe-1"></a>
+                            <span>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal-Ativacao-{{ marca.id }}" title="Ativar Marca">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square" viewBox="0 0 16 16">
+                                        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                        <path d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.235.235 0 0 1 .02-.022z"/>
+                                        </svg>
+                                </button>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <input type="hidden" name="quantidade" value="{{quantidade}}">
+                {% if marcas.has_prev %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('mostrar_tela_de_cadastramento_de_marcas', pagina=marcas.prev_num) }}">
+                        Anterior
+                    </a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+                {% endif%}
+
+                {% for page in marcas.iter_pages(left_edge=3, right_edge=3) %}
+                {% if page %}
+                    <li class="page-item"><a class="page-link active" href="{{ url_for('mostrar_tela_de_cadastramento_de_marcas', pagina=page) }}">
+                        {{ page }}
+                    </a></li>
+                {% else %}
+                    <li class="page-item disabled" id="exemple_ellipsis"><a class="page-link" href="#">..</a></li>
+                {% endif%}
+                {%endfor%}
+                {% if marcas.has_next %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('mostrar_tela_de_cadastramento_de_marcas', pagina=marcas.next_num) }}">
+                        Próxima
+                    </a> </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Próxima</span></li>
+                {% endif%}
+                <ul class="pagination">
+                    <li class="page-item disabled" id="li_pequena"><span class="page-link">Itens {{quantidade}}</span></li>
+                    <li class="page-item disabled" id="li_grande"><span class="page-link">Qtde de itens encontrados {{quantidade}}</span></li>
+                </ul>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+<style>
+    .row.botao{
+        padding-top: 24px;
+        align-items:flex-end;
+        display: flex;
+        justify-content: center;
+    }
+    @media screen and (max-width: 556px) {
+        #li_grande{
+            display: none;
+        }
+        #li_pequena{
+            display: flex;
+        }
+    }
+</style>
+{% endblock %}

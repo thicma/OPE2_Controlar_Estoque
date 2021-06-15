@@ -3,7 +3,6 @@
     Estoque ForU
 {% endblock %}
 {% block content%}
-
 <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
 
 <div class="row botoes">
@@ -23,104 +22,104 @@
             </div>      
         </form>
     </div>   
-    <div class="col">
-        <form action="{{url_for('busca_valores_checkbox')}}" method="POST">
+        <div class="col">
+    <form action="{{url_for('busca_valores_checkbox')}}" method="POST">
             <input type="hidden" value="{{genero}}" name="genero">
-        <div class="dropdown">
-            <div class="row">  
-                <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_tamanho" data-bs-toggle="dropdown" aria-expanded="false">
-                Tamanho
-                </button>
-                <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_tamanho">
-                    {% for tamanho in (['PP','P','M','G','GG'])%}
-                    <li class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" name="tamanho" value="{{tamanho.lower()}}">
-                        <label class="form-check-label" for="{{tamanho[0].lower()}}">
-                            {{tamanho.upper()}}
-                        </label>
-                    </li>
-                    {%endfor%}
-                </ul>                         
+            <div class="dropdown">
+                <div class="row">  
+                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_tamanho" data-bs-toggle="dropdown" aria-expanded="false">
+                    Tamanho
+                    </button>
+                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_tamanho">
+                        {% for tamanho in (['PP','P','M','G','GG'])%}
+                        <li class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" name="tamanho" value="{{tamanho.lower()}}">
+                            <label class="form-check-label" for="{{tamanho[0].lower()}}">
+                                {{tamanho.upper()}}
+                            </label>
+                        </li>
+                        {%endfor%}
+                    </ul>                         
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col">              
-        <div class="dropdown">
-            <div class="row">
-                <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_categoria" data-bs-toggle="dropdown" aria-expanded="false">
-                Categoria
-                </button>
-                <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_categoria">
-                    {% for categoria in label_categoria%}
-                    <li class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" name="categoria" value="{{categoria[0]}}">
-                        <label class="form-check-label" for="{{categoria[1].lower()}}">
-                            {{categoria[1].title()}}
-                        </label>
-                    </li>
-                    {%endfor%}
-                </ul>                  
+        <div class="col">              
+            <div class="dropdown">
+                <div class="row">
+                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_categoria" data-bs-toggle="dropdown" aria-expanded="false">
+                    Categoria
+                    </button>
+                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_categoria">
+                        {% for categoria in label_categoria%}
+                        <li class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" name="categoria" value="{{categoria[0]}}">
+                            <label class="form-check-label" for="{{categoria[1].lower()}}">
+                                {{categoria[1].title()}}
+                            </label>
+                        </li>
+                        {%endfor%}
+                    </ul>                  
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col">
-        <div class="dropdown">   
-            <div class="row">  
-                <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_ano" data-bs-toggle="dropdown" aria-expanded="false">
-                Ano
-                </button>
-                <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_ano">
-                    {% for ano in label_ano%}
-                    <li class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" name="ano" value="{{ano}}">
-                        <label class="form-check-label" for="{{ano}}">
-                            {{ano}}
-                        </label>
-                    </li>
-                    {%endfor%}
-                </ul>                                                      
+        <div class="col">
+            <div class="dropdown">   
+                <div class="row">  
+                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_ano" data-bs-toggle="dropdown" aria-expanded="false">
+                    Ano
+                    </button>
+                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_ano">
+                        {% for ano in label_ano%}
+                        <li class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" name="ano" value="{{ano}}">
+                            <label class="form-check-label" for="{{ano}}">
+                                {{ano}}
+                            </label>
+                        </li>
+                        {%endfor%}
+                    </ul>                                                      
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col">
-        <div class="dropdown">
-            <div class="row">
-                <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_marca" data-bs-toggle="dropdown" aria-expanded="true">
-                Marca
-                </button>
-                <ul class="dropdown-menu checkbox-menul" aria-labelledby="button_marca">
-                    {% for marca in label_marca%}
-                    <li class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" name="marca" value="{{marca[0]}}">
-                        <label class="form-check-label" for="{{marca[1].lower()}}">
-                            {{marca[1].title()}}
-                        </label>
-                    </li>
-                    {%endfor%}
-                </ul>
+        <div class="col">
+            <div class="dropdown">
+                <div class="row">
+                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_marca" data-bs-toggle="dropdown" aria-expanded="true">
+                    Marca
+                    </button>
+                    <ul class="dropdown-menu checkbox-menul" aria-labelledby="button_marca">
+                        {% for marca in label_marca%}
+                        <li class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" name="marca" value="{{marca[0]}}">
+                            <label class="form-check-label" for="{{marca[1].lower()}}">
+                                {{marca[1].title()}}
+                            </label>
+                        </li>
+                        {%endfor%}
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col">
-        <div class="dropdown">
-            <div class="row">
-                <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_material" data-bs-toggle="dropdown" aria-expanded="false">
-                Material
-                </button>
-                <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_material">
-                    {% for material in label_material%}
-                    <li class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" name="material" value="{{material[0]}}">
-                        <label class="form-check-label" for="{{material[1].lower()}}">
-                            {{material[1].title()}}
-                        </label>
-                    </li>
-                    {%endfor%}
-                </ul>                   
+        <div class="col">
+            <div class="dropdown">
+                <div class="row">
+                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="button_material" data-bs-toggle="dropdown" aria-expanded="false">
+                    Material
+                    </button>
+                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="button_material">
+                        {% for material in label_material%}
+                        <li class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" name="material" value="{{material[0]}}">
+                            <label class="form-check-label" for="{{material[1].lower()}}">
+                                {{material[1].title()}}
+                            </label>
+                        </li>
+                        {%endfor%}
+                    </ul>                   
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col">
+        <div class="col">
             <div class="row">
                 <button type="submit" name="filtrar" class="btn btn-success btn-lg bg-primary.bg-gradient">Filtrar</button>
             </div>
@@ -240,42 +239,44 @@
                             {%endif%}
                         </td>
                     </tr>
-                    {%endif%}                    
+                    {%endif%}                  
                 {% endfor %}
             </tbody>
-        </table>                  
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    {% if resultado.has_prev %}
-                        <li class="page-item"><a class="page-link" href="{{ url_for('produtos_masculinos', pagina=resultado.prev_num) }}">
-                            Anterior
-                        </a></li>
-                    {% else %}
-                        <li class="page-item disabled"><span class="page-link">Anterior</span></li>
-                    {% endif%}
-
-                    {% for page in resultado.iter_pages(left_edge=3, right_edge=3) %}
-                    {% if page %}
-                        <li class="page-item"><a class="page-link" href="{{ url_for('produtos_masculinos', pagina=page) }}">
-                            {{ page }}
-                        </a></li>
-                    {% else %}
-                        <li class="page-item disabled" id="exemple_ellipsis"><a class="page-link" href="#">..</a></li>
-                    {% endif%}
-                    {%endfor%}
-                    {% if resultado.has_next %}
-                        <li class="page-item"><a class="page-link" href="{{ url_for('produtos_masculinos', pagina=resultado.next_num) }}">
-                            Próxima
-                        </a> </li>
-                    {% else %}
-                        <li class="page-item disabled"><span class="page-link">Próxima</span></li>
-                    {% endif%}
+        </table>
+                <nav aria-label="Page navigation example">
                     <ul class="pagination">
-                        <li class="page-item disabled" id="li_pequena"><span class="page-link">Itens {{quantidade}}</span></li>
-                    <li class="page-item disabled" id="li_grande"><span class="page-link">Qtde de itens encontrados {{quantidade}}</span></li>
+                        {% if resultado.has_prev %}
+                        <input type="hidden" name='consultar' value="{{consultar}}">
+                            <li class="page-item"><a class="page-link" href="{{ url_for('estoque_page', pagina=resultado.prev_num, consultar=consultar) }}">
+                                Anterior
+                            </a></li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+                        {% endif%}
+
+                        {% for page in resultado.iter_pages(left_edge=3, right_edge=3) %}
+                        {% if page %}
+                            <li class="page-item"><a class="page-link" href="{{ url_for('estoque_page', pagina=page, consultar=consultar) }}">
+                                {{ page }}
+                            </a></li>
+                        {% else %}
+                            <li class="page-item disabled" id="exemple_ellipsis"><a class="page-link" href="#">..</a></li>
+                        {% endif%}
+                        {%endfor%}
+                        {% if resultado.has_next %}
+                            <li class="page-item"><a class="page-link" href="{{ url_for('estoque_page', pagina=resultado.next_num, consultar=consultar) }}">
+                                Próxima
+                            </a> </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">Próxima</span></li>
+                        {% endif%}
+                        <ul class="pagination">
+                            <li class="page-item disabled" id="li_pequena"><span class="page-link">Itens {{quantidade}}</span></li>
+                            <li class="page-item disabled" id="li_grande"><span class="page-link">Qtde de itens encontrados {{quantidade}}</span></li>
+                        </ul>
                     </ul>
-                </ul>
-            </nav>
+                </nav>
+            </div>
         </div>
     </div>
 </div>
@@ -302,5 +303,6 @@
         }
     }
 </style>
- 
+
+
 {% endblock %}

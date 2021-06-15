@@ -1,6 +1,16 @@
 {% macro render_field(field) %}
-  <dt class="text-center">{{ field.label(class_='fs-4 fw-bold') }}
-  <dd class="text-center">{{ field(class_='form-select fw-bold text-center',**kwargs)|safe }}
+  <style>
+    #rotulo, #rotulo2{
+      font-size: 17px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      font-style: italic;
+      padding-bottom: 0px;
+      padding-top: 0px;
+    }
+  </style>
+  <dt class="text-center">{{ field.label(class_='rotulo', id="rotulo") }}
+  <dd class="text-center">{{ field(class_='form-select', id="rotulo2",**kwargs)|safe }}
   {% if field.errors %}
     <ul class=errors>
     {% for error in field.errors %}

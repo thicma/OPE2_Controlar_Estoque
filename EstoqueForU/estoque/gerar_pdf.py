@@ -44,7 +44,7 @@ class PDF(FPDF):
         self.cell(20,10,'Valor', border=True)
         self.cell(60,10,'Tipo da Movimentação', border=True, ln=True)        
         self.set_font('helvetica', '', 10)
-        for linha in lista_resultados.items:
+        for linha in lista_resultados:
             self.cell(70,10, f'{linha.produto.descricao.title()}', border=True)
             self.cell(70,10,f'{linha.produto.marca.nome.title()}', border=True)
             self.cell(20,10,f"{linha.data.strftime('%d/%m/%Y')}", border=True)
